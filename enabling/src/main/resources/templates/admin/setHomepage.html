@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>首頁設定</title>
+    <style>
+        body {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
+<div></div>
+
+</body>
+</html>
