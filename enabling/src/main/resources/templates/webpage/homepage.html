@@ -40,16 +40,16 @@
                 <div>Google Map</div>
                 <div>
                     <div>
-                        <p th:style="'color: ' + ${homePage.themeColorId.headingColor}">地址：</p>
-                        <p th:text="${homePage.institutionDomain.address}"></p>
-                    </div>
-                    <div>
                         <p th:style="'color: ' + ${homePage.themeColorId.headingColor}">電話：</p>
                         <p th:text="${homePage.institutionDomain.tel}"></p>
                     </div>
                     <div>
+                        <p th:style="'color: ' + ${homePage.themeColorId.headingColor}">地址：</p>
+                        <p th:text="${homePage.institutionDomain.address}"></p>
+                    </div>
+                    <div>
                         <p th:style="'color: ' + ${homePage.themeColorId.headingColor}">營業時間：</p>
-                        <p th:text="${homePage.institutionDomain.businessHour}"></p>
+                        <p th:utext="${business_hour}"></p>
                     </div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
             </div>
             <div>
                 <span>營業時間</span>
-                <div th:text="${homePage.institutionDomain.businessHour}"></div>
+                <div th:utext="${business_hour}"></div>
             </div>
         </div>
     </footer>

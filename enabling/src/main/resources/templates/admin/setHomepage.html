@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>首頁設定</title>
@@ -8,12 +9,94 @@
         body {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+
+            input {
+                width: 300px;
+                margin: 5px;
+            }
+
+            textarea {
+                width: 400px;
+                height: 100px;
+                padding: 5px;
+            }
         }
     </style>
 </head>
 <body>
 <div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
-<div></div>
+<div>
+    <h2>基本資料設定</h2>
+    <div th:switch="${action}">
+        <div th:case="'get-info'">
+            <label th:text="'機構名稱: ' + ${i.institutionName}" for="institution_name"></label>
+            <br>
+            <label th:text="'電話: ' + ${i.tel}" for="tel"></label>
+            <br>
+            <label th:text="'地址: ' + ${i.address}" for="address"></label>
+            <br>
+            <label th:text="'營業時間: '" for="business_hour"></label>
+            <p th:utext=" ${business_hour}"></p>
+            <br>
+            <button id="btn-change">更改</button>
+        </div>
+        <div th:case="'get-form'">
+            <form id="institution-form" method="post">
+                <label for="institution_name">機構名稱:</label>
+                <input id="institution_name" name="institutionName" th:value="${i.institutionName}" type="text"
+                       required>
+                <br>
+                <label for="tel">電話:</label>
+                <input id="tel" name="tel" th:value="${i.tel}" type="text" required>
+                <br>
+                <label for="address">地址:</label>
+                <input id="address" name="address" th:value="${i.address}" type="text" required>
+                <br>
+                <label for="business_hour">營業時間:</label>
+                <br>
+                <textarea id="business_hour" name="businessHour" th:text="${i.businessHour}" required></textarea>
+                <br>
+                <button id="btn-update">更新</button>
+            </form>
+        </div>
+    </div>
 
+    <h2>首頁設定</h2>
+    <form id="style-form" method="post">
+        <div>
+            <input type="radio" id="color-red" name="color" value="1"/>
+            <label for="color-red">紅色</label>
+
+            <input type="radio" id="color-orange" name="color" value="2"/>
+            <label for="color-orange">橘色</label>
+
+            <input type="radio" id="color-green" name="color" value="3"/>
+            <label for="color-green">綠色</label>
+            <input type="radio" id="color-blue" name="color" value="4"/>
+            <label for="color-blue">藍色</label>
+            <input type="radio" id="color-purple" name="color" value="5"/>
+            <label for="color-purple">紫色</label>
+        </div>
+        <button id="btn-update-color">更新</button>
+    </form>
+</div>
 </body>
+<script>
+    // Institution setting
+    // change to form page
+    $('#btn-change').click(() => {
+        const currentUrl = window.location.href;
+        window.location.href = currentUrl + "?action=update";
+    });
+
+    // POST form data to back end
+    let targetURL = window.location.href.split('?')[0] + "/update";
+    $('#institution-form').attr('action', targetURL)
+
+    // homepage style setting
+    // POST form data to back end
+    let updateStyleUrl = window.location.href.split('?')[0] + "/update/color";
+    $('#style-form').attr('action', updateStyleUrl)
+
+</script>
 </html>
