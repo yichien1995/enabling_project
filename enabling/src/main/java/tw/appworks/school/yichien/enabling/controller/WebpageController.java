@@ -27,7 +27,7 @@ public class WebpageController {
 	// for testing
 	@GetMapping
 	public ResponseEntity<?> test() {
-		return ResponseEntity.ok().body(webpageService.getHomepage("test1"));
+		return ResponseEntity.ok().body(webpageService.getHomepageDetail("test1"));
 	}
 
 }

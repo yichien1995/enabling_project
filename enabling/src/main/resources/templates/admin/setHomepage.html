@@ -9,24 +9,38 @@
         body {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+            height: 100vh;
+        }
 
-            input {
-                width: 300px;
-                margin: 5px;
-            }
+        input {
+            width: 300px;
+            margin: 5px;
+        }
 
-            textarea {
-                width: 400px;
-                height: 100px;
-                padding: 5px;
-            }
+        textarea {
+            width: 400px;
+            height: 100px;
+            padding: 5px;
+        }
+
+        button {
+            margin: 5px;
         }
     </style>
 </head>
 <body>
-<div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
+<div th:switch="${preview}">
+    <div th:case="'current-page'">
+        <div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
+    </div>
+    <div th:case="'update-page'">
+        <div th:insert="~{admin/preview/homepage_preview.html:: homepagePreview}"></div>
+    </div>
+
+</div>
+
 <div>
-    <h2>基本資料設定</h2>
+    <h2>機構資料設定</h2>
     <div th:switch="${action}">
         <div th:case="'get-info'">
             <label th:text="'機構名稱: ' + ${i.institutionName}" for="institution_name"></label>
@@ -40,7 +54,7 @@
             <br>
             <button id="btn-change">更改</button>
         </div>
-        <div th:case="'get-form'">
+        <div th:case="'get-info-form'">
             <form id="institution-form" method="post">
                 <label for="institution_name">機構名稱:</label>
                 <input id="institution_name" name="institutionName" th:value="${i.institutionName}" type="text"
@@ -54,49 +68,177 @@
                 <br>
                 <label for="business_hour">營業時間:</label>
                 <br>
-                <textarea id="business_hour" name="businessHour" th:text="${i.businessHour}" required></textarea>
+                <textarea id="business_hour" name="businessHour" th:utext="${i.businessHour}" required></textarea>
                 <br>
-                <button id="btn-update">更新</button>
+                <button id="btn-update">儲存</button>
             </form>
+            <button id="btn-cancel">取消</button>
         </div>
     </div>
 
     <h2>首頁設定</h2>
-    <form id="style-form" method="post">
-        <div>
-            <input type="radio" id="color-red" name="color" value="1"/>
-            <label for="color-red">紅色</label>
+    <div th:switch="${preview}">
+        <div th:case="'current-page'">
+            <form id="homepage-form" method="post" th:object="${HomepageForm}" enctype="multipart/form-data">
 
-            <input type="radio" id="color-orange" name="color" value="2"/>
-            <label for="color-orange">橘色</label>
-
-            <input type="radio" id="color-green" name="color" value="3"/>
-            <label for="color-green">綠色</label>
-            <input type="radio" id="color-blue" name="color" value="4"/>
-            <label for="color-blue">藍色</label>
-            <input type="radio" id="color-purple" name="color" value="5"/>
-            <label for="color-purple">紫色</label>
+                <h3>機構介紹</h3>
+                <label for="logo">機構 Logo </label>
+                <input id="logo" type="file" name="logo">
+                <br>
+                <label for="main-image">主要圖片 </label>
+                <input id="main-image" type="file" name="mainImage"/>
+                <br>
+                <label for="image-intro">圖片敘述: </label>
+                <br>
+                <textarea id="image-intro" name="imageDescription" th:utext="${h.ImageDescription}" required></textarea>
+                <br>
+                <label for="institution-intro">關於我們:</label>
+                <br>
+                <textarea id="institution-intro" name="institutionIntro" th:utext="${h.institutionIntro}" required></textarea>
+                <h3>選擇顏色</h3>
+                <div>
+                    <input id="color-red" name="color" type="radio" value="1" required/>
+                    <label for="color-red">紅色</label>
+                    <input id="color-orange" name="color" type="radio" value="2"/>
+                    <label for="color-orange">橘色</label>
+                    <input id="color-green" name="color" type="radio" value="3"/>
+                    <label for="color-green">綠色</label>
+                    <input id="color-blue" name="color" type="radio" value="4"/>
+                    <label for="color-blue">藍色</label>
+                    <input id="color-purple" name="color" type="radio" value="5"/>
+                    <label for="color-purple">紫色</label>
+                </div>
+                <button id="btn-preview-style">預覽</button>
+                <button id="btn-update-style">儲存</button>
+            </form>
+            <button id="btn-cancel-style">取消</button>
         </div>
-        <button id="btn-update-color">更新</button>
-    </form>
+        <div th:case="'update-page'">
+            <form id="homepage-form" method="post" th:object="${HomepageForm}" enctype="multipart/form-data">
+
+                <h3>機構介紹</h3>
+                <label for="logo">機構 Logo </label>
+                <input id="logo" type="file" name="logo">
+                <br>
+                <label for="main-image">主要圖片 </label>
+                <input id="main-image" type="file" name="mainImage"/>
+                <br>
+                <label for="image-intro">圖片敘述: </label>
+                <br>
+                <textarea id="image-intro" name="imageDescription" th:utext="${previewForm.imageDescription}" required></textarea>
+                <br>
+                <label for="institution-intro">關於我們:</label>
+                <br>
+                <textarea id="institution-intro" name="institutionIntro" th:utext="${previewForm.institutionIntro}" required></textarea>
+                <h3>選擇顏色</h3>
+                <div>
+                    <input id="color-red" name="color" type="radio" value="1" required/>
+                    <label for="color-red">紅色</label>
+                    <input id="color-orange" name="color" type="radio" value="2"/>
+                    <label for="color-orange">橘色</label>
+                    <input id="color-green" name="color" type="radio" value="3"/>
+                    <label for="color-green">綠色</label>
+                    <input id="color-blue" name="color" type="radio" value="4"/>
+                    <label for="color-blue">藍色</label>
+                    <input id="color-purple" name="color" type="radio" value="5"/>
+                    <label for="color-purple">紫色</label>
+                </div>
+                <button id="btn-preview-style">預覽</button>
+                <button id="btn-update-style">儲存</button>
+            </form>
+            <button id="btn-cancel-style">取消</button>
+        </div>
+
+    </div>
+
 </div>
+
 </body>
 <script>
     // Institution setting
     // change to form page
     $('#btn-change').click(() => {
         const currentUrl = window.location.href;
-        window.location.href = currentUrl + "?action=update";
+        window.location.href = currentUrl.split('?')[0] + "?action=update";
+    });
+
+    $('#btn-cancel').click(() => {
+        const currentUrl = window.location.href;
+        window.location.href = currentUrl.split('?')[0];
     });
 
     // POST form data to back end
-    let targetURL = window.location.href.split('?')[0] + "/update";
+    let targetURL = window.location.href.split('?')[0] + "/update/institution";
     $('#institution-form').attr('action', targetURL)
 
     // homepage style setting
     // POST form data to back end
-    let updateStyleUrl = window.location.href.split('?')[0] + "/update/color";
-    $('#style-form').attr('action', updateStyleUrl)
+
+    $("#btn-preview-style").click(function (event) {
+        event.preventDefault();
+
+        if (!$("input[name='color']:checked").val()) {
+            alert("請選擇一種顏色");
+            return;
+        }
+
+        let formData = new FormData($("#homepage-form")[0]);
+        const baseUrl = window.location.href.split('?')[0];
+        let endpoint = baseUrl + "/preview"
+        try {
+            (async function postData() {
+                await sendData(formData, endpoint);
+                window.location.href = baseUrl + "?action=preview"
+            })()
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    $("#btn-update-style").click(function (event) {
+        event.preventDefault();
+
+        if (!$("input[name='color']:checked").val()) {
+            alert("請選擇一種顏色");
+            return;
+        }
+
+        let formData = new FormData($("#homepage-form")[0]);
+        const baseUrl = window.location.href.split('?')[0];
+        let endpoint = baseUrl + "/update/style"
+        try {
+            (async function postData() {
+                await sendData(formData, endpoint);
+                window.location.href = baseUrl;
+            })()
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    $('#btn-cancel-style').click(() => {
+        const currentUrl = window.location.href;
+        window.location.href = currentUrl.split('?')[0];
+    });
+
+    async function sendData(formData, endpoint) {
+        try {
+            let response = await fetch(endpoint, {
+                method: 'POST',
+                body: formData
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+            throw error;
+        }
+    }
+
+
+    // let updateStyleUrl = window.location.href.split('?')[0] + "/update/style";
+    // $('#style-form').attr('action', updateStyleUrl)
 
 </script>
 </html>

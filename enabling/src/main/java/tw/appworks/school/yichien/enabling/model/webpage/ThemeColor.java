@@ -17,10 +17,10 @@ public class ThemeColor {
 	@Column(name = "color")
 	private String color;
 
-	@Column(name = "background_color")
+	@Column(name = "background_color", length = 7)
 	private String backgroundColor;
 
-	@Column(name = "heading_color")
+	@Column(name = "heading_color", length = 7)
 	private String headingColor;
 
 	public ThemeColor(String color) {

@@ -1,17 +1,24 @@
 <!DOCTYPE html>
-<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title th:text="${homePage.institutionDomain.institutionName}"></title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-<div th:fragment="homepageFragment">
 
-    <header th:style="'background-color: ' + ${homePage.themeColorId.backgroundColor}">
+<div th:fragment="homepagePreview">
+
+    <header th:style="'background-color: ' + ${previewPage.backgroundColor}">
         <div>
-            <img th:src="${homePage.logo}" alt="institution_logo"/>
-            <!--        <h1 th:text="${institution.institutionName}"></h1>-->
+            <div th:switch="'${logo-update}'">
+                <div th:case="true">
+                    <img th:src="${newLogoUrl}" alt="institution_logo"/>
+                </div>
+                <div th:case="false">
+                    <img th:src="${homePage.logo}" alt="institution_logo"/>
+                </div>
+            </div>
+
             <h1 th:text="${homePage.institutionDomain.institutionName}"></h1>
         </div>
         <nav>
@@ -27,28 +34,35 @@
 
     <main>
         <div>
-            <img th:src="${homePage.mainImage}" alt="main_image"/>
-            <p th:utext="${imageDescription}"></p>
+            <div th:switch="'${image-update}'">
+                <div th:case="true">
+                    <img th:src="${newUrl}" alt="main_image"/>
+                </div>
+                <div th:case="false">
+                    <img th:src="${homePage.mainImage}" alt="main_image"/>
+                </div>
+            </div>
+            <p th:utext="${previewPage.imageDescription}"></p>
         </div>
         <div>
-            <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">關於我們</h2>
-            <p th:utext="${institutionIntro}"></p>
+            <h2 th:style="'color: ' + ${previewPage.headingColor}">關於我們</h2>
+            <p th:utext="${previewPage.institutionIntro}"></p>
         </div>
         <div>
-            <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">聯絡資訊</h2>
+            <h2 th:style="'color: ' + ${previewPage.headingColor}">聯絡資訊</h2>
             <div>
                 <div>Google Map</div>
                 <div>
                     <div>
-                        <p th:style="'color: ' + ${homePage.themeColorId.headingColor}">電話：</p>
+                        <p th:style="'color: ' + ${previewPage.headingColor}">電話：</p>
                         <p th:text="${homePage.institutionDomain.tel}"></p>
                     </div>
                     <div>
-                        <p th:style="'color: ' + ${homePage.themeColorId.headingColor}">地址：</p>
+                        <p th:style="'color: ' + ${previewPage.headingColor}">地址：</p>
                         <p th:text="${homePage.institutionDomain.address}"></p>
                     </div>
                     <div>
-                        <p th:style="'color: ' + ${homePage.themeColorId.headingColor}">營業時間：</p>
+                        <p th:style="'color: ' + ${previewPage.headingColor}">營業時間：</p>
                         <p th:utext="${business_hour}"></p>
                     </div>
                 </div>
@@ -56,7 +70,7 @@
         </div>
     </main>
 
-    <footer th:style="'background-color: ' + ${homePage.themeColorId.backgroundColor}">
+    <footer th:style="'background-color: ' + ${previewPage.backgroundColor}">
         <div>
             <div>
                 <span>聯絡我們</span>
@@ -77,5 +91,6 @@
     </footer>
 
 </div>
+
 </body>
 </html>

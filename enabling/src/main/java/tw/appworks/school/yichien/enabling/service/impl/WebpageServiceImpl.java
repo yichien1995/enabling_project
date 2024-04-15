@@ -2,6 +2,7 @@ package tw.appworks.school.yichien.enabling.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.model.webpage.Homepage;
 import tw.appworks.school.yichien.enabling.model.webpage.ThemeColor;
@@ -26,15 +27,16 @@ public class WebpageServiceImpl implements WebpageService {
 	public void renderHomepage(String domain, Model model) {
 //		Institution institution = getInstitution(domain);
 //		model.addAttribute("institution",institution);
-		Homepage homepage = getHomepage(domain);
+		Homepage homepage = getHomepageDetail(domain);
 		model.addAttribute("homePage", homepage);
 		String businessHour = homepage.getInstitutionDomain().getBusinessHour().replace("\n", "<br>");
-
 		model.addAttribute("business_hour", businessHour);
-
+		String imageDescription = homepage.getImageDescription().replace("\n", "<br>");
+		model.addAttribute("imageDescription", imageDescription);
+		String institutionIntro = homepage.getInstitutionIntro().replace("\n", "<br>");
+		model.addAttribute("institutionIntro", institutionIntro);
 	}
 
-	;
 
 	@Override
 	public void getInstitution(String domain, Model model) {
@@ -46,8 +48,8 @@ public class WebpageServiceImpl implements WebpageService {
 
 	}
 
-	;
 
+	@Override
 	public void updateInstitution(String domain, Institution i) {
 		Institution existData = institutionRepository.findByDomainName(domain);
 
@@ -59,23 +61,37 @@ public class WebpageServiceImpl implements WebpageService {
 		institutionRepository.save(existData);
 	}
 
-	;
+	public void getHomepage(String domain, Model model) {
+		Homepage homepage = homepageRepository.getHomepage(domain);
+		model.addAttribute("h", homepage);
+	}
+
 
 	@Override
-	public void updateStyle(String domain, Integer colorId) {
+	public void updateHomepage(String domain, HomepageForm h) {
 		Homepage existData = homepageRepository.getHomepage(domain);
+		existData.setImageDescription(h.getImageDescription());
+		existData.setInstitutionIntro(h.getInstitutionIntro());
+
 		ThemeColor newColor = new ThemeColor();
-		newColor.setId(colorId);
+		newColor.setId(h.getColor());
+
+
+		//上傳圖片修改
+//		existData.setLogo(h.getLogo());
+//		existData.setMainImage(h.getMainImage());
 
 		existData.setThemeColorId(newColor);
 		homepageRepository.save(existData);
 	}
 
+
 	@Override
-	public Homepage getHomepage(String domain) {
+	public Homepage getHomepageDetail(String domain) {
 		return homepageRepository.getHomepage(domain);
 	}
 
 	;
+
 
 }

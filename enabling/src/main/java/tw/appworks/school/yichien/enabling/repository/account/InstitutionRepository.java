@@ -13,4 +13,7 @@ public interface InstitutionRepository extends JpaRepository<Institution, Intege
 	Institution getInstitution(@Param("domainName") String domain);
 
 	Institution findByDomainName(String domain);
+
+//	@Query(value = "SELECT * FROM institution WHERE domain_name = :domainName", nativeQuery = true)
+//	String checkDomainExist;
 }
