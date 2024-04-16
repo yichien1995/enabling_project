@@ -15,25 +15,28 @@ public class Homepage {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@JoinColumn(name = "theme_color_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "theme_color_id", referencedColumnName = "id", columnDefinition = "int default 1")
 	@ManyToOne
 	private ThemeColor themeColorId;
 
-	@Column(name = "main_image")
+	@Column(name = "main_image", columnDefinition = "varchar(255) default '預設主要圖片網址'")
 	private String mainImage;
 
-	@Column(name = "image_description")
+	@Column(name = "image_description",columnDefinition = "varchar(100) default '輸入圖片敘述'")
 	private String imageDescription;
 
-	@Column(name = "logo")
+	@Column(name = "logo", columnDefinition = "varchar(255) default '預設機構logo網址'")
 	private String logo;
 
-	@Column(name = "institution_intro")
+	@Column(name = "institution_intro", columnDefinition = "varchar(1000) default '輸入機構敘述'")
 	private String institutionIntro;
 
 	@JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
-	@OneToOne
+	@ManyToOne
 	private Institution institutionDomain;
+
+	@Column(name = "status", columnDefinition = "int default 0")
+	private Integer status;
 
 	public Homepage(ThemeColor themeColorId, String mainImage, String imageDescription, String logo, String institutionIntro, Institution institutionDomain) {
 		this.themeColorId = themeColorId;

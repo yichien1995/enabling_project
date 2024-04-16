@@ -17,19 +17,19 @@ public class Institution {
 	@Column(name = "domain_name", nullable = false, unique = true)
 	private String domainName;
 
-	@Column(name = "institution_name")
+	@Column(name = "institution_name", columnDefinition = "varchar(50) default '輸入機構名稱'")
 	private String institutionName;
 
-	@Column(name = "address")
+	@Column(name = "address", columnDefinition = "varchar(255) default '輸入機構地址'")
 	private String address;
 
-	@Column(name = "tel")
+	@Column(name = "tel", columnDefinition = "varchar(255) default '輸入機構電話'")
 	private String tel;
 
-	@Column(name = "business_hour")
+	@Column(name = "business_hour", columnDefinition = "varchar(255) default '輸入營業時間'")
 	private String businessHour;
 
-	@Column(name = "webpage_available")
+	@Column(name = "webpage_available", columnDefinition = "int default 0")
 	private Integer webpageAvailable;
 
 	public Institution(String domainName, String institutionName, String address, String tel, String businessHour, Integer webpageAvailable) {

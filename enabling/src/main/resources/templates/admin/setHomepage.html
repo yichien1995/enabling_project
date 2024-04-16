@@ -29,16 +29,7 @@
     </style>
 </head>
 <body>
-<div th:switch="${preview}">
-    <div th:case="'current-page'">
-        <div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
-    </div>
-    <div th:case="'update-page'">
-        <div th:insert="~{admin/preview/homepage_preview.html:: homepagePreview}"></div>
-    </div>
-
-</div>
-
+<div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
 <div>
     <h2>機構資料設定</h2>
     <div th:switch="${action}">
@@ -77,80 +68,39 @@
     </div>
 
     <h2>首頁設定</h2>
-    <div th:switch="${preview}">
-        <div th:case="'current-page'">
-            <form id="homepage-form" method="post" th:object="${HomepageForm}" enctype="multipart/form-data">
-
-                <h3>機構介紹</h3>
-                <label for="logo">機構 Logo </label>
-                <input id="logo" type="file" name="logo">
-                <br>
-                <label for="main-image">主要圖片 </label>
-                <input id="main-image" type="file" name="mainImage"/>
-                <br>
-                <label for="image-intro">圖片敘述: </label>
-                <br>
-                <textarea id="image-intro" name="imageDescription" th:utext="${h.ImageDescription}" required></textarea>
-                <br>
-                <label for="institution-intro">關於我們:</label>
-                <br>
-                <textarea id="institution-intro" name="institutionIntro" th:utext="${h.institutionIntro}" required></textarea>
-                <h3>選擇顏色</h3>
-                <div>
-                    <input id="color-red" name="color" type="radio" value="1" required/>
-                    <label for="color-red">紅色</label>
-                    <input id="color-orange" name="color" type="radio" value="2"/>
-                    <label for="color-orange">橘色</label>
-                    <input id="color-green" name="color" type="radio" value="3"/>
-                    <label for="color-green">綠色</label>
-                    <input id="color-blue" name="color" type="radio" value="4"/>
-                    <label for="color-blue">藍色</label>
-                    <input id="color-purple" name="color" type="radio" value="5"/>
-                    <label for="color-purple">紫色</label>
-                </div>
-                <button id="btn-preview-style">預覽</button>
-                <button id="btn-update-style">儲存</button>
-            </form>
-            <button id="btn-cancel-style">取消</button>
+    <form id="homepage-form" method="post" th:object="${HomepageForm}" enctype="multipart/form-data">
+        <h3>機構介紹</h3>
+        <label for="logo">機構 Logo </label>
+        <input id="logo" type="file" name="logo">
+        <br>
+        <label for="main-image">主要圖片 </label>
+        <input id="main-image" type="file" name="mainImage"/>
+        <br>
+        <label for="image-intro">圖片敘述: </label>
+        <br>
+        <textarea id="image-intro" name="imageDescription" th:text="${homePage.imageDescription}" required></textarea>
+        <br>
+        <label for="institution-intro">關於我們:</label>
+        <br>
+        <textarea id="institution-intro" name="institutionIntro" th:text="${homePage.institutionIntro}"
+                  required></textarea>
+        <h3>選擇顏色</h3>
+        <div>
+            <input id="color-red" name="color" type="radio" value="1" required/>
+            <label for="color-red">紅色</label>
+            <input id="color-orange" name="color" type="radio" value="2"/>
+            <label for="color-orange">橘色</label>
+            <input id="color-green" name="color" type="radio" value="3"/>
+            <label for="color-green">綠色</label>
+            <input id="color-blue" name="color" type="radio" value="4"/>
+            <label for="color-blue">藍色</label>
+            <input id="color-purple" name="color" type="radio" value="5"/>
+            <label for="color-purple">紫色</label>
         </div>
-        <div th:case="'update-page'">
-            <form id="homepage-form" method="post" th:object="${HomepageForm}" enctype="multipart/form-data">
-
-                <h3>機構介紹</h3>
-                <label for="logo">機構 Logo </label>
-                <input id="logo" type="file" name="logo">
-                <br>
-                <label for="main-image">主要圖片 </label>
-                <input id="main-image" type="file" name="mainImage"/>
-                <br>
-                <label for="image-intro">圖片敘述: </label>
-                <br>
-                <textarea id="image-intro" name="imageDescription" th:utext="${previewForm.imageDescription}" required></textarea>
-                <br>
-                <label for="institution-intro">關於我們:</label>
-                <br>
-                <textarea id="institution-intro" name="institutionIntro" th:utext="${previewForm.institutionIntro}" required></textarea>
-                <h3>選擇顏色</h3>
-                <div>
-                    <input id="color-red" name="color" type="radio" value="1" required/>
-                    <label for="color-red">紅色</label>
-                    <input id="color-orange" name="color" type="radio" value="2"/>
-                    <label for="color-orange">橘色</label>
-                    <input id="color-green" name="color" type="radio" value="3"/>
-                    <label for="color-green">綠色</label>
-                    <input id="color-blue" name="color" type="radio" value="4"/>
-                    <label for="color-blue">藍色</label>
-                    <input id="color-purple" name="color" type="radio" value="5"/>
-                    <label for="color-purple">紫色</label>
-                </div>
-                <button id="btn-preview-style">預覽</button>
-                <button id="btn-update-style">儲存</button>
-            </form>
-            <button id="btn-cancel-style">取消</button>
-        </div>
-
-    </div>
-
+        <button id="btn-preview-style">預覽</button>
+        <button id="btn-update-style">儲存</button>
+    </form>
+    <button id="btn-cancel-style">取消</button>
 </div>
 
 </body>
@@ -235,10 +185,6 @@
             throw error;
         }
     }
-
-
-    // let updateStyleUrl = window.location.href.split('?')[0] + "/update/style";
-    // $('#style-form').attr('action', updateStyleUrl)
 
 </script>
 </html>

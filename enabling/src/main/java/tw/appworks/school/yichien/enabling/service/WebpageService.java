@@ -9,13 +9,16 @@ public interface WebpageService {
 
 	void renderHomepage(String domain, Model model);
 
+	void renderHomepagePreview(String domain, Model model);
+
 	void getInstitution(String domain, Model model);
 
 	void updateInstitution(String domain, Institution institution);
 
-	void updateHomepage(String domain, HomepageForm homepageForm);
+	void saveHomepage(String domain, HomepageForm homepageForm);
 
-	void getHomepage(String domain,Model model);
+	void saveHomepageDraft(String domain, HomepageForm hf);
+
 	Homepage getHomepageDetail(String domain);
 
 }

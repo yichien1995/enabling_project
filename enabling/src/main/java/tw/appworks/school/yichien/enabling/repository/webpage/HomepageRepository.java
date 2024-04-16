@@ -9,7 +9,7 @@ import tw.appworks.school.yichien.enabling.model.webpage.Homepage;
 
 @Repository
 public interface HomepageRepository extends JpaRepository<Homepage,Integer> {
-	@Query(value = "SELECT * FROM homepage AS h WHERE h.institution_domain = :domainName", nativeQuery = true)
-	Homepage getHomepage(@Param("domainName") String domain);
+	@Query(value = "SELECT * FROM homepage AS h WHERE h.institution_domain = :domainName AND h.status = :status ", nativeQuery = true)
+	Homepage getHomepage(@Param("domainName") String domain, @Param("status") int status);
 
 }

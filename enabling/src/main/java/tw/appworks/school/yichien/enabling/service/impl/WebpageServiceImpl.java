@@ -25,9 +25,22 @@ public class WebpageServiceImpl implements WebpageService {
 
 	@Override
 	public void renderHomepage(String domain, Model model) {
-//		Institution institution = getInstitution(domain);
-//		model.addAttribute("institution",institution);
-		Homepage homepage = getHomepageDetail(domain);
+		Homepage homepage;
+		if (homepageRepository.getHomepage(domain, 1) != null) {
+			homepage = homepageRepository.getHomepage(domain, 1);
+		} else {
+			homepage = homepageRepository.getHomepage(domain, 0);
+		}
+		addHomepageModelAttr(homepage, model);
+	}
+
+	@Override
+	public void renderHomepagePreview(String domain, Model model) {
+		Homepage homepage = homepageRepository.getHomepage(domain, 0);
+		addHomepageModelAttr(homepage, model);
+	}
+
+	private void addHomepageModelAttr(Homepage homepage, Model model) {
 		model.addAttribute("homePage", homepage);
 		String businessHour = homepage.getInstitutionDomain().getBusinessHour().replace("\n", "<br>");
 		model.addAttribute("business_hour", businessHour);
@@ -61,34 +74,38 @@ public class WebpageServiceImpl implements WebpageService {
 		institutionRepository.save(existData);
 	}
 
-	public void getHomepage(String domain, Model model) {
-		Homepage homepage = homepageRepository.getHomepage(domain);
-		model.addAttribute("h", homepage);
+	@Override
+	public void saveHomepage(String domain, HomepageForm hf) {
+		Homepage existData = homepageRepository.getHomepage(domain, 1);
+		saveHomepageForm(domain, hf, existData);
 	}
 
-
 	@Override
-	public void updateHomepage(String domain, HomepageForm h) {
-		Homepage existData = homepageRepository.getHomepage(domain);
-		existData.setImageDescription(h.getImageDescription());
-		existData.setInstitutionIntro(h.getInstitutionIntro());
+	public void saveHomepageDraft(String domain, HomepageForm hf) {
+		Homepage existData = homepageRepository.getHomepage(domain, 0);
+		saveHomepageForm(domain, hf, existData);
+	}
+
+	public void saveHomepageForm(String domain, HomepageForm hf, Homepage homepage) {
+		homepage.setImageDescription(hf.getImageDescription());
+		homepage.setInstitutionIntro(hf.getInstitutionIntro());
 
 		ThemeColor newColor = new ThemeColor();
-		newColor.setId(h.getColor());
+		newColor.setId(hf.getColor());
 
 
 		//上傳圖片修改
-//		existData.setLogo(h.getLogo());
-//		existData.setMainImage(h.getMainImage());
+//		homepage.setLogo(hf.getLogo());
+//		homepage.setMainImage(hf.getMainImage());
 
-		existData.setThemeColorId(newColor);
-		homepageRepository.save(existData);
+		homepage.setThemeColorId(newColor);
+		homepageRepository.save(homepage);
 	}
 
 
 	@Override
 	public Homepage getHomepageDetail(String domain) {
-		return homepageRepository.getHomepage(domain);
+		return homepageRepository.getHomepage(domain, 1);
 	}
 
 	;

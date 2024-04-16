@@ -28,6 +28,7 @@ public class AdminServiceImpl implements AdminService {
 		data.setLogo(h.getLogo());
 		data.setMainImage(h.getMainImage());
 		//
+
 		data.setImageDescription(h.getImageDescription().replace("\n", "<br>"));
 		data.setInstitutionIntro(h.getInstitutionIntro().replace("\n", "<br>"));
 
@@ -40,8 +41,11 @@ public class AdminServiceImpl implements AdminService {
 		return data;
 	}
 
-//	@Override
-//	public String checkDomain(){
-//		return institutionRepository.searchByDomainNameExists;
-//	};
+	@Override
+	public boolean checkDomain(String domain) {
+		return institutionRepository.existsInstitutionByDomainName(domain);
+	}
+
+	;
+
 }
