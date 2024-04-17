@@ -42,22 +42,21 @@ public class WebpageServiceImpl implements WebpageService {
 
 	private void addHomepageModelAttr(Homepage homepage, Model model) {
 		model.addAttribute("homePage", homepage);
-		String businessHour = homepage.getInstitutionDomain().getBusinessHour().replace("\n", "<br>");
-		model.addAttribute("business_hour", businessHour);
-		String imageDescription = homepage.getImageDescription().replace("\n", "<br>");
-		model.addAttribute("imageDescription", imageDescription);
-		String institutionIntro = homepage.getInstitutionIntro().replace("\n", "<br>");
-		model.addAttribute("institutionIntro", institutionIntro);
+		addFormattedAttribute(model, "businessHour", homepage.getInstitutionDomain().getBusinessHour());
+		addFormattedAttribute(model, "imageDescription", homepage.getImageDescription());
+		addFormattedAttribute(model, "institutionIntro", homepage.getInstitutionIntro());
 	}
 
-
+	private void addFormattedAttribute(Model model, String attributeName, String attributeValue) {
+		if (attributeValue != null) {
+			model.addAttribute(attributeName, attributeValue.replace("\n", "<br>"));
+		}
+	}
 	@Override
 	public void getInstitution(String domain, Model model) {
 		Institution institutionInfo = institutionRepository.getInstitution(domain);
 		model.addAttribute("i", institutionInfo);
-
-		String businessHour = institutionInfo.getBusinessHour().replace("\n", "<br>");
-		model.addAttribute("business_hour", businessHour);
+		addFormattedAttribute(model,"businessHour",institutionInfo.getBusinessHour());
 
 	}
 
