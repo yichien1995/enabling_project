@@ -12,4 +12,7 @@ public interface HomepageRepository extends JpaRepository<Homepage,Integer> {
 	@Query(value = "SELECT * FROM homepage AS h WHERE h.institution_domain = :domainName AND h.status = :status ", nativeQuery = true)
 	Homepage getHomepage(@Param("domainName") String domain, @Param("status") int status);
 
+	@Query(value = "SELECT COUNT(h.id) FROM homepage AS h WHERE h.institution_domain = :domainName AND h.status = :status ", nativeQuery = true)
+	int checkHomepage(@Param("domainName") String domain, @Param("status") int status);
+
 }

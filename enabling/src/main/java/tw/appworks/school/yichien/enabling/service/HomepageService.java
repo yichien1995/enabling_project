@@ -5,7 +5,7 @@ import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.model.webpage.Homepage;
 
-public interface WebpageService {
+public interface HomepageService {
 
 	void renderHomepage(String domain, Model model);
 

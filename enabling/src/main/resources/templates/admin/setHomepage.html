@@ -71,10 +71,10 @@
     <form id="homepage-form" method="post" th:object="${HomepageForm}" enctype="multipart/form-data">
         <h3>機構介紹</h3>
         <label for="logo">機構 Logo </label>
-        <input id="logo" type="file" name="logo">
+        <input id="logo" type="file" name="logo" required>
         <br>
         <label for="main-image">主要圖片 </label>
-        <input id="main-image" type="file" name="mainImage"/>
+        <input id="main-image" type="file" name="mainImage" required/>
         <br>
         <label for="image-intro">圖片敘述: </label>
         <br>
@@ -129,6 +129,14 @@
 
         if (!$("input[name='color']:checked").val()) {
             alert("請選擇一種顏色");
+            return;
+        }
+
+        let logoFile = $("#logo")[0].files[0];
+        let mainImageFile = $("#main-image")[0].files[0];
+
+        if (!logoFile || !mainImageFile) {
+            alert("請上傳機構 Logo 和主要圖片");
             return;
         }
 

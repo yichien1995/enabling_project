@@ -10,7 +10,7 @@
 
     <header th:style="'background-color: ' + ${homePage.themeColorId.backgroundColor}">
         <div>
-            <img th:src="${homePage.logo}" alt="institution_logo"/>
+            <img th:src="${logoImage}" alt="institution_logo"/>
             <!--        <h1 th:text="${institution.institutionName}"></h1>-->
             <h1 th:text="${homePage.institutionDomain.institutionName}"></h1>
         </div>
@@ -27,7 +27,7 @@
 
     <main>
         <div>
-            <img th:src="${homePage.mainImage}" alt="main_image"/>
+            <img th:src="${mainImage}" alt="main_image"/>
             <p th:utext="${imageDescription}"></p>
         </div>
         <div>

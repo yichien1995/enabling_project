@@ -1,6 +1,8 @@
 package tw.appworks.school.yichien.enabling.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
@@ -8,19 +10,26 @@ import tw.appworks.school.yichien.enabling.model.webpage.Homepage;
 import tw.appworks.school.yichien.enabling.model.webpage.ThemeColor;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
 import tw.appworks.school.yichien.enabling.repository.webpage.HomepageRepository;
-import tw.appworks.school.yichien.enabling.service.WebpageService;
+import tw.appworks.school.yichien.enabling.service.FileStorageService;
+import tw.appworks.school.yichien.enabling.service.HomepageService;
 
 @Service
-public class WebpageServiceImpl implements WebpageService {
+public class HomepageServiceImpl implements HomepageService {
 
 	private final InstitutionRepository institutionRepository;
 
 	private final HomepageRepository homepageRepository;
 
-	public WebpageServiceImpl(InstitutionRepository institutionRepository,
-	                          HomepageRepository homepageRepository) {
+	private final FileStorageService fileStorageService;
+
+	@Value("${prefix.image}")
+	private String imageUrlPrefix;
+
+	public HomepageServiceImpl(InstitutionRepository institutionRepository,
+	                           HomepageRepository homepageRepository, FileStorageService fileStorageService) {
 		this.institutionRepository = institutionRepository;
 		this.homepageRepository = homepageRepository;
+		this.fileStorageService = fileStorageService;
 	}
 
 	@Override
@@ -42,6 +51,12 @@ public class WebpageServiceImpl implements WebpageService {
 
 	private void addHomepageModelAttr(Homepage homepage, Model model) {
 		model.addAttribute("homePage", homepage);
+
+		// add prefix to image url
+		model.addAttribute("logoImage", imageUrlPrefix + homepage.getLogo());
+		model.addAttribute("mainImage", imageUrlPrefix + homepage.getMainImage());
+
+		// replace "\n" to "<br>"
 		addFormattedAttribute(model, "businessHour", homepage.getInstitutionDomain().getBusinessHour());
 		addFormattedAttribute(model, "imageDescription", homepage.getImageDescription());
 		addFormattedAttribute(model, "institutionIntro", homepage.getInstitutionIntro());
@@ -52,11 +67,12 @@ public class WebpageServiceImpl implements WebpageService {
 			model.addAttribute(attributeName, attributeValue.replace("\n", "<br>"));
 		}
 	}
+
 	@Override
 	public void getInstitution(String domain, Model model) {
 		Institution institutionInfo = institutionRepository.getInstitution(domain);
 		model.addAttribute("i", institutionInfo);
-		addFormattedAttribute(model,"businessHour",institutionInfo.getBusinessHour());
+		addFormattedAttribute(model, "businessHour", institutionInfo.getBusinessHour());
 
 	}
 
@@ -74,31 +90,47 @@ public class WebpageServiceImpl implements WebpageService {
 	}
 
 	@Override
+	@Transactional
 	public void saveHomepage(String domain, HomepageForm hf) {
-		Homepage existData = homepageRepository.getHomepage(domain, 1);
-		saveHomepageForm(domain, hf, existData);
+		if (checkHomepageExists(domain, 1)) {
+			Homepage existData = homepageRepository.getHomepage(domain, 1);
+			saveHomepageForm(domain, "public", hf, existData);
+		} else {
+			Institution institution = institutionRepository.findByDomainName(domain);
+			Homepage homepage = new Homepage();
+
+			homepage.setStatus(1);
+			homepage.setInstitutionDomain(institution);
+			homepageRepository.save(homepage);
+			saveHomepageForm(domain,"public",hf,homepage);
+		}
 	}
 
 	@Override
 	public void saveHomepageDraft(String domain, HomepageForm hf) {
 		Homepage existData = homepageRepository.getHomepage(domain, 0);
-		saveHomepageForm(domain, hf, existData);
+		saveHomepageForm(domain, "draft", hf, existData);
 	}
 
-	public void saveHomepageForm(String domain, HomepageForm hf, Homepage homepage) {
+	public void saveHomepageForm(String domain, String fileType, HomepageForm hf, Homepage homepage) {
 		homepage.setImageDescription(hf.getImageDescription());
 		homepage.setInstitutionIntro(hf.getInstitutionIntro());
 
 		ThemeColor newColor = new ThemeColor();
 		newColor.setId(hf.getColor());
 
+		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
+		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
 
-		//上傳圖片修改
-//		homepage.setLogo(hf.getLogo());
-//		homepage.setMainImage(hf.getMainImage());
+		homepage.setLogo(logoPath);
+		homepage.setMainImage(mainImagePath);
 
 		homepage.setThemeColorId(newColor);
 		homepageRepository.save(homepage);
+	}
+
+	private boolean checkHomepageExists(String domain, int status) {
+		return homepageRepository.checkHomepage(domain, status) == 1;
 	}
 
 
