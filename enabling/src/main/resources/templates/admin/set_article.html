@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
+    <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}">
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <script th:src="@{/richtext/jquery.richtext.js}"></script>
+    <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+    <style>
+        body {
+            display: flex;
+        }
+
+        nav {
+            flex: 1;
+        }
+
+        main {
+            flex: 4;
+        }
+
+        button {
+            margin: 5px;
+        }
+    </style>
+    <title>Document</title>
+</head>
+<body>
+<nav id="side-bar">
+    <h2>管理者頁面</h2>
+    <h3>網頁管理</h3>
+    <ul>
+        <li><a href="">首頁設定</a></li>
+        <li><a href="">服務項目</a></li>
+        <li><a href="">團隊介紹</a></li>
+        <li><a th:href="@{'/admin/' +${domain}+'/setting/articles'}">衛教文章</a></li>
+        <ul>
+            <li>已發布文章</li>
+            <ul th:if="${released_article != null}">
+                <li th:each="title : ${released_article}">
+                    <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${title} + '?draft=0'}"
+                       th:text="${title}"></a>
+                </li>
+            </ul>
+            <li>草稿</li>
+            <ul th:if="${drafts != null}">
+                <li th:each="title : ${drafts}">
+                    <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${title} + '?draft=1'}"
+                       th:text="${title}"></a>
+                </li>
+            </ul>
+        </ul>
+
+    </ul>
+    <h3>團隊管理</h3>
+    <ul>
+        <li><a href="">成員管理</a></li>
+    </ul>
+    <h3>帳號管理</h3>
+    <ul>
+        <li><a href="">帳號設定</a></li>
+        <li><a href="">設定</a></li>
+    </ul>
+</nav>
+<main>
+    <div th:if="${article != null}">
+        <h2>衛教文章管理</h2>
+        <h3>修改文章</h3>
+        <form class="article-form" method="post" enctype="multipart/form-data">
+            <label>上傳文章封面: </label>
+            <input class="cover" type="file" name="cover"/>
+            <br/>
+            <label>文章標題: </label>
+            <input class="title" type="text" th:value="${article.title}" name="title" required/>
+            <br/>
+            <label>文章內文</label>
+            <textarea class="content" name="content" th:text="${article.content}" required></textarea>
+            <br/>
+            <button class="btn-preview">預覽</button>
+            <button class="btn-delete" th:if="${released}">刪除</button>
+            <button class="btn-save" th:unless="${released}">存檔</button>
+            <button class="btn-release">發布</button>
+        </form>
+        <button class="btn-cancel">取消</button>
+    </div>
+
+    <div th:unless="${article != null}">
+        <h2>衛教文章管理</h2>
+        <h3>新增文章</h3>
+        <form class="article-form" method="post" enctype="multipart/form-data">
+            <label>上傳文章封面: </label>
+            <input class="cover" type="file" name="cover"/>
+            <br/>
+            <label>文章標題: </label>
+            <input class="title" type="text" name="title" required/>
+            <br/>
+            <label>文章內文</label>
+            <textarea class="content" name="content" required></textarea>
+            <br/>
+            <button class="btn-preview">預覽</button>
+            <button class="btn-save">存檔</button>
+            <button class="btn-release">發布</button>
+        </form>
+        <button class="btn-cancel">取消</button>
+    </div>
+</main>
+<script>
+    $('.content').richText();
+
+    const RELATIVE_PATH = window.location.origin;
+    let currentUrl = window.location.href;
+
+    // get user's domain name
+    const REGEX = /\/admin\/([^/]+)/;
+    let domain = REGEX.exec(currentUrl)[1];
+
+    // check article status
+    const urlString = new URL(currentUrl);
+    const searchParams = urlString.searchParams.get('draft');
+    let draftValue = searchParams == null ? 1 : searchParams;
+
+
+    $(".btn-save").click(function (event) {
+        let form = $(".article-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=save`;
+        console.log(endpoint)
+        try {
+            (async function postData() {
+                await sendData(formData, endpoint, "成功儲存文章!");
+                window.location.href = currentUrl;
+            })()
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    $(".btn-release").click(function (event) {
+        let form = $(".article-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/release`;
+        try {
+            (async function postData() {
+                await sendData(formData, endpoint, "已發布文章!");
+                window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/articles`
+            })()
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    $(".btn-delete").click(function (event) {
+        let form = $(".article-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/delete`;
+        try {
+            (async function postData() {
+                await sendData(formData, endpoint, "已刪除文章!");
+                window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/articles`
+            })()
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    $('.btn-cancel').click(() => {
+        window.location.href = currentUrl;
+    });
+
+    async function sendData(formData, endpoint, message) {
+        try {
+            let response = await fetch(endpoint, {
+                method: 'POST',
+                body: formData
+            });
+            if (response.ok) {
+                alert(message)
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.error('There has been a problem with your fetch operation:', error);
+            throw error;
+        }
+    }
+</script>
+</body>
+</html>

@@ -125,22 +125,13 @@
     // POST form data to back end
 
     $("#btn-preview-style").click(function (event) {
+        let form = $("#homepage-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
         event.preventDefault();
 
-        if (!$("input[name='color']:checked").val()) {
-            alert("請選擇一種顏色");
-            return;
-        }
-
-        let logoFile = $("#logo")[0].files[0];
-        let mainImageFile = $("#main-image")[0].files[0];
-
-        if (!logoFile || !mainImageFile) {
-            alert("請上傳機構 Logo 和主要圖片");
-            return;
-        }
-
-        let formData = new FormData($("#homepage-form")[0]);
+        let formData = new FormData(form);
         const baseUrl = window.location.href.split('?')[0];
         let endpoint = baseUrl + "/preview"
         try {
@@ -154,14 +145,13 @@
     });
 
     $("#btn-update-style").click(function (event) {
-        event.preventDefault();
-
-        if (!$("input[name='color']:checked").val()) {
-            alert("請選擇一種顏色");
+        let form = $("#homepage-form")[0];
+        if (!form.checkValidity()) {
             return;
         }
+        event.preventDefault();
 
-        let formData = new FormData($("#homepage-form")[0]);
+        let formData = new FormData(form);
         const baseUrl = window.location.href.split('?')[0];
         let endpoint = baseUrl + "/update/style"
         try {

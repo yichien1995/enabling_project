@@ -22,7 +22,7 @@ public class Homepage {
 	@Column(name = "main_image", columnDefinition = "varchar(255) default '預設主要圖片網址'")
 	private String mainImage;
 
-	@Column(name = "image_description",columnDefinition = "varchar(100) default '輸入圖片敘述'")
+	@Column(name = "image_description", columnDefinition = "varchar(100) default '輸入圖片敘述'")
 	private String imageDescription;
 
 	@Column(name = "logo", columnDefinition = "varchar(255) default '預設機構logo網址'")
@@ -35,7 +35,7 @@ public class Homepage {
 	@ManyToOne
 	private Institution institutionDomain;
 
-	@Column(name = "status", columnDefinition = "int default 0")
+	@Column(name = "status", columnDefinition = "tinyint default 0")
 	private Integer status;
 
 	public Homepage(ThemeColor themeColorId, String mainImage, String imageDescription, String logo, String institutionIntro, Institution institutionDomain) {
