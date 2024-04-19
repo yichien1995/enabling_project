@@ -27,6 +27,9 @@ public class Article {
 	@Column(name = "draft", columnDefinition = "tinyint", nullable = false)
 	private int draft;
 
+	@Column(name = "preview", columnDefinition = "tinyint", nullable = false)
+	private int preview;
+
 	@JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
 	@ManyToOne
 	private Institution institutionDomain;

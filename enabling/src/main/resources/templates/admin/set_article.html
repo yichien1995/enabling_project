@@ -2,7 +2,7 @@
 <html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
     <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}">
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
@@ -39,16 +39,16 @@
         <ul>
             <li>已發布文章</li>
             <ul th:if="${released_article != null}">
-                <li th:each="title : ${released_article}">
-                    <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${title} + '?draft=0'}"
-                       th:text="${title}"></a>
+                <li th:each="article : ${released_article}">
+                    <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=0'}"
+                       th:text="${article.title}"></a>
                 </li>
             </ul>
             <li>草稿</li>
             <ul th:if="${drafts != null}">
-                <li th:each="title : ${drafts}">
-                    <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${title} + '?draft=1'}"
-                       th:text="${title}"></a>
+                <li th:each="article : ${drafts}">
+                    <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=1'}"
+                       th:text="${article.title}"></a>
                 </li>
             </ul>
         </ul>
@@ -68,18 +68,18 @@
     <div th:if="${article != null}">
         <h2>衛教文章管理</h2>
         <h3>修改文章</h3>
-        <form class="article-form" method="post" enctype="multipart/form-data">
+        <form class="article-form" enctype="multipart/form-data" method="post">
             <label>上傳文章封面: </label>
-            <input class="cover" type="file" name="cover"/>
+            <input class="cover" name="cover" type="file"/>
             <br/>
             <label>文章標題: </label>
-            <input class="title" type="text" th:value="${article.title}" name="title" required/>
+            <input class="title" name="title" required th:value="${article.title}" type="text"/>
             <br/>
             <label>文章內文</label>
-            <textarea class="content" name="content" th:text="${article.content}" required></textarea>
+            <textarea class="content" name="content" required th:text="${article.content}"></textarea>
             <br/>
             <button class="btn-preview">預覽</button>
-            <button class="btn-delete" th:if="${released}">刪除</button>
+            <button class="btn-delete">刪除</button>
             <button class="btn-save" th:unless="${released}">存檔</button>
             <button class="btn-release">發布</button>
         </form>
@@ -89,12 +89,12 @@
     <div th:unless="${article != null}">
         <h2>衛教文章管理</h2>
         <h3>新增文章</h3>
-        <form class="article-form" method="post" enctype="multipart/form-data">
+        <form class="article-form" enctype="multipart/form-data" method="post">
             <label>上傳文章封面: </label>
-            <input class="cover" type="file" name="cover"/>
+            <input class="cover" name="cover" type="file"/>
             <br/>
             <label>文章標題: </label>
-            <input class="title" type="text" name="title" required/>
+            <input class="title" name="title" required type="text"/>
             <br/>
             <label>文章內文</label>
             <textarea class="content" name="content" required></textarea>
@@ -113,14 +113,18 @@
     let currentUrl = window.location.href;
 
     // get user's domain name
-    const REGEX = /\/admin\/([^/]+)/;
-    let domain = REGEX.exec(currentUrl)[1];
+    const DOMAIN_REGEX = /\/admin\/([^/]+)/;
+    let domain = DOMAIN_REGEX.exec(currentUrl)[1];
 
     // check article status
     const urlString = new URL(currentUrl);
     const searchParams = urlString.searchParams.get('draft');
     let draftValue = searchParams == null ? 1 : searchParams;
 
+    // get article id
+    let path = urlString.pathname;
+    const ID_REGEX = /articles\/([^?]+)/;
+    let articleId = ID_REGEX.exec(currentUrl) == null ? null : ID_REGEX.exec(currentUrl)[1];
 
     $(".btn-save").click(function (event) {
         let form = $(".article-form")[0];
@@ -130,12 +134,34 @@
         event.preventDefault();
 
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=save`;
-        console.log(endpoint)
+        let endpoint;
+        if (articleId == null) {
+            endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=save'`;
+        } else {
+            endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=save&id=${articleId}`;
+        }
         try {
             (async function postData() {
                 await sendData(formData, endpoint, "成功儲存文章!");
                 window.location.href = currentUrl;
+            })()
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    $(".btn-preview").click(function (event) {
+        let form = $(".article-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=preview`;
+        try {
+            (async function postData() {
+                await sendData(formData, endpoint, "預覽畫面!");
             })()
         } catch (error) {
             console.error('Error:', error);
@@ -150,7 +176,11 @@
         event.preventDefault();
 
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/release`;
+        if (articleId == null) {
+            endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?&action=release&draft=0'`;
+        } else {
+            endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?&action=release&id=${articleId}`;
+        }
         try {
             (async function postData() {
                 await sendData(formData, endpoint, "已發布文章!");
@@ -168,16 +198,22 @@
         }
         event.preventDefault();
 
-        let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/delete`;
-        try {
-            (async function postData() {
-                await sendData(formData, endpoint, "已刪除文章!");
-                window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/articles`
-            })()
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/delete?id=${articleId}`;
+        (async function deleteData() {
+            try {
+                let response = await fetch(endpoint, {
+                    method: 'DELETE'
+                })
+                if (response.ok) {
+                    alert("已刪除文章");
+                    window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/articles`
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            } catch (e) {
+                console.error('Error:', e);
+            }
+        })()
     });
 
     $('.btn-cancel').click(() => {
@@ -191,7 +227,7 @@
                 body: formData
             });
             if (response.ok) {
-                alert(message)
+                alert(message);
             } else {
                 throw new Error('Network response was not ok');
             }

@@ -2,6 +2,7 @@ package tw.appworks.school.yichien.enabling.repository.webpage;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.model.webpage.Article;
@@ -10,11 +11,15 @@ import java.util.List;
 
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
-
-	Article findByInstitutionDomainAndTitleAndDraft(Institution institution, String title, int draft);
+	Article findArticleById(int id);
 
 	void deleteArticleByInstitutionDomainAndTitleAndDraft(Institution institution, String title, int draft);
 
-	List<Article> findTitlesByInstitutionDomainAndDraft(Institution institutionDomain, int draft);
+	void deleteArticleById(int id);
+
+	List<Article> findArticleByInstitutionDomainAndDraftAndPreview(Institution institutionDomain, int draft, int preview);
+
+	@Query(value = "SELECT * FROM article WHERE institution_domain = :domain AND preview = 1", nativeQuery = true)
+	Article getPreviewArticle(@Param("domain") String domain);
 }
 
