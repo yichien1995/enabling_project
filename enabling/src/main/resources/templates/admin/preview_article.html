@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <style>
+        body#article-preview {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+    </style>
+    <title>預覽畫面</title>
+</head>
+<body id="article-preview">
+<div>
+    <div th:insert="~{webpage/homepage.html:: headerFragment}"></div>
+    <main>
+        <h2>衛教文章</h2>
+        <div class="article-container">
+            <img alt="文章封面" th:src="${article.cover}">
+            <h3 th:text="${article.title}"></h3>
+        </div>
+    </main>
+    <div th:insert="~{webpage/homepage.html:: footerFragment}"></div>
+</div>
+
+<div th:insert="~{webpage/article_page.html:: articlePageFragment}"></div>
+</body>
+</html>

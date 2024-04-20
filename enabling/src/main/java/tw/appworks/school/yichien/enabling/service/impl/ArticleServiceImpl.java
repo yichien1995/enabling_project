@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -25,6 +26,9 @@ public class ArticleServiceImpl implements ArticleService {
 	private final InstitutionRepository institutionRepository;
 	private final ArticleRepository articleRepository;
 	private final FileStorageService fileStorageService;
+
+	@Value("${prefix.image}")
+	private String imageUrlPrefix;
 
 	@Autowired
 	private EntityManager entityManager;
@@ -93,8 +97,16 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public void renderPageByArticleId(String id, Model model) {
 		int idValue = Integer.parseInt(id);
-		model.addAttribute("article",
-				articleRepository.findArticleById(idValue));
+		Article article = articleRepository.findArticleById(idValue);
+		article.setCover(imageUrlPrefix + article.getCover());
+		model.addAttribute("article", article);
+	}
+
+	@Override
+	public void renderArticlePreviewPage(String domain, Model model) {
+		Article previewArticle = articleRepository.getPreviewArticle(domain);
+		previewArticle.setCover(imageUrlPrefix + previewArticle.getCover());
+		model.addAttribute("article", previewArticle);
 	}
 
 	@Override
@@ -113,9 +125,21 @@ public class ArticleServiceImpl implements ArticleService {
 
 	;
 
+	@Override
+	public void renderArticleListPage(String domain, Model model) {
+		List<Article> articles = getReleasedArticlesList(domain);
+		for (Article article : articles) {
+			article.setCover(imageUrlPrefix + article.getCover());
+		}
+		model.addAttribute("articles", articles);
+	}
+
 	private List<Article> getArticleList(String domain, int draft) {
 		Institution institution = institutionRepository.findByDomainName(domain);
-		List<Article> articles = articleRepository.findArticleByInstitutionDomainAndDraftAndPreview(institution, draft, 0);
-		return articles;
+		return articleRepository.findArticleByInstitutionDomainAndDraftAndPreview(institution, draft, 0);
+	}
+
+	private List<Article> getReleasedArticlesList(String domain) {
+		return articleRepository.getReleasedArticles(domain);
 	}
 }

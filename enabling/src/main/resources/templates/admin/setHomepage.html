@@ -3,10 +3,19 @@
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>首頁設定</title>
     <style>
         body {
+            display: flex;
+        }
+
+        nav {
+            flex: 1;
+        }
+
+        main#homepage-setting {
+            flex: 4;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             height: 100vh;
@@ -29,79 +38,84 @@
     </style>
 </head>
 <body>
-<div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
-<div>
-    <h2>機構資料設定</h2>
-    <div th:switch="${action}">
-        <div th:case="'get-info'">
-            <label th:text="'機構名稱: ' + ${i.institutionName}" for="institution_name"></label>
-            <br>
-            <label th:text="'電話: ' + ${i.tel}" for="tel"></label>
-            <br>
-            <label th:text="'地址: ' + ${i.address}" for="address"></label>
-            <br>
-            <label th:text="'營業時間: '" for="business_hour"></label>
-            <p th:utext=" ${businessHour}"></p>
-            <br>
-            <button id="btn-change">更改</button>
+<nav th:insert="~{admin/set_article.html:: admin_sidebar}"></nav>
+<main id="homepage-setting">
+    <div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
+    <div>
+        <h2>機構資料設定</h2>
+        <div th:switch="${action}">
+            <div th:case="'get-info'">
+                <label for="institution_name" th:text="'機構名稱: ' + ${i.institutionName}"></label>
+                <br>
+                <label for="tel" th:text="'電話: ' + ${i.tel}"></label>
+                <br>
+                <label for="address" th:text="'地址: ' + ${i.address}"></label>
+                <br>
+                <label for="business_hour" th:text="'營業時間: '"></label>
+                <p th:utext=" ${businessHour}"></p>
+                <br>
+                <button id="btn-change">更改</button>
+            </div>
+            <div th:case="'get-info-form'">
+                <form id="institution-form" method="post">
+                    <label for="institution_name">機構名稱:</label>
+                    <input id="institution_name" name="institutionName" required th:value="${i.institutionName}"
+                           type="text">
+                    <br>
+                    <label for="tel">電話:</label>
+                    <input id="tel" name="tel" required th:value="${i.tel}" type="text">
+                    <br>
+                    <label for="address">地址:</label>
+                    <input id="address" name="address" required th:value="${i.address}" type="text">
+                    <br>
+                    <label for="business_hour">營業時間:</label>
+                    <br>
+                    <textarea id="business_hour" name="businessHour" required th:utext="${i.businessHour}"></textarea>
+                    <br>
+                    <button id="btn-update">儲存</button>
+                </form>
+                <button id="btn-cancel">取消</button>
+            </div>
         </div>
-        <div th:case="'get-info-form'">
-            <form id="institution-form" method="post">
-                <label for="institution_name">機構名稱:</label>
-                <input id="institution_name" name="institutionName" th:value="${i.institutionName}" type="text"
-                       required>
-                <br>
-                <label for="tel">電話:</label>
-                <input id="tel" name="tel" th:value="${i.tel}" type="text" required>
-                <br>
-                <label for="address">地址:</label>
-                <input id="address" name="address" th:value="${i.address}" type="text" required>
-                <br>
-                <label for="business_hour">營業時間:</label>
-                <br>
-                <textarea id="business_hour" name="businessHour" th:utext="${i.businessHour}" required></textarea>
-                <br>
-                <button id="btn-update">儲存</button>
-            </form>
-            <button id="btn-cancel">取消</button>
-        </div>
-    </div>
 
-    <h2>首頁設定</h2>
-    <form id="homepage-form" method="post" th:object="${HomepageForm}" enctype="multipart/form-data">
-        <h3>機構介紹</h3>
-        <label for="logo">機構 Logo </label>
-        <input id="logo" type="file" name="logo" required>
-        <br>
-        <label for="main-image">主要圖片 </label>
-        <input id="main-image" type="file" name="mainImage" required/>
-        <br>
-        <label for="image-intro">圖片敘述: </label>
-        <br>
-        <textarea id="image-intro" name="imageDescription" th:text="${homePage.imageDescription}" required></textarea>
-        <br>
-        <label for="institution-intro">關於我們:</label>
-        <br>
-        <textarea id="institution-intro" name="institutionIntro" th:text="${homePage.institutionIntro}"
-                  required></textarea>
-        <h3>選擇顏色</h3>
-        <div>
-            <input id="color-red" name="color" type="radio" value="1" required/>
-            <label for="color-red">紅色</label>
-            <input id="color-orange" name="color" type="radio" value="2"/>
-            <label for="color-orange">橘色</label>
-            <input id="color-green" name="color" type="radio" value="3"/>
-            <label for="color-green">綠色</label>
-            <input id="color-blue" name="color" type="radio" value="4"/>
-            <label for="color-blue">藍色</label>
-            <input id="color-purple" name="color" type="radio" value="5"/>
-            <label for="color-purple">紫色</label>
-        </div>
-        <button id="btn-preview-style">預覽</button>
-        <button id="btn-update-style">儲存</button>
-    </form>
-    <button id="btn-cancel-style">取消</button>
-</div>
+        <h2>首頁設定</h2>
+        <form enctype="multipart/form-data" id="homepage-form" method="post" th:object="${HomepageForm}">
+            <h3>機構介紹</h3>
+            <label for="logo">機構 Logo </label>
+            <input id="logo" name="logo" required type="file">
+            <br>
+            <label for="main-image">主要圖片 </label>
+            <input id="main-image" name="mainImage" required type="file"/>
+            <br>
+            <label for="image-intro">圖片敘述: </label>
+            <br>
+            <textarea id="image-intro" name="imageDescription" required
+                      th:text="${homePage.imageDescription}"></textarea>
+            <br>
+            <label for="institution-intro">關於我們:</label>
+            <br>
+            <textarea id="institution-intro" name="institutionIntro" required
+                      th:text="${homePage.institutionIntro}"></textarea>
+            <h3>選擇顏色</h3>
+            <div>
+                <input id="color-red" name="color" required type="radio" value="1"/>
+                <label for="color-red">紅色</label>
+                <input id="color-orange" name="color" type="radio" value="2"/>
+                <label for="color-orange">橘色</label>
+                <input id="color-green" name="color" type="radio" value="3"/>
+                <label for="color-green">綠色</label>
+                <input id="color-blue" name="color" type="radio" value="4"/>
+                <label for="color-blue">藍色</label>
+                <input id="color-purple" name="color" type="radio" value="5"/>
+                <label for="color-purple">紫色</label>
+            </div>
+            <button id="btn-preview-style">預覽</button>
+            <button id="btn-update-style">儲存</button>
+        </form>
+        <button id="btn-cancel-style">取消</button>
+    </div>
+</main>
+
 
 </body>
 <script>

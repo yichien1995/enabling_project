@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tw.appworks.school.yichien.enabling.service.ArticleService;
 import tw.appworks.school.yichien.enabling.service.HomepageService;
 
 @Controller
@@ -14,14 +15,32 @@ public class WebpageController {
 
 	private final HomepageService homepageService;
 
-	public WebpageController(HomepageService homepageService) {
+	private final ArticleService articleService;
+
+	public WebpageController(HomepageService homepageService, ArticleService articleService) {
 		this.homepageService = homepageService;
+		this.articleService = articleService;
 	}
 
 	@GetMapping("/homepage.html")
 	public String HomePage(@PathVariable String domain, Model model) {
 		homepageService.renderHomepage(domain, model);
 		return "webpage/homepage";
+	}
+
+	@GetMapping("/articles.html")
+	public String articleListPage(@PathVariable String domain, Model model) {
+		homepageService.renderHomepage(domain, model);
+		articleService.renderArticleListPage(domain, model);
+		return "webpage/articles";
+	}
+
+	@GetMapping("/article/{id}")
+	public String articlePage(@PathVariable String domain,
+	                          @PathVariable String id, Model model) {
+		homepageService.renderHomepage(domain, model);
+		articleService.renderPageByArticleId(id, model);
+		return "webpage/article_page";
 	}
 
 	// for testing

@@ -28,31 +28,32 @@
     <title>Document</title>
 </head>
 <body>
-<nav id="side-bar">
+<nav id="side-bar" th:fragment="admin_sidebar">
     <h2>管理者頁面</h2>
     <h3>網頁管理</h3>
     <ul>
-        <li><a href="">首頁設定</a></li>
+        <li><a th:href="@{'/admin/' +${domain}+'/setting/homepage'}">首頁設定</a></li>
         <li><a href="">服務項目</a></li>
         <li><a href="">團隊介紹</a></li>
         <li><a th:href="@{'/admin/' +${domain}+'/setting/articles'}">衛教文章</a></li>
-        <ul>
-            <li>已發布文章</li>
-            <ul th:if="${released_article != null}">
-                <li th:each="article : ${released_article}">
-                    <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=0'}"
-                       th:text="${article.title}"></a>
-                </li>
+        <div th:if="${released_article != null || draft != null}">
+            <ul>
+                <li>已發布文章</li>
+                <ul th:if="${released_article != null}">
+                    <li th:each="article : ${released_article}">
+                        <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=0'}"
+                           th:text="${article.title}"></a>
+                    </li>
+                </ul>
+                <li>草稿</li>
+                <ul th:if="${drafts != null}">
+                    <li th:each="article : ${drafts}">
+                        <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=1'}"
+                           th:text="${article.title}"></a>
+                    </li>
+                </ul>
             </ul>
-            <li>草稿</li>
-            <ul th:if="${drafts != null}">
-                <li th:each="article : ${drafts}">
-                    <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=1'}"
-                       th:text="${article.title}"></a>
-                </li>
-            </ul>
-        </ul>
-
+        </div>
     </ul>
     <h3>團隊管理</h3>
     <ul>
@@ -61,7 +62,7 @@
     <h3>帳號管理</h3>
     <ul>
         <li><a href="">帳號設定</a></li>
-        <li><a href="">設定</a></li>
+        <li><a href="">登出</a></li>
     </ul>
 </nav>
 <main>
@@ -86,7 +87,7 @@
         <button class="btn-cancel">取消</button>
     </div>
 
-    <div th:unless="${article != null}">
+    <div th:if="${article == null}">
         <h2>衛教文章管理</h2>
         <h3>新增文章</h3>
         <form class="article-form" enctype="multipart/form-data" method="post">
@@ -159,9 +160,11 @@
 
         let formData = new FormData(form);
         let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=preview`;
+        let previewUrl = `${RELATIVE_PATH}/admin/${domain}/setting/articles/preview`;
         try {
             (async function postData() {
-                await sendData(formData, endpoint, "預覽畫面!");
+                await sendData(formData, endpoint);
+                window.open(previewUrl, '_blank', 'width=1200,height=600');
             })()
         } catch (error) {
             console.error('Error:', error);
@@ -183,7 +186,7 @@
         }
         try {
             (async function postData() {
-                await sendData(formData, endpoint, "已發布文章!");
+                await sendData(formData, endpoint);
                 window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/articles`
             })()
         } catch (error) {
@@ -220,14 +223,13 @@
         window.location.href = currentUrl;
     });
 
-    async function sendData(formData, endpoint, message) {
+    async function sendData(formData, endpoint) {
         try {
             let response = await fetch(endpoint, {
                 method: 'POST',
                 body: formData
             });
             if (response.ok) {
-                alert(message);
             } else {
                 throw new Error('Network response was not ok');
             }

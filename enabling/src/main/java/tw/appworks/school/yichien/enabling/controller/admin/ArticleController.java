@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.ArticleForm;
 import tw.appworks.school.yichien.enabling.service.ArticleService;
+import tw.appworks.school.yichien.enabling.service.HomepageService;
 
 
 @Controller
@@ -14,11 +15,15 @@ import tw.appworks.school.yichien.enabling.service.ArticleService;
 public class ArticleController {
 
 	private final ArticleService articleService;
+
+	private final HomepageService homepageService;
+
 	@Value("${prefix.domain}")
 	private String domainPrefix;
 
-	public ArticleController(ArticleService articleService) {
+	public ArticleController(ArticleService articleService, HomepageService homepageService) {
 		this.articleService = articleService;
+		this.homepageService = homepageService;
 	}
 
 	@GetMapping
@@ -60,6 +65,13 @@ public class ArticleController {
 		articleService.renderPageByArticleId(id, model);
 		articleService.renderArticleList(domain, model);
 		return "admin/set_article";
+	}
+
+	@GetMapping("/preview")
+	public String previewArticle(@PathVariable String domain, Model model) {
+		homepageService.renderHomepage(domain, model);
+		articleService.renderArticlePreviewPage(domain, model);
+		return "admin/preview_article";
 	}
 
 	@DeleteMapping("/delete")
