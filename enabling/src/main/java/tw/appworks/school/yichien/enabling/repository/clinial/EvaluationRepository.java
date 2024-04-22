@@ -23,4 +23,6 @@ public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 	List<Evaluation> getUnreservedEvaluations(@Param("domain") String domain);
 
 	void deleteEvaluationById(long id);
+
+	Evaluation getEvaluationById(long id);
 }

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import tw.appworks.school.yichien.enabling.dto.account.MemberDTO;
 import tw.appworks.school.yichien.enabling.dto.form.NewEvaluationForm;
+import tw.appworks.school.yichien.enabling.dto.form.ReserveEvaluationForm;
 import tw.appworks.school.yichien.enabling.model.account.InstitutionUser;
 import tw.appworks.school.yichien.enabling.model.clinial.Evaluation;
 import tw.appworks.school.yichien.enabling.model.clinial.EvaluationCalendarEvent;
@@ -69,6 +70,19 @@ public class EvaluationImpl implements EvaluationService {
 
 		evaluationRepository.save(evaluation);
 
+	}
+
+	@Override
+	public void reserveEvaluation(ReserveEvaluationForm reserveEvaluationForm) {
+		Evaluation evaluation = evaluationRepository.getEvaluationById(reserveEvaluationForm.getEvaluationId());
+		System.out.println(evaluation);
+		System.out.println(reserveEvaluationForm);
+		evaluation.setClientName(reserveEvaluationForm.getClientName());
+		evaluation.setBirthday(reserveEvaluationForm.getBirthday());
+		evaluation.setTel(reserveEvaluationForm.getTel());
+		evaluation.setEmail(reserveEvaluationForm.getEmail());
+		evaluation.setReserved(1);
+		evaluationRepository.save(evaluation);
 	}
 
 	@Override

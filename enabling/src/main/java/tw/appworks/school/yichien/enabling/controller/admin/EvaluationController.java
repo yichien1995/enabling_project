@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.NewEvaluationForm;
+import tw.appworks.school.yichien.enabling.dto.form.ReserveEvaluationForm;
 import tw.appworks.school.yichien.enabling.service.EvaluationService;
 
 @Controller
@@ -31,6 +32,12 @@ public class EvaluationController {
 	public String evaluation(@PathVariable String domain, @ModelAttribute NewEvaluationForm newEvaluationForm) {
 		evaluationService.saveNewEvaluation(domain, newEvaluationForm);
 		return "redirect:" + domainPrefix + "admin/" + domain + "/setting/evaluation";
+	}
+
+	@PostMapping("/reserve")
+	public String reserveEvaluation(@PathVariable String domain, @ModelAttribute ReserveEvaluationForm reserveEvaluationForm) {
+		evaluationService.reserveEvaluation(reserveEvaluationForm);
+		return "redirect:" + domainPrefix + domain + "/evaluation.html";
 	}
 
 	@DeleteMapping("/delete")

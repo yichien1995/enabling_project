@@ -13,6 +13,14 @@
             max-width: 1100px;
             margin: 40px auto;
         }
+
+        form {
+            text-align: center;
+        }
+
+        input {
+            margin: 5px;
+        }
     </style>
     <title>預約評估</title>
 </head>
@@ -22,25 +30,34 @@
     <h2>進行預約</h2>
     <div id='calendar'></div>
     <h2>填寫表單</h2>
-    <form>
+    <form id="reservation-form">
         <p>選擇時段</p>
         <div th:each="option:${options}" th:if="${options != null}">
-            <input name="evaluation-option" th:value="${option.id}" type="radio">
+            <input name="evaluationId" required th:value="${option.id}" type="radio">
             <label th:text="${option.detail}"></label>
         </div>
-        
+        <label>小朋友姓名: </label>
+        <input name="clientName" required type="text">
+        <br>
+        <label>生日: </label>
+        <input name="birthday" required type="date">
+        <br>
+        <label>聯絡電話: </label>
+        <input name="tel" required type="text">
+        <br>
+        <label>信箱: </label>
+        <input name="email" required type="text">
+        <br>
+        <button id="btn-reserve">送出</button>
     </form>
 </main>
 <div th:insert="~{webpage/homepage.html:: footerFragment}"></div>
 </body>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 <script th:inline="javascript">
-
     $(document).ready(function () {
         let calendarEl = document.getElementById('calendar');
         let events = [[${events != null ? events : '[]'}]];
-
-        console.log(events);
 
         var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
@@ -55,6 +72,38 @@
 
         calendar.render();
     });
+</script>
+<script>
+    const RELATIVE_PATH = window.location.origin;
+    let currentUrl = new URL(window.location.href);
 
+    // get domain name
+    let domain = currentUrl.pathname.split('/')[1];
+
+    $("#btn-reserve").click(function (event) {
+        let form = $("#reservation-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/evaluation/reserve`;
+        try {
+            (async function postData() {
+                let response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                })
+                if (response.ok) {
+                    alert("成功預約評估")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/${domain}/evaluation.html`;
+                    }, 0);
+                }
+            })()
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    })
 </script>
 </html>
