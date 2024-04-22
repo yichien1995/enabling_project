@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        h2 {
+            text-align: center;
+        }
+
+        #calendar {
+            max-width: 1100px;
+            margin: 40px auto;
+        }
+    </style>
+    <title>預約評估</title>
+</head>
+<body>
+<div th:insert="~{webpage/homepage.html:: headerFragment}"></div>
+<main>
+    <h2>進行預約</h2>
+    <div id='calendar'></div>
+    <h2>填寫表單</h2>
+    <form>
+        <p>選擇時段</p>
+        <div th:each="option:${options}" th:if="${options != null}">
+            <input name="evaluation-option" th:value="${option.id}" type="radio">
+            <label th:text="${option.detail}"></label>
+        </div>
+        
+    </form>
+</main>
+<div th:insert="~{webpage/homepage.html:: footerFragment}"></div>
+</body>
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script th:inline="javascript">
+
+    $(document).ready(function () {
+        let calendarEl = document.getElementById('calendar');
+        let events = [[${events != null ? events : '[]'}]];
+
+        console.log(events);
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            initialDate: '2024-04-20',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
+            },
+            events: events
+        });
+
+        calendar.render();
+    });
+
+</script>
+</html>

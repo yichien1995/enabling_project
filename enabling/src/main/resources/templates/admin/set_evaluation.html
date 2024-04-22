@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <style>
+        body {
+            display: flex;
+        }
+
+        nav {
+            flex: 1;
+        }
+
+        main {
+            flex: 4;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+    <title>評估管理</title>
+</head>
+<body>
+<nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
+<main>
+    <h2>評估管理系統</h2>
+    <h2>新增評估</h2>
+    <form id="evaluation" method="post">
+        <label for="evaluation-date">日期: </label>
+        <input id="evaluation-date" name="evaluationDate" required type="date">
+        <br>
+        <label for="evaluation-time">時間: </label>
+        <input id="evaluation-time" name="evaluationTime" required type="time">
+        <br>
+        <div th:if="${memberData != null}">
+            <label for="evaluators-list">評估人員: </label>
+            <input list="evaluators-list" name="institutionUserId" required type="text">
+            <datalist id="evaluators-list">
+                <option th:each="member : ${memberData}" th:text="${member.name}"
+                        th:value="${member.institutionUserId}"></option>
+            </datalist>
+        </div>
+        <div th:if="${memberData == null}">
+            <label for="evaluators-default">評估人員: </label>
+            <input list="evaluators-default" required type="text">
+            <datalist id="evaluators-default">
+            </datalist>
+        </div>
+        <br>
+        <button id="btn-new-evaluation">新增</button>
+    </form>
+    <h2>評估列表</h2>
+    <table>
+        <tr>
+            <th>日期</th>
+            <th>時間</th>
+            <th>評估人員</th>
+            <th>個案姓名</th>
+            <th>生日</th>
+            <th>聯絡電話</th>
+            <th>刪除</th>
+        </tr>
+        <tr th:each="evaluation:${evaluations}" th:if="${evaluations != null}">
+            <td th:text="${evaluation.evaluationDate}"></td>
+            <td th:text="${evaluation.evaluationTime}"></td>
+            <td th:text="${evaluation.institutionUserId.userId.username}"></td>
+            <td th:text="${evaluation.clientName} ?: 'N/A'"></td>
+            <td th:text="${evaluation.birthday} ?: 'N/A'"></td>
+            <td th:text="${evaluation.tel} ?: 'N/A'"></td>
+            <td>
+                <button th:attr="onclick='deleteEvaluation(\'' + ${evaluation.id} + '\')'">刪除</button>
+            </td>
+        </tr>
+    </table>
+</main>
+</body>
+<script>
+    const RELATIVE_PATH = window.location.origin;
+    let currentUrl = window.location.href;
+
+    // get user's domain name
+    const DOMAIN_REGEX = /\/admin\/([^/]+)/;
+    let domain = DOMAIN_REGEX.exec(currentUrl)[1];
+
+    $("#btn-new-evaluation").click(function (event) {
+        let form = $("#evaluation")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/evaluation/create`;
+        try {
+            (async function postData() {
+                let response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                })
+                if (response.ok) {
+                    alert("成功新增評估")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/evaluation`;
+                    }, 0);
+                }
+            })()
+
+        } catch (error) {
+            console.error('Error:', error)
+        }
+    })
+
+    function deleteEvaluation(id) {
+        if (confirm("確定刪除?")) {
+            let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/evaluation/delete?id=` + id;
+            console.log(endpoint);
+            (async function deleteData() {
+                try {
+                    let response = await fetch(endpoint, {
+                        method: 'DELETE'
+                    })
+                    if (response.ok) {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/evaluation`
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (e) {
+                    console.error('Error:', e);
+                }
+            })()
+        }
+    }
+
+</script>
+</html>

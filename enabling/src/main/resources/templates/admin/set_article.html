@@ -28,43 +28,7 @@
     <title>Document</title>
 </head>
 <body>
-<nav id="side-bar" th:fragment="admin_sidebar">
-    <h2>管理者頁面</h2>
-    <h3>網頁管理</h3>
-    <ul>
-        <li><a th:href="@{'/admin/' +${domain}+'/setting/homepage'}">首頁設定</a></li>
-        <li><a href="">服務項目</a></li>
-        <li><a href="">團隊介紹</a></li>
-        <li><a th:href="@{'/admin/' +${domain}+'/setting/articles'}">衛教文章</a></li>
-        <div th:if="${released_article != null || draft != null}">
-            <ul>
-                <li>已發布文章</li>
-                <ul th:if="${released_article != null}">
-                    <li th:each="article : ${released_article}">
-                        <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=0'}"
-                           th:text="${article.title}"></a>
-                    </li>
-                </ul>
-                <li>草稿</li>
-                <ul th:if="${drafts != null}">
-                    <li th:each="article : ${drafts}">
-                        <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=1'}"
-                           th:text="${article.title}"></a>
-                    </li>
-                </ul>
-            </ul>
-        </div>
-    </ul>
-    <h3>團隊管理</h3>
-    <ul>
-        <li><a href="">成員管理</a></li>
-    </ul>
-    <h3>帳號管理</h3>
-    <ul>
-        <li><a href="">帳號設定</a></li>
-        <li><a href="">登出</a></li>
-    </ul>
-</nav>
+<nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
 <main>
     <div th:if="${article != null}">
         <h2>衛教文章管理</h2>

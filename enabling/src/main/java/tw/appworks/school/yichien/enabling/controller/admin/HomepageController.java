@@ -1,7 +1,6 @@
 package tw.appworks.school.yichien.enabling.controller.admin;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -9,9 +8,6 @@ import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.service.AdminService;
 import tw.appworks.school.yichien.enabling.service.HomepageService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/admin/{domain}/setting/homepage")
@@ -46,7 +42,7 @@ public class HomepageController {
 		}
 		homepageService.getInstitution(domain, model);
 
-		return "admin/setHomepage";
+		return "admin/set_homepage";
 	}
 
 	@PostMapping("/update/institution")

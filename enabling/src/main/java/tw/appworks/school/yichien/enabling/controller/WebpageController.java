@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tw.appworks.school.yichien.enabling.service.ArticleService;
+import tw.appworks.school.yichien.enabling.service.EvaluationService;
 import tw.appworks.school.yichien.enabling.service.HomepageService;
 
 @Controller
@@ -17,9 +18,12 @@ public class WebpageController {
 
 	private final ArticleService articleService;
 
-	public WebpageController(HomepageService homepageService, ArticleService articleService) {
+	private final EvaluationService evaluationService;
+
+	public WebpageController(HomepageService homepageService, ArticleService articleService, EvaluationService evaluationService) {
 		this.homepageService = homepageService;
 		this.articleService = articleService;
+		this.evaluationService = evaluationService;
 	}
 
 	@GetMapping("/homepage.html")
@@ -41,6 +45,13 @@ public class WebpageController {
 		homepageService.renderHomepage(domain, model);
 		articleService.renderPageByArticleId(id, model);
 		return "webpage/article_page";
+	}
+
+	@GetMapping("/evaluation.html")
+	public String evaluationPage(@PathVariable String domain, Model model) {
+		homepageService.renderHomepage(domain, model);
+		evaluationService.renderEvaluationPage(domain, model);
+		return "webpage/evaluation";
 	}
 
 	// for testing

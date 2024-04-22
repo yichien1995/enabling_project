@@ -4,7 +4,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>首頁設定</title>
     <style>
         body {
             display: flex;
@@ -36,9 +35,10 @@
             margin: 5px;
         }
     </style>
+    <title>首頁設定</title>
 </head>
 <body>
-<nav th:insert="~{admin/set_article.html:: admin_sidebar}"></nav>
+<nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
 <main id="homepage-setting">
     <div th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
     <div>
