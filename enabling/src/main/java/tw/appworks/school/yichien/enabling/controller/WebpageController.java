@@ -1,6 +1,5 @@
 package tw.appworks.school.yichien.enabling.controller;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,12 +51,6 @@ public class WebpageController {
 		homepageService.renderHomepage(domain, model);
 		evaluationService.renderEvaluationPage(domain, model);
 		return "webpage/evaluation";
-	}
-
-	// for testing
-	@GetMapping
-	public ResponseEntity<?> test() {
-		return ResponseEntity.ok().body(homepageService.getHomepageDetail("test1"));
 	}
 
 }

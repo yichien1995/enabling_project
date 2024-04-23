@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        form {
+            background-color: #fff;
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <title>新增機構</title>
+</head>
+<body>
+<form action="/api/1.0/institution/create" id="new-institution-form" method="post" th:object="${NewInstitutionForm}">
+    <label for="institution_domain">*網域名稱:</label>
+    <input id="institution_domain"
+           name="institutionDomain"
+           placeholder="不得包含 &lt; &gt; &quot; ' # % { } | \\ ^ ~ [ ] ` ( ) ; ? : @ &amp; = + $ , / ! * 等符號" required type="text">
+    <p> 輸入機構基本資料(可於稍後設定)</p>
+    <label for="institution_name">機構名稱:</label>
+    <input id="institution_name" name="institutionName" placeholder="輸入機構名稱" type="text">
+    <br>
+    <label for="tel">電話:</label>
+    <input id="tel" name="tel" placeholder="輸入機構電話" type="text">
+    <br>
+    <label for="address">地址:</label>
+    <input id="address" name="address" placeholder="輸入機構地址" type="text">
+    <br>
+    <label for="business_hour" placeholder="輸入營業時間">營業時間:</label>
+    <br>
+    <textarea id="business_hour" name="businessHour"></textarea>
+    <br>
+    <button id="btn-create">新增</button>
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).on('submit', '#new-institution-form', async function (event) {
+        event.preventDefault();
+
+        try {
+            let response = await fetch($(this).attr('action'), {
+                body: new FormData(this),
+                method: $(this).attr('method'),
+            });
+            let result = await response.json();
+            if (response.ok) {
+                window.close();
+            } else {
+                alert(result["error"])
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    });
+</script>
+</body>
+</html>

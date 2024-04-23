@@ -120,7 +120,6 @@ public class ArticleServiceImpl implements ArticleService {
 		model.addAttribute("released_article", released);
 		List<Article> drafts = getArticleList(domain, 1);
 		model.addAttribute("drafts", drafts);
-		model.addAttribute("domain", domain);
 	}
 
 	;

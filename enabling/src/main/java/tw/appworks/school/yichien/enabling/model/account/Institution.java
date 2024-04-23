@@ -1,6 +1,7 @@
 package tw.appworks.school.yichien.enabling.model.account;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "institution")
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Institution {
 
 	@Id

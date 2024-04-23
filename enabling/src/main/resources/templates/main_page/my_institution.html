@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            flex: 1;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        nav p {
+            margin: 0;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        nav a.btn-logout {
+            margin-top: auto;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 4;
+            padding: 20px;
+            position: relative;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            bottom: 50px;
+            right: 50px;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <title>Enabling - 會員</title>
+</head>
+<body>
+<nav>
+    <p>你好, </p>
+    <a class="btn-logout" th:href="@{/}">登出</a>
+</nav>
+<main>
+    <h1>我的機構</h1>
+    <div th:if="${myInstitutions != null}">
+        <li th:each="myInstitution : ${myInstitutions}">
+            <a
+                    th:href="@{'/admin/' + ${myInstitution.institutionDomain}}"
+                    th:text="${myInstitution.institutionName}"></a>
+        </li>
+    </div>
+</main>
+<button id="btn-create">新增機構</button>
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+<script>
+    $('#btn-create').click(() => {
+        window.open('/myinstitution/create', '_blank', 'width=800,height=600');
+    });
+</script>
+</body>
+</html>

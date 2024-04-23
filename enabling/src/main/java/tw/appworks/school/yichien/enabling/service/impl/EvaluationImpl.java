@@ -75,8 +75,7 @@ public class EvaluationImpl implements EvaluationService {
 	@Override
 	public void reserveEvaluation(ReserveEvaluationForm reserveEvaluationForm) {
 		Evaluation evaluation = evaluationRepository.getEvaluationById(reserveEvaluationForm.getEvaluationId());
-		System.out.println(evaluation);
-		System.out.println(reserveEvaluationForm);
+		
 		evaluation.setClientName(reserveEvaluationForm.getClientName());
 		evaluation.setBirthday(reserveEvaluationForm.getBirthday());
 		evaluation.setTel(reserveEvaluationForm.getTel());

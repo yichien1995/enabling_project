@@ -102,7 +102,7 @@ public class HomepageServiceImpl implements HomepageService {
 			homepage.setStatus(1);
 			homepage.setInstitutionDomain(institution);
 			homepageRepository.save(homepage);
-			saveHomepageForm(domain,"public",hf,homepage);
+			saveHomepageForm(domain, "public", hf, homepage);
 		}
 	}
 

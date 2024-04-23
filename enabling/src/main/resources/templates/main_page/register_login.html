@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Enabling - 登入/註冊</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            background: #fff;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #666;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        a {
+            display: block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .switch-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .switch-form a {
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="register-form-container" style="display: none;">
+    <h1>註冊</h1>
+    <form action="/api/1.0/user/register" id="register-form" method="post" th:object="${Users}">
+        <label for="user-name">姓名：</label>
+        <input id="user-name" name="username" required type="text"/>
+        <br/>
+        <label for="email">信箱：</label>
+        <input id="email" name="email" required type="email"/>
+        <br/>
+        <label>密碼：</label>
+        <input
+                name="password"
+                required
+                type="password"
+        />
+        <br/>
+        <label>確認密碼：</label>
+        <input
+                required
+                type="password"
+        />
+        <br/>
+        <button id="btn-register">註冊</button>
+    </form>
+    <div class="switch-form">
+        <a href="#" id="login-link">已有帳號？立即登入</a>
+    </div>
+</div>
+
+<div id="login-form-container">
+    <h1>登入</h1>
+    <form action="/api/1.0/user/login" id="login-form" method="post" th:object="${Users}">
+        <label for="login-email">信箱：</label>
+        <input id="login-email" name="email" required type="email"/>
+        <br/>
+        <label for="login-password">密碼：</label>
+        <input
+                id="login-password"
+                name="password"
+                required
+                type="password"
+        />
+        <br/>
+        <button id="btn-login">登入</button>
+    </form>
+    <div class="switch-form">
+        <a href="#" id="register-link">註冊新帳號</a>
+    </div>
+</div>
+
+<div class="return-home">
+    <a href="#" id="return-home-link">返回首頁</a>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    const relativePath = window.location.origin;
+
+    $(document).ready(function () {
+        $('#register-link').click(function () {
+            $('#login-form-container').hide();
+            $('#register-form-container').show();
+        });
+
+        $('#login-link').click(function () {
+            $('#register-form-container').hide();
+            $('#login-form-container').show();
+        });
+    })
+
+    $(document).on('submit', '#login-form', async function (event) {
+        event.preventDefault();
+
+        try {
+            let response = await fetch($(this).attr('action'), {
+                body: new FormData(this),
+                method: $(this).attr('method'),
+            });
+            let result = await response.json();
+            if (response.ok) {
+                window.location.href = `${relativePath}/myinstitution`;
+            } else {
+                alert(result["error"])
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    });
+
+    $(document).on('submit', '#register-form', async function (event) {
+        event.preventDefault();
+
+        try {
+            let response = await fetch($(this).attr('action'), {
+                body: new FormData(this),
+                method: $(this).attr('method'),
+            });
+            let result = await response.json();
+
+            if (response.ok) {
+                window.location.href = `${relativePath}/myinstitution`;
+            } else {
+                alert(result["error"])
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    });
+
+    $('#return-home-link').click(function (event) {
+        event.preventDefault();
+        window.location.href = relativePath;
+    });
+
+</script>
+</body>
+</html>
