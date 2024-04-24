@@ -27,7 +27,7 @@ public class MainPageController {
 	@GetMapping("/myinstitution")
 	public String user(Model model) {
 		// user id 從 session 中取得
-		mainPageService.renderMyInstitutionPage(model, 1L);
+		mainPageService.renderMyInstitutionPage(model, 5L);
 		return "main_page/my_institution";
 	}
 

@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <style>
-        /*.article-container {*/
-        /*    display: grid;*/
-        /*    grid-template-columns: repeat(3, 1fr);*/
-        /*}*/
+        .article-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
 
         h2, h3 {
             text-align: center;
         }
 
-        /*img {*/
-        /*    width: 100%;*/
-        /*}*/
+        img.image-article {
+            width: 100%;
+        }
     </style>
     <link rel="stylesheet" th:href="@{/styles/homepage.css}"/>
     <title th:style="'color: ' + ${homePage.themeColorId.headingColor}">衛教文章</title>
@@ -27,7 +27,7 @@
     <div class="article-container">
         <div th:each="article : ${articles}">
             <a th:href="@{'/' +${domain}+'/article/' + ${article.id}}">
-                <img alt="文章封面" th:src="${article.cover}">
+                <img alt="文章封面" class="image-article" th:src="${article.cover}">
             </a>
             <h3 th:style="'color: ' + ${homePage.themeColorId.headingColor}" th:text="${article.title}"></h3>
         </div>

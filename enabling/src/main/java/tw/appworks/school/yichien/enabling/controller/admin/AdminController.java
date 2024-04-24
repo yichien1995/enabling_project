@@ -39,4 +39,10 @@ public class AdminController {
 		model.addAttribute("domain", domain);
 		return "admin/account_management";
 	}
+
+	@GetMapping("/management/report")
+	public String caseReport(@PathVariable String domain, Model model) {
+		model.addAttribute("domain", domain);
+		return "admin/report";
+	}
 }

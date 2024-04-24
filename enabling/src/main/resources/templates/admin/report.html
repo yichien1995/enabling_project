@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-Hunt">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
     <style>
         body {
             display: flex;
@@ -16,12 +17,13 @@
             flex: 4;
         }
     </style>
-    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
-    <title>管理者頁面</title>
 </head>
 <body>
 <nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
-<main></main>
+<main>
+    <h2>個案報表</h2>
+    <p>網站建置中......</p>
+</main>
 
 </body>
 </html>

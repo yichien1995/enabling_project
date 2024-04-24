@@ -29,7 +29,7 @@ public class InstitutionController {
 			return ResponseEntity.badRequest().body(domainErrorMsg);
 		}
 		// user id 從 session 中取得
-		institutionService.createNewInstitution(1L, form);
+		institutionService.createNewInstitution(5L, form);
 		Map<String, Object> result = new HashMap<>();
 		result.put("success", "Create institution successfully.");
 		return ResponseEntity.status(HttpStatus.OK).body(result);
