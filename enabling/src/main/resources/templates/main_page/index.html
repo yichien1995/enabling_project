@@ -1,12 +1,41 @@
 <!DOCTYPE html>
-<html lang="zh-Hunt">
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <style>
+        div.image-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        img {
+            width: 80%;
+        }
+
+        button {
+            position: absolute;
+            right: 300px;
+            bottom: 100px;
+            padding: 1rem;
+            background-color: #ffd700;;
+            color: #3d3d3d;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #ffcc00;
+        }
+    </style>
     <title>Enabling - 首頁</title>
 </head>
 <body>
-<h1>首頁</h1>
+<div class="image-container">
+    <img th:src="@{/images/homepage_image.PNG}">
+</div>
+
 <button onclick="window.location.href='/register'">註冊 / 登入</button>
 </body>
 </html>

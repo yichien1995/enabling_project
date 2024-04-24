@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/styles/homepage.css}"/>
     <style>
         h2 {
             text-align: center;
@@ -27,9 +28,9 @@
 <body>
 <div th:insert="~{webpage/homepage.html:: headerFragment}"></div>
 <main>
-    <h2>進行預約</h2>
+    <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">進行預約</h2>
     <div id='calendar'></div>
-    <h2>填寫表單</h2>
+    <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">填寫表單</h2>
     <form id="reservation-form">
         <p>選擇時段</p>
         <div th:each="option:${options}" th:if="${options != null}">

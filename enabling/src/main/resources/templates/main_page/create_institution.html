@@ -5,10 +5,49 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <style>
         body {
+            display: flex;
+            height: 100vh;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+        }
+
+        nav {
+            flex: 1;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        nav p {
+            margin: 0;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-right: 10px;
+        }
+
+        nav a.btn-logout {
+            margin-top: auto;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 4;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
         }
 
         form {
@@ -55,32 +94,42 @@
     <title>新增機構</title>
 </head>
 <body>
-<form action="/api/1.0/institution/create" id="new-institution-form" method="post" th:object="${NewInstitutionForm}">
-    <label for="institution_domain">*網域名稱:</label>
-    <input id="institution_domain"
-           name="institutionDomain"
-           placeholder="不得包含 &lt; &gt; &quot; ' # % { } | \\ ^ ~ [ ] ` ( ) ; ? : @ &amp; = + $ , / ! * 等符號" required type="text">
-    <p> 輸入機構基本資料(可於稍後設定)</p>
-    <label for="institution_name">機構名稱:</label>
-    <input id="institution_name" name="institutionName" placeholder="輸入機構名稱" type="text">
-    <br>
-    <label for="tel">電話:</label>
-    <input id="tel" name="tel" placeholder="輸入機構電話" type="text">
-    <br>
-    <label for="address">地址:</label>
-    <input id="address" name="address" placeholder="輸入機構地址" type="text">
-    <br>
-    <label for="business_hour" placeholder="輸入營業時間">營業時間:</label>
-    <br>
-    <textarea id="business_hour" name="businessHour"></textarea>
-    <br>
-    <button id="btn-create">新增</button>
-</form>
+<nav>
+    <p>你好, </p>
+    <a class="btn-logout" th:href="@{/}">登出</a>
+</nav>
+<main>
+    <h1>打造你的機構網站</h1>
+    <form action="/api/1.0/institution/create" id="new-institution-form" method="post"
+          th:object="${NewInstitutionForm}">
+        <label for="institution_domain">*網域名稱:</label>
+        <input id="institution_domain"
+               name="institutionDomain"
+               placeholder="不得包含 &lt; &gt; &quot; ' # % { } | \\ ^ ~ [ ] ` ( ) ; ? : @ &amp; = + $ , / ! * 等符號"
+               required type="text">
+        <p> 輸入機構基本資料(可於稍後設定)</p>
+        <label for="institution_name">機構名稱:</label>
+        <input id="institution_name" name="institutionName" placeholder="輸入機構名稱" type="text">
+        <br>
+        <label for="tel">電話:</label>
+        <input id="tel" name="tel" placeholder="輸入機構電話" type="text">
+        <br>
+        <label for="address">地址:</label>
+        <input id="address" name="address" placeholder="輸入機構地址" type="text">
+        <br>
+        <label for="business_hour" placeholder="輸入營業時間">營業時間:</label>
+        <br>
+        <textarea id="business_hour" name="businessHour"></textarea>
+        <br>
+        <button id="btn-create">新增</button>
+    </form>
+</main>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    const relativePath = window.location.origin;
     $(document).on('submit', '#new-institution-form', async function (event) {
         event.preventDefault();
-
         try {
             let response = await fetch($(this).attr('action'), {
                 body: new FormData(this),
@@ -88,7 +137,7 @@
             });
             let result = await response.json();
             if (response.ok) {
-                window.close();
+                window.location.href = `${relativePath}/myinstitution`;
             } else {
                 alert(result["error"])
             }

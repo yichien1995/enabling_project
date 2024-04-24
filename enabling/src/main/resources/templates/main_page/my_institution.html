@@ -95,8 +95,11 @@
 <button id="btn-create">新增機構</button>
 <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
 <script>
+    const relativePath = window.location.origin;
+
     $('#btn-create').click(() => {
-        window.open('/myinstitution/create', '_blank', 'width=800,height=600');
+        window.location.href = `${relativePath}/myinstitution/create`;
+        // window.open('/myinstitution/create', '_blank', 'width=800,height=600');
     });
 </script>
 </body>

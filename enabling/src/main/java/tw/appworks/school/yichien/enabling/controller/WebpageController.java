@@ -53,4 +53,16 @@ public class WebpageController {
 		return "webpage/evaluation";
 	}
 
+	@GetMapping("/service.html")
+	public String servicePage(@PathVariable String domain, Model model) {
+		homepageService.renderHomepage(domain, model);
+		return "webpage/service";
+	}
+
+	@GetMapping("/team.html")
+	public String teamPage(@PathVariable String domain, Model model) {
+		homepageService.renderHomepage(domain, model);
+		return "webpage/team";
+	}
+
 }

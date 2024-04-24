@@ -9,13 +9,15 @@
             text-align: center;
         }
     </style>
-    <title th:style="'color: ' + ${homePage.themeColorId.headingColor}" th:text="${article.title}"></title>
+    <title>團隊介紹</title>
 </head>
-<body th:fragment="articlePageFragment">
+<body>
 <div th:insert="~{webpage/homepage.html:: headerFragment}"></div>
-<h2 th:text="${article.title}"></h2>
-<p th:utext="${article.content}"></p>
+<main>
+    <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">團隊介紹</h2>
+    網站建置中......
+</main>
 <div th:insert="~{webpage/homepage.html:: footerFragment}"></div>
-
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </html>

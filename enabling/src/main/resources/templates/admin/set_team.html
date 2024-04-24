@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+    <style>
+        body {
+            display: flex;
+        }
+
+        nav {
+            flex: 1;
+        }
+
+        main {
+            flex: 4;
+        }
+    </style>
+</head>
+<body>
+<nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
+<main>
+    <h2>團隊成員介紹</h2>
+    <p>網站建置中......</p>
+</main>
+
+</body>
+</html>
