@@ -19,4 +19,8 @@ public interface InstitutionUserRepository extends JpaRepository<InstitutionUser
 	@Query(value = "SELECT i.institution_domain FROM institution_user AS i WHERE i.user_id = :userId", nativeQuery = true)
 	List<String> getDomainByUserId(@Param("userId") Long userId);
 
+	@Query(value = "SELECT i.id, i.institution_domain, i.user_id, i.role_id, i.employee_id FROM institution_user AS i " +
+			"JOIN users AS u ON i.user_id = u.id WHERE u.email = :email", nativeQuery = true)
+	List<InstitutionUser> getInstitutionUserInfoByEmail(@Param("email") String email);
+
 }
