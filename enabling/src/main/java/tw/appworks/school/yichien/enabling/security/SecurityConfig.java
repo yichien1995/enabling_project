@@ -2,6 +2,7 @@ package tw.appworks.school.yichien.enabling.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import tw.appworks.school.yichien.enabling.middleware.AdminFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -18,37 +20,25 @@ public class SecurityConfig {
 
 	private final PasswordEncoder passwordEncoder;
 
-	public SecurityConfig(PasswordEncoder passwordEncoder) {
+	private final AdminFilter adminFilter;
+
+	public SecurityConfig(PasswordEncoder passwordEncoder, AdminFilter adminFilter) {
 		this.passwordEncoder = passwordEncoder;
+		this.adminFilter = adminFilter;
 	}
-
-//	@Bean
-//	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//		http
-//				.csrf(csrf -> csrf.disable())// Postman are not including a CSRF token in request
-//				.authorizeHttpRequests(authorizeRequests ->
-//						authorizeRequests
-//								.requestMatchers("/admin", "/admin/**")
-//								.hasAuthority("admin")
-//								.requestMatchers("/myinstitution")
-//								.hasAuthority("user")
-//								.anyRequest()
-//								.permitAll()
-//				);
-//		return http.build();
-//	}
-
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-				.csrf(csrf -> csrf.disable()) // Postman are not including a CSRF token in request
+				.csrf(csrf -> csrf.disable())
 				.authorizeRequests(authorizeRequests ->
 						authorizeRequests
-								.requestMatchers("/**").permitAll() // Allow access to / without authentication
-								.anyRequest().authenticated() // All other requests require authentication
+								.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+								.requestMatchers("/admin", "/admin/**").hasAuthority("admin")
+								.anyRequest().permitAll()
 				)
-				.addFilterAt(new UsernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // Use form login
+				.addFilterAfter(adminFilter, UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
+
 }

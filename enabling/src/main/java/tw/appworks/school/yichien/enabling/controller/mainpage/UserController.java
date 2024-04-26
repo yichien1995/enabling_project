@@ -5,10 +5,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.model.account.Users;
 import tw.appworks.school.yichien.enabling.service.UserService;
 import tw.appworks.school.yichien.enabling.service.impl.SessionServiceImpl;
@@ -46,11 +43,14 @@ public class UserController {
 
 	@PostMapping(path = "/login")
 	public ResponseEntity<?> login(@ModelAttribute Users user,
+	                               @CookieValue(value = "enabling", required = false) String sessionID,
 	                               HttpServletResponse response) throws JsonProcessingException {
+
 		Map<String, Object> loginErrorMsg = userService.loginError(user);
 		if (loginErrorMsg != null) {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(loginErrorMsg);
 		}
+		//set cookie after successful login
 		sessionService.setCookieAndStoreSession(user.getEmail(), response);
 		Map<String, Object> result = new HashMap<>();
 		result.put("success", "Login successfully.");

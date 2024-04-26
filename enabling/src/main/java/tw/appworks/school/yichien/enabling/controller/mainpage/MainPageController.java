@@ -1,5 +1,6 @@
 package tw.appworks.school.yichien.enabling.controller.mainpage;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,12 +30,15 @@ public class MainPageController {
 	}
 
 	@GetMapping("/register")
-	public String register() {
+	public String register(@CookieValue(value = "enabling", required = false) String sessionID) {
+		if (sessionID != null) {
+			return "redirect:" + domainPrefix + "myinstitution";
+		}
 		return "main_page/register_login";
 	}
 
 	@GetMapping("/myinstitution")
-	public String user(Model model, @CookieValue(value = "enabling", required = false) String sessionID) {
+	public String user(Model model, @CookieValue(value = "enabling", required = false) String sessionID) throws JsonProcessingException {
 		if (sessionID == null) {
 			return "redirect:" + domainPrefix;
 		}

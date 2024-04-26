@@ -53,7 +53,6 @@ public class HomepageController {
 
 	@PostMapping("/preview")
 	public String previewHomepage(@PathVariable String domain, @ModelAttribute HomepageForm homepageForm) {
-		System.out.println(homepageForm);
 		//save preview data
 		homepageService.saveHomepageDraft(domain, homepageForm);
 		return "redirect:" + domainPrefix + "admin/" + domain + "/setting/homepage?action=preview";
