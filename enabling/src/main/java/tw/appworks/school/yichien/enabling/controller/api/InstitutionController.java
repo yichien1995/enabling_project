@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/1.0/institution")
+@RequestMapping("api/1.0/admin/institution")
 public class InstitutionController {
 
 	private final InstitutionService institutionService;

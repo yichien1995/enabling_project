@@ -1,4 +1,4 @@
-package tw.appworks.school.yichien.enabling.service.impl;
+package tw.appworks.school.yichien.enabling.service.impl.webpage;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -14,8 +14,8 @@ import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.model.webpage.Article;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
 import tw.appworks.school.yichien.enabling.repository.webpage.ArticleRepository;
-import tw.appworks.school.yichien.enabling.service.ArticleService;
 import tw.appworks.school.yichien.enabling.service.FileStorageService;
+import tw.appworks.school.yichien.enabling.service.webpage.ArticleService;
 
 import java.util.List;
 

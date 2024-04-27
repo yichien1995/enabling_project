@@ -6,8 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.ArticleForm;
-import tw.appworks.school.yichien.enabling.service.ArticleService;
-import tw.appworks.school.yichien.enabling.service.HomepageService;
+import tw.appworks.school.yichien.enabling.service.webpage.ArticleService;
+import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
 
 @Controller
@@ -29,7 +29,7 @@ public class ArticleController {
 	@GetMapping
 	public String setArticle(@PathVariable String domain, Model model) {
 		articleService.renderArticleList(domain, model);
-		return "admin/set_article";
+		return "admin/webpage_setting/set_article";
 	}
 
 	@PostMapping("/save")
@@ -64,14 +64,14 @@ public class ArticleController {
 		}
 		articleService.renderPageByArticleId(id, model);
 		articleService.renderArticleList(domain, model);
-		return "admin/set_article";
+		return "admin/webpage_setting/set_article";
 	}
 
 	@GetMapping("/preview")
 	public String previewArticle(@PathVariable String domain, Model model) {
 		homepageService.renderHomepage(domain, model);
 		articleService.renderArticlePreviewPage(domain, model);
-		return "admin/preview_article";
+		return "admin/webpage_setting/preview_article";
 	}
 
 	@DeleteMapping("/delete")

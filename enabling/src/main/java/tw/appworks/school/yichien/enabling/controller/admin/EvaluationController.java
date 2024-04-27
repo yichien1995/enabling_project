@@ -7,7 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.NewEvaluationForm;
 import tw.appworks.school.yichien.enabling.dto.form.ReserveEvaluationForm;
-import tw.appworks.school.yichien.enabling.service.EvaluationService;
+import tw.appworks.school.yichien.enabling.service.webpage.EvaluationService;
 
 @Controller
 @RequestMapping("/admin/{domain}/setting/evaluation")
@@ -25,7 +25,7 @@ public class EvaluationController {
 	@GetMapping
 	public String setArticle(@PathVariable String domain, Model model) {
 		evaluationService.renderEvaluationSettingPage(domain, model);
-		return "admin/set_evaluation";
+		return "admin/webpage_setting/set_evaluation";
 	}
 
 	@PostMapping("/create")
@@ -40,12 +40,12 @@ public class EvaluationController {
 		return "redirect:" + domainPrefix + domain + "/evaluation.html";
 	}
 
-	@DeleteMapping("/delete")
+	@DeleteMapping("/{id}")
 	@ResponseBody
 	public ResponseEntity<?> deleteEvaluation(
-			@RequestParam String id, @PathVariable String domain) {
+			@PathVariable String id, @PathVariable String domain) {
 		long idValue = Long.parseLong(id);
 		evaluationService.deleteEvaluation(idValue);
-		return ResponseEntity.ok("Delete article id: " + id);
+		return ResponseEntity.ok("Delete evaluation id: " + id);
 	}
 }

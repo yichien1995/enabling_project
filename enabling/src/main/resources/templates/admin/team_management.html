@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
@@ -21,11 +21,112 @@
 <body>
 <nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
 <main>
-    <main>
-        <h2>團隊成員管理</h2>
-        <p>網站建置中......</p>
-    </main>
+    <h2>團隊成員管理</h2>
+    <h3>新增成員</h3>
+    <form id="management-team" method="post">
+        <label>員工編號: </label>
+        <input min="1" name="employeeId" type="number">
+        <br>
+        <label>信箱: </label>
+        <input name="email" required type="email">
+        <br>
+        <p>身份: </p>
+        <input name="roleId" required type="radio" value="1">
+        <label>管理者</label>
+        <input name="roleId" th:value="2" type="radio">
+        <label>治療師</label>
+        <br>
+        <button id="btn-create">送出</button>
+    </form>
+    <h3>團隊成員列表</h3>
+    <table>
+        <tr>
+            <th>員工編號</th>
+            <th>姓名</th>
+            <th>信箱</th>
+            <th>身份</th>
+            <th>刪除</th>
+        </tr>
+        <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">
+            <td th:text="${info.employeeId}"></td>
+            <td th:text="${info.userName}"></td>
+            <td th:text="${info.email}"></td>
+            <td th:text="${info.role}"></td>
+            <td th:if="${info.employeeId != 1}">
+                <button th:attr="onclick='deleteMember(\'' + ${info.institutionUserId} + '\')'">刪除</button>
+            </td>
+        </tr>
+        <!--            Update team member info-->
+        <!--            <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">-->
+        <!--                <td><input type="number"></td>-->
+        <!--                <td th:text="${info.userName}"></td>-->
+        <!--                <td><input th:value="${info.email}" type="email"></td>-->
+        <!--                <td>-->
+        <!--                    <input name="role" required type="radio" value="1">-->
+        <!--                    <label>管理者</label>-->
+        <!--                    <input name="role" th:value="2" type="radio">-->
+        <!--                    <label>治療師</label>-->
+        <!--                </td>-->
+        <!--            </tr>-->
+    </table>
 </main>
+<script>
+    const RELATIVE_PATH = window.location.origin;
+    let currentUrl = window.location.href;
 
+    // get user's domain name
+    const DOMAIN_REGEX = /\/admin\/([^/]+)/;
+    let domain = DOMAIN_REGEX.exec(currentUrl)[1];
+
+    $("#btn-create").click(function (event) {
+        let form = $("#management-team")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/management/team`;
+        try {
+            (async function postData() {
+                let response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                })
+                let result = await response.json();
+                if (response.ok) {
+                    alert("成功新增員工!")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/management/team`;
+                    }, 0);
+                } else {
+                    alert(result["error"])
+                }
+            })()
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    });
+
+    function deleteMember(id) {
+        if (confirm("確定刪除?")) {
+            let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/management/team/` + id;
+            (async function deleteData() {
+                try {
+                    let response = await fetch(endpoint, {
+                        method: 'DELETE'
+                    })
+                    if (response.ok) {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/management/team`
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (e) {
+                    console.error('Error:', e);
+                }
+            })()
+        }
+    }
+</script>
 </body>
 </html>

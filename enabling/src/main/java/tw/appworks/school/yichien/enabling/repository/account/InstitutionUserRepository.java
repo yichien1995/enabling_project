@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.model.account.InstitutionUser;
 
 import java.util.List;
@@ -22,5 +23,13 @@ public interface InstitutionUserRepository extends JpaRepository<InstitutionUser
 	@Query(value = "SELECT i.id, i.institution_domain, i.user_id, i.role_id, i.employee_id FROM institution_user AS i " +
 			"JOIN users AS u ON i.user_id = u.id WHERE u.email = :email", nativeQuery = true)
 	List<InstitutionUser> getInstitutionUserInfoByEmail(@Param("email") String email);
+
+	boolean existsInstitutionUserByInstitutionDomainAndEmployeeId(Institution InstitutionDomain, Integer EmployeeId);
+
+	@Query(value = "SELECT COUNT(i.id) FROM institution_user AS i JOIN users AS u ON i.user_id = u.id " +
+			"WHERE i.institution_domain = :domain AND u.email = :email", nativeQuery = true)
+	Integer countInstitutionUserByDomainANDEmail(@Param("domain") String domain, @Param("email") String Email);
+
+	void deleteInstitutionUserById(Long id);
 
 }

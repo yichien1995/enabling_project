@@ -5,11 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoDTO {
+@NoArgsConstructor
+public class MyInstitutionDto {
 
-	private Long userId;
-	private String userName;
-	private String userEmail;
+	private String role;
+	private String institutionDomain;
+	private String institutionName;
 }

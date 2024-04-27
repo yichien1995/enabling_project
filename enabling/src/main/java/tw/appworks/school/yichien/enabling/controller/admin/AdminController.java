@@ -19,30 +19,12 @@ public class AdminController {
 	@GetMapping("/setting/team")
 	public String setTeam(@PathVariable String domain, Model model) {
 		model.addAttribute("domain", domain);
-		return "admin/set_team";
+		return "admin/webpage_setting/set_team";
 	}
 
 	@GetMapping("/setting/service")
 	public String setService(@PathVariable String domain, Model model) {
 		model.addAttribute("domain", domain);
-		return "admin/set_service";
-	}
-
-	@GetMapping("/management/team")
-	public String teamManagement(@PathVariable String domain, Model model) {
-		model.addAttribute("domain", domain);
-		return "admin/team_management";
-	}
-
-	@GetMapping("/management/account")
-	public String accountManagement(@PathVariable String domain, Model model) {
-		model.addAttribute("domain", domain);
-		return "admin/account_management";
-	}
-
-	@GetMapping("/management/report")
-	public String caseReport(@PathVariable String domain, Model model) {
-		model.addAttribute("domain", domain);
-		return "admin/report";
+		return "admin/webpage_setting/set_service";
 	}
 }

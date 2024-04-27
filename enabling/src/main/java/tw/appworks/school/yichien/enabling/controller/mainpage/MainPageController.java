@@ -51,4 +51,5 @@ public class MainPageController {
 	public String createInstitutionPage() {
 		return "main_page/create_institution";
 	}
+
 }

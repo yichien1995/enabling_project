@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.service.AdminService;
-import tw.appworks.school.yichien.enabling.service.HomepageService;
+import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
 @Controller
 @RequestMapping("/admin/{domain}/setting/homepage")
@@ -42,7 +42,7 @@ public class HomepageController {
 		}
 		homepageService.getInstitution(domain, model);
 
-		return "admin/set_homepage";
+		return "admin/webpage_setting/set_homepage";
 	}
 
 	@PostMapping("/update/institution")

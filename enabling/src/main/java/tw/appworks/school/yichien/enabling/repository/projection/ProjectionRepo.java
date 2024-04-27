@@ -3,10 +3,11 @@ package tw.appworks.school.yichien.enabling.repository.projection;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
-import tw.appworks.school.yichien.enabling.dto.account.InstitutionUserDTO;
-import tw.appworks.school.yichien.enabling.dto.account.MemberDTO;
-import tw.appworks.school.yichien.enabling.dto.account.MyInstitutionDTO;
-import tw.appworks.school.yichien.enabling.dto.account.UserInfoDTO;
+import tw.appworks.school.yichien.enabling.dto.account.InstitutionUserDto;
+import tw.appworks.school.yichien.enabling.dto.account.MemberDto;
+import tw.appworks.school.yichien.enabling.dto.account.MyInstitutionDto;
+import tw.appworks.school.yichien.enabling.dto.account.UserInfoDto;
+import tw.appworks.school.yichien.enabling.dto.management.TeamMemberInfoDto;
 
 import java.util.List;
 
@@ -16,35 +17,45 @@ public class ProjectionRepo {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public List<MemberDTO> getMemberDto(String domain) {
+	public List<MemberDto> getMemberDto(String domain) {
 		String query = """
 				    SELECT i.id, u.user_name FROM institution_user AS i JOIN users AS u ON i.user_id = u.id WHERE i.institution_domain = '%s';
 				""";
-		return entityManager.createNativeQuery(query.formatted(domain), MemberDTO.class)
+		return entityManager.createNativeQuery(query.formatted(domain), MemberDto.class)
 				.getResultList();
 	}
 
-	public List<MyInstitutionDTO> getMyInstitutionDTO(Long id) {
+	public List<MyInstitutionDto> getMyInstitutionDTO(Long id) {
 		String query = """
-				    SELECT iu.institution_domain, i.institution_name FROM institution_user AS iu 
-				    JOIN institution AS i ON iu.institution_domain = i.domain_name WHERE iu.user_id = %d;
+				    SELECT r.role, iu.institution_domain, i.institution_name FROM institution_user AS iu 
+				    JOIN institution AS i ON iu.institution_domain = i.domain_name 
+				    JOIN role AS r ON iu.role_id = r.id WHERE iu.user_id = %d;
 				""";
-		return entityManager.createNativeQuery(query.formatted(id), MyInstitutionDTO.class).getResultList();
+		return entityManager.createNativeQuery(query.formatted(id), MyInstitutionDto.class).getResultList();
 	}
 
-	public UserInfoDTO getUserInfoDTO(String email) {
+	public UserInfoDto getUserInfoDTO(String email) {
 		String query = """
 				SELECT u.id, u.user_name, u.email FROM users AS u WHERE u.email = '%s'
 				""".formatted(email);
-		return (UserInfoDTO) entityManager.createNativeQuery(query, UserInfoDTO.class)
+		return (UserInfoDto) entityManager.createNativeQuery(query, UserInfoDto.class)
 				.getSingleResult();
 	}
 
-	public List<InstitutionUserDTO> getInstitutionUserDTO(String email) {
+	public List<InstitutionUserDto> getInstitutionUserDTO(String email) {
 		String query = """
 				SELECT i.id, i.institution_domain, i.user_id, i.role_id, i.employee_id FROM institution_user AS i 
 				JOIN users AS u ON i.user_id = u.id WHERE u.email = '%s';
 				""";
-		return entityManager.createNativeQuery(query.formatted(email), InstitutionUserDTO.class).getResultList();
+		return entityManager.createNativeQuery(query.formatted(email), InstitutionUserDto.class).getResultList();
+	}
+
+	public List<TeamMemberInfoDto> getTeamMemberInfoDTO(String domain) {
+		String query = """
+				    		SELECT i.id, i.employee_id, u.user_name, u.email, r.name FROM institution_user AS i 
+				    		JOIN users AS u ON i.user_id = u.id JOIN role AS r ON i.role_id = r.id 
+				    		WHERE institution_domain = '%s'		    
+				""";
+		return entityManager.createNativeQuery(query.formatted(domain), TeamMemberInfoDto.class).getResultList();
 	}
 }

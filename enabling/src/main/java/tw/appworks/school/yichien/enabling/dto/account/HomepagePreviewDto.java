@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class HomepagePreviewDTO {
+public class HomepagePreviewDto {
 	private MultipartFile logo;
 	private MultipartFile mainImage;
 	private String imageDescription;

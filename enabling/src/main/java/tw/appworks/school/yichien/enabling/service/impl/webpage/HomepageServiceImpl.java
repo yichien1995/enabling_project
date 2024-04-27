@@ -1,4 +1,4 @@
-package tw.appworks.school.yichien.enabling.service.impl;
+package tw.appworks.school.yichien.enabling.service.impl.webpage;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import tw.appworks.school.yichien.enabling.model.webpage.ThemeColor;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
 import tw.appworks.school.yichien.enabling.repository.webpage.HomepageRepository;
 import tw.appworks.school.yichien.enabling.service.FileStorageService;
-import tw.appworks.school.yichien.enabling.service.HomepageService;
+import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
 @Service
 public class HomepageServiceImpl implements HomepageService {

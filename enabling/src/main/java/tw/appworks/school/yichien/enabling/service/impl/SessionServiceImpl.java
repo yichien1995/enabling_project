@@ -11,8 +11,8 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.stereotype.Service;
-import tw.appworks.school.yichien.enabling.dto.account.InstitutionUserDTO;
-import tw.appworks.school.yichien.enabling.dto.account.UserInfoDTO;
+import tw.appworks.school.yichien.enabling.dto.account.InstitutionUserDto;
+import tw.appworks.school.yichien.enabling.dto.account.UserInfoDto;
 import tw.appworks.school.yichien.enabling.repository.projection.ProjectionRepo;
 
 import java.util.List;
@@ -44,8 +44,8 @@ public class SessionServiceImpl {
 		response.addCookie(cookie);
 
 		// store session data
-		UserInfoDTO userInfo = projectionRepo.getUserInfoDTO(email);
-		List<InstitutionUserDTO> institutionUserDTO = projectionRepo.getInstitutionUserDTO(email);
+		UserInfoDto userInfo = projectionRepo.getUserInfoDTO(email);
+		List<InstitutionUserDto> institutionUserDTO = projectionRepo.getInstitutionUserDTO(email);
 
 		ObjectMapper mapper = new ObjectMapper();
 		String stringUserInfoDTO = mapper.writeValueAsString(userInfo);
@@ -64,16 +64,16 @@ public class SessionServiceImpl {
 		hashOperations.put(sessionId, field, value);
 	}
 
-	public List<InstitutionUserDTO> getInstitutionUserDTOFromSession(String sessionId) throws JsonProcessingException {
+	public List<InstitutionUserDto> getInstitutionUserDTOFromSession(String sessionId) throws JsonProcessingException {
 		String userValue = hashOperations.get(sessionId, "institution_user");
 		ObjectMapper mapper = new ObjectMapper();
-		return mapper.readValue(userValue, new TypeReference<List<InstitutionUserDTO>>() {
+		return mapper.readValue(userValue, new TypeReference<List<InstitutionUserDto>>() {
 		});
 	}
 
-	public UserInfoDTO getUserInfoDTOFromSession(String sessionId) {
+	public UserInfoDto getUserInfoDTOFromSession(String sessionId) {
 		String userValue = hashOperations.get(sessionId, "user");
-		return deserialize(userValue, UserInfoDTO.class);
+		return deserialize(userValue, UserInfoDto.class);
 	}
 
 	private <T> T deserialize(String data, Class<T> clazz) {

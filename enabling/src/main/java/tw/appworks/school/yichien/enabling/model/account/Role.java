@@ -17,4 +17,7 @@ public class Role {
 
 	@Column(name = "role", columnDefinition = "varchar(20)", nullable = false)
 	private String role;
+
+	@Column(name = "name", columnDefinition = "varchar(20)")
+	private String name;
 }

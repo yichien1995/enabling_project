@@ -1,6 +1,7 @@
 package tw.appworks.school.yichien.enabling.controller.mainpage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -57,4 +58,18 @@ public class UserController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
+	@GetMapping("/logout")
+	public ResponseEntity<?> logout(@CookieValue(name = "enabling", required = false) String enablingCookie,
+	                                HttpServletResponse response) {
+
+
+		Cookie cookie = new Cookie("enabling", null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+
+		Map<String, Object> msg = new HashMap<>();
+		msg.put("msg", "successful logout");
+		return ResponseEntity.status(HttpStatus.OK).body(msg);
+	}
 }

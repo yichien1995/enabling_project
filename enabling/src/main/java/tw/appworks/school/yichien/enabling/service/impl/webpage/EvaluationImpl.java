@@ -1,10 +1,10 @@
-package tw.appworks.school.yichien.enabling.service.impl;
+package tw.appworks.school.yichien.enabling.service.impl.webpage;
 
 import lombok.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import tw.appworks.school.yichien.enabling.dto.account.MemberDTO;
+import tw.appworks.school.yichien.enabling.dto.account.MemberDto;
 import tw.appworks.school.yichien.enabling.dto.form.NewEvaluationForm;
 import tw.appworks.school.yichien.enabling.dto.form.ReserveEvaluationForm;
 import tw.appworks.school.yichien.enabling.model.account.InstitutionUser;
@@ -13,7 +13,7 @@ import tw.appworks.school.yichien.enabling.model.clinial.EvaluationCalendarEvent
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionUserRepository;
 import tw.appworks.school.yichien.enabling.repository.clinial.EvaluationRepository;
 import tw.appworks.school.yichien.enabling.repository.projection.ProjectionRepo;
-import tw.appworks.school.yichien.enabling.service.EvaluationService;
+import tw.appworks.school.yichien.enabling.service.webpage.EvaluationService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,7 +39,7 @@ public class EvaluationImpl implements EvaluationService {
 
 	@Override
 	public void renderEvaluationSettingPage(String domain, Model model) {
-		List<MemberDTO> memberDTO = getMemberDto(domain);
+		List<MemberDto> memberDTO = getMemberDto(domain);
 		List<Evaluation> evaluations = evaluationRepository.getEvaluationsByDomain(domain);
 
 		model.addAttribute("memberData", memberDTO);
@@ -75,7 +75,7 @@ public class EvaluationImpl implements EvaluationService {
 	@Override
 	public void reserveEvaluation(ReserveEvaluationForm reserveEvaluationForm) {
 		Evaluation evaluation = evaluationRepository.getEvaluationById(reserveEvaluationForm.getEvaluationId());
-		
+
 		evaluation.setClientName(reserveEvaluationForm.getClientName());
 		evaluation.setBirthday(reserveEvaluationForm.getBirthday());
 		evaluation.setTel(reserveEvaluationForm.getTel());
@@ -94,7 +94,7 @@ public class EvaluationImpl implements EvaluationService {
 		return evaluations.stream().map(this::mapToEvent).collect(Collectors.toList());
 	}
 
-	private List<MemberDTO> getMemberDto(String domain) {
+	private List<MemberDto> getMemberDto(String domain) {
 		return projectionRepo.getMemberDto(domain);
 	}
 

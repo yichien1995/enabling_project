@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import tw.appworks.school.yichien.enabling.dto.account.InstitutionUserDTO;
+import tw.appworks.school.yichien.enabling.dto.account.InstitutionUserDto;
 import tw.appworks.school.yichien.enabling.service.impl.AuthenticationServiceImpl;
 import tw.appworks.school.yichien.enabling.service.impl.SessionServiceImpl;
 
@@ -39,10 +39,10 @@ public class AdminFilter extends OncePerRequestFilter {
 				for (Cookie cookie : cookies) {
 					if (cookie.getName().equals("enabling")) {
 						String sessionId = cookie.getValue();
-						List<InstitutionUserDTO> institutionUserDTOS =
+						List<InstitutionUserDto> institutionUserDtos =
 								sessionService.getInstitutionUserDTOFromSession(sessionId);
 
-						for (InstitutionUserDTO data : institutionUserDTOS) {
+						for (InstitutionUserDto data : institutionUserDtos) {
 							if (data.getInstitutionDomain().equals(domain) && data.getRoleId() == 1) {
 								authenticationService.authenticateWithAdminRole();
 							}

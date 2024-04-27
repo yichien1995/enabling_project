@@ -115,8 +115,7 @@
 
     function deleteEvaluation(id) {
         if (confirm("確定刪除?")) {
-            let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/evaluation/delete?id=` + id;
-            console.log(endpoint);
+            let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/evaluation/` + id;
             (async function deleteData() {
                 try {
                     let response = await fetch(endpoint, {

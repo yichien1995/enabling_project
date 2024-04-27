@@ -19,21 +19,11 @@
             padding: 10px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-end;
+            justify-content: space-between;
         }
 
         nav p {
             margin: 0;
-        }
-
-        nav a {
-            color: #fff;
-            text-decoration: none;
-            margin-right: 10px;
-        }
-
-        nav a.btn-logout {
-            margin-top: auto;
         }
 
         nav a:hover {
@@ -59,7 +49,7 @@
             text-decoration: underline;
         }
 
-        button {
+        button#btn-create {
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
@@ -71,7 +61,7 @@
             border-radius: 4px;
         }
 
-        button:hover {
+        button#btn-create:hover {
             background-color: #0056b3;
         }
     </style>
@@ -80,14 +70,14 @@
 <body>
 <nav>
     <p>你好, </p>
-    <a class="btn-logout" th:href="@{/}">登出</a>
+    <button id="btn-logout">登出</button>
 </nav>
 <main>
     <h1>我的機構</h1>
     <div th:if="${myInstitutions != null}">
         <li th:each="myInstitution : ${myInstitutions}">
             <a
-                    th:href="@{'/admin/' + ${myInstitution.institutionDomain}}"
+                    th:href="@{'/' + ${myInstitution.role}+'/' + ${myInstitution.institutionDomain}}"
                     th:text="${myInstitution.institutionName}"></a>
         </li>
     </div>
@@ -95,12 +85,33 @@
 <button id="btn-create">新增機構</button>
 <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
 <script>
-    const relativePath = window.location.origin;
+    const RELATIVE_PATH = window.location.origin;
 
     $('#btn-create').click(() => {
-        window.location.href = `${relativePath}/myinstitution/create`;
+        window.location.href = `${RELATIVE_PATH}/myinstitution/create`;
         // window.open('/myinstitution/create', '_blank', 'width=800,height=600');
     });
+
+    $('#btn-logout').click(() => {
+        let endpoint = `${RELATIVE_PATH}/api/1.0/user/logout`;
+        (async function logout() {
+            try {
+                let response = await fetch(endpoint, {
+                    method: 'GET'
+                })
+                if (response.ok) {
+                    console.log("OK")
+                    setTimeout(
+                        function () {
+                            window.location.href = `${RELATIVE_PATH}`
+                        }, 0);
+                }
+            } catch (e) {
+                console.log("Error: " + e)
+            }
+        })()
+
+    })
 </script>
 </body>
 </html>

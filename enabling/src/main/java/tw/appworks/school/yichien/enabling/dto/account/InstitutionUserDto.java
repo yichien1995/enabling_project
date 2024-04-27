@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MyInstitutionDTO {
-
+public class InstitutionUserDto {
+	private long InstitutionUserId;
 	private String institutionDomain;
-	private String institutionName;
+	private long userId;
+	private int roleId;
+	private int employeeId;
 }
