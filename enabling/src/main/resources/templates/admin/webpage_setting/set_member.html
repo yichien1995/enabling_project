@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
+    <style>
+        body {
+            display: flex;
+        }
+
+        nav {
+            flex: 1;
+        }
+
+        main {
+            flex: 4;
+        }
+
+        input {
+            width: 300px;
+            margin: 5px;
+        }
+
+        textarea {
+            width: 400px;
+            height: 150px;
+            padding: 5px;
+        }
+
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+<nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
+<main>
+    <h2>團隊介紹管理</h2>
+    <h3>新增團隊成員</h3>
+    <form enctype="multipart/form-data" id="member-form" method="post">
+        <label for="member-name">姓名:</label>
+        <input id="member-name" name="name" required type="text">
+        <br>
+        <label for="photo">圖片:</label>
+        <input id="photo" name="photo" required type="file">
+        <br>
+        <label for="title">頭銜:</label>
+        <input id="title" name="title" required type="text">
+        <br>
+        <label for="qualification">經歷: </label>
+        <br>
+        <textarea id="qualification" name="qualification" required></textarea>
+        <br>
+        <label for="education">學歷: </label>
+        <br>
+        <textarea id="education" name="education" required></textarea>
+        <br>
+        <button id="btn-create">新增</button>
+    </form>
+    <h3>刪除團隊成員</h3>
+    <table>
+        <tr>
+            <th>姓名</th>
+            <th>刪除</th>
+        </tr>
+        <tr th:each="member:${members}" th:if="${members != null}">
+            <td th:text="${member.name}"></td>
+            <td>
+                <button th:attr="onclick='deleteMember(\'' + ${member.id} + '\')'">刪除</button>
+            </td>
+        </tr>
+    </table>
+</main>
+<script>
+    const RELATIVE_PATH = window.location.origin;
+    let currentUrl = window.location.href;
+
+    // get user's domain name
+    const DOMAIN_REGEX = /\/admin\/([^/]+)/;
+    let domain = DOMAIN_REGEX.exec(currentUrl)[1];
+
+    $("#btn-create").click(function (event) {
+        let form = $("#member-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/member`;
+        try {
+            (async function postData() {
+                let response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                })
+                if (response.ok) {
+                    // alert("成功新增成員介紹")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/member`;
+                    }, 0);
+                }
+            })()
+
+        } catch (error) {
+            console.error('Error:', error)
+        }
+    })
+
+    function deleteMember(id) {
+        if (confirm("確定刪除?")) {
+            let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/member/` + id;
+            (async function deleteData() {
+                try {
+                    let response = await fetch(endpoint, {
+                        method: 'DELETE'
+                    })
+                    if (response.ok) {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/member`
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (e) {
+                    console.error('Error:', e);
+                }
+            })()
+        }
+    }
+</script>
+</body>
+</html>

@@ -5,7 +5,7 @@
     <ul>
         <li><a th:href="@{'/admin/' +${domain}+'/setting/homepage'}">首頁設定</a></li>
         <li><a th:href="@{'/admin/' +${domain}+'/setting/service'}">服務項目</a></li>
-        <li><a th:href="@{'/admin/' +${domain}+'/setting/team'}">團隊介紹</a></li>
+        <li><a th:href="@{'/admin/' +${domain}+'/setting/member'}">團隊介紹</a></li>
         <li><a th:href="@{'/admin/' +${domain}+'/setting/articles'}">衛教文章</a></li>
         <div th:if="${released_article != null || draft != null}">
             <ul>

@@ -15,9 +15,16 @@
 <div th:insert="~{webpage/homepage.html:: headerFragment}"></div>
 <main>
     <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">團隊介紹</h2>
-    網站建置中......
+    <div th:each="member:${members}" th:if="${members != null}">
+        <img th:src="${member.photo}">
+        <h3 th:text="${member.name}"></h3>
+        <h4 th:text="${member.title}"></h4>
+        <h3>工作經歷:</h3>
+        <p th:utext="${member.qualification}"></p>
+        <h3>學歷:</h3>
+        <p th:utext="${member.education}"></p>
+    </div>
 </main>
 <div th:insert="~{webpage/homepage.html:: footerFragment}"></div>
 </body>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </html>

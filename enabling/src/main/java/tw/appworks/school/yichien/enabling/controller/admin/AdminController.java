@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tw.appworks.school.yichien.enabling.service.webpage.MemberService;
 import tw.appworks.school.yichien.enabling.service.webpage.ServiceItemService;
 
 @Controller
@@ -13,8 +14,11 @@ public class AdminController {
 
 	private final ServiceItemService serviceItemService;
 
-	public AdminController(ServiceItemService serviceItemService) {
+	private final MemberService memberService;
+
+	public AdminController(ServiceItemService serviceItemService, MemberService memberService) {
 		this.serviceItemService = serviceItemService;
+		this.memberService = memberService;
 	}
 
 	@GetMapping
@@ -23,10 +27,11 @@ public class AdminController {
 		return "main_page/admin";
 	}
 
-	@GetMapping("/setting/team")
+	@GetMapping("/setting/member")
 	public String setTeam(@PathVariable String domain, Model model) {
 		model.addAttribute("domain", domain);
-		return "admin/webpage_setting/set_team";
+		memberService.renderMemberPage(domain, model);
+		return "admin/webpage_setting/set_member";
 	}
 
 	@GetMapping("/setting/service")

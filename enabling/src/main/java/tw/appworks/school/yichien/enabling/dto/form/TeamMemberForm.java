@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeamMemberForm {
+
 	private Integer employeeId;
+
 	private String email;
+
 	private Integer roleId;
 }
