@@ -74,12 +74,12 @@
 </nav>
 <main>
     <h1>我的機構</h1>
-    <div th:if="${myInstitutions != null}">
-        <li th:each="myInstitution : ${myInstitutions}">
-            <a
-                    th:href="@{'/' + ${myInstitution.role}+'/' + ${myInstitution.institutionDomain}}"
-                    th:text="${myInstitution.institutionName}"></a>
-        </li>
+    <div th:each="myInstitution : ${myInstitutions}" th:if="${myInstitutions != null}">
+        <a th:href="@{'/' + ${myInstitution.role}+'/' + ${myInstitution.institutionDomain}}"
+           th:text="${myInstitution.institutionName}"></a>
+        <!--        <div th:if="${myInstitution.role == 'admin'}">-->
+        <!--            <button th:attr="onclick='deleteInstition(\'' + ${myInstitution.id} + '\')'">刪除</button>-->
+        <!--        </div>-->
     </div>
 </main>
 <button id="btn-create">新增機構</button>
