@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tw.appworks.school.yichien.enabling.service.ReportService;
 import tw.appworks.school.yichien.enabling.service.TeamManagementService;
 
 
@@ -14,8 +15,11 @@ public class ManagementController {
 
 	private final TeamManagementService teamManagementService;
 
-	public ManagementController(TeamManagementService teamManagementService) {
+	private final ReportService reportService;
+
+	public ManagementController(TeamManagementService teamManagementService, ReportService reportService) {
 		this.teamManagementService = teamManagementService;
+		this.reportService = reportService;
 	}
 
 	@GetMapping("/team")
@@ -34,6 +38,7 @@ public class ManagementController {
 	@GetMapping("/report")
 	public String caseReport(@PathVariable String domain, Model model) {
 		model.addAttribute("domain", domain);
+		reportService.renderReportPage(domain, model);
 		return "admin/report";
 	}
 }

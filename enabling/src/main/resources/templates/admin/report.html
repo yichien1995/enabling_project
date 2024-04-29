@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <script charset="utf-8" src="https://cdn.plot.ly/plotly-2.31.1.min.js"></script>
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
     <style>
         body {
@@ -22,8 +23,34 @@
 <nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
 <main>
     <h2>個案報表</h2>
-    <p>網站建置中......</p>
+    <div th:each="chartData :${allChartData}" th:if="${allChartData != null}">
+        <div th:id="'chart-' + ${chartData.institutionUserId}"></div>
+        <script th:inline="javascript">
+            var id = [[${chartData.institutionUserId}]];
+            var chartData = [
+                {
+                    x: [[${chartData.xData}]],
+                    y: [[${chartData.yData}]],
+                    type: 'bar',
+                    marker: {
+                        color: 'rgb(158,202,225)',
+                        opacity: 0.6,
+                        line: {
+                            color: 'rgb(8,48,107)',
+                            width: 1.5
+                        }
+                    }
+                }
+            ];
+            var layout = {
+                xaxis: {
+                    type: 'category'
+                },
+                title: [[${chartData.name}]] + '個案報表'
+            }
+            Plotly.newPlot('chart-' + id, chartData, layout)
+        </script>
+    </div>
 </main>
-
 </body>
 </html>
