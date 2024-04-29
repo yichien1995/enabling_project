@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            display: flex;
+        }
+
+        nav {
+            flex: 1;
+        }
+
+        main {
+            flex: 4;
+        }
+    </style>
+    <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <title>個案回報</title>
+</head>
+<body>
+
+<nav th:insert="~{fragment/therapist_sidebar.html:: therapist_sidebar}"></nav>
+<main>
+    <h2>每日個案回報</h2>
+    <form id="client-report-form" method="post">
+        <label>日期: </label>
+        <input name="date" required type="date">
+        <label>今日個案量: </label>
+        <input min="0" name="totalAttendance" required type="number">
+        <button id="btn-submit">送出</button>
+    </form>
+</main>
+<script>
+    const RELATIVE_PATH = window.location.origin;
+    let currentUrl = window.location.href;
+
+    // get user's domain name
+    const DOMAIN_REGEX = /\/therapist\/([^/]+)/;
+    let domain = DOMAIN_REGEX.exec(currentUrl)[1];
+
+    $("#btn-submit").click(function (event) {
+        let form = $("#client-report-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/client/report`;
+        try {
+            (async function postData() {
+                let response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                })
+                if (response.ok) {
+                    // alert("成功回報個案量")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/therapist/${domain}/client/report`;
+                    }, 0);
+                }
+            })()
+
+        } catch (error) {
+            console.error('Error:', error)
+        }
+    })
+</script>
+</body>
+</html>

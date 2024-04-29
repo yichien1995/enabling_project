@@ -29,7 +29,8 @@ public class ProjectionRepo {
 		String query = """
 				    SELECT iu.id, r.role, iu.institution_domain, i.institution_name FROM institution_user AS iu 
 				    JOIN institution AS i ON iu.institution_domain = i.domain_name 
-				    JOIN role AS r ON iu.role_id = r.id WHERE iu.user_id = %d;
+				    JOIN role AS r ON iu.role_id = r.id  
+				    WHERE iu.user_id = %d;
 				""";
 		return entityManager.createNativeQuery(query.formatted(id), MyInstitutionDto.class).getResultList();
 	}

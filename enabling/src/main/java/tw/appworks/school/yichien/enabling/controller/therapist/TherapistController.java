@@ -14,4 +14,10 @@ public class TherapistController {
 		model.addAttribute("domain", domain);
 		return "therapist/therapist";
 	}
+
+	@GetMapping("/client/report")
+	public String clientReportPage(@PathVariable String domain, Model model) {
+		model.addAttribute("domain", domain);
+		return "therapist/client_report";
+	}
 }

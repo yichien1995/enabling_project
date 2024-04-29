@@ -64,6 +64,16 @@ public class SessionServiceImpl {
 		hashOperations.put(sessionId, field, value);
 	}
 
+	public Long getInstitutionUserIdFromSession(String sessionId, String domain) throws JsonProcessingException {
+		List<InstitutionUserDto> allData = getInstitutionUserDTOFromSession(sessionId);
+		for (InstitutionUserDto data : allData) {
+			if (data.getInstitutionDomain().equals(domain)) {
+				return data.getInstitutionUserId();
+			}
+		}
+		return null;
+	}
+
 	public List<InstitutionUserDto> getInstitutionUserDTOFromSession(String sessionId) throws JsonProcessingException {
 		String userValue = hashOperations.get(sessionId, "institution_user");
 		ObjectMapper mapper = new ObjectMapper();

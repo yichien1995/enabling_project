@@ -43,6 +43,8 @@ public class MainPageController {
 			return "redirect:" + domainPrefix;
 		}
 		long userId = sessionService.getUserInfoDTOFromSession(sessionID).getUserId();
+		String userName = sessionService.getUserInfoDTOFromSession(sessionID).getUserName();
+		model.addAttribute("userName", userName);
 		mainPageService.renderMyInstitutionPage(model, userId);
 		return "main_page/my_institution";
 	}
