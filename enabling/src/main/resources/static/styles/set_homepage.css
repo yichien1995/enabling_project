@@ -1,0 +1,59 @@
+* {
+    box-sizing: border-box;
+}
+
+body#homepage-setting-body {
+    display: flex;
+    background-color: #F1F2F0;
+}
+
+nav#homepage-setting-nav {
+    flex: 1;
+}
+
+main#homepage-setting-main {
+    flex: 4;
+    display: flex;
+}
+
+div#homepage-preview {
+    flex: 1;
+    padding: 10px;
+    overflow-y: scroll;
+    max-height: 95vh;
+    border: 2px solid black;
+    border-radius: 5px;
+    margin: 1rem;
+    background-color: white;
+}
+
+img.main-image {
+    position: relative;
+    width: 100%;
+    height: auto;
+    z-index: 1;
+}
+
+p.main-image-description {
+    font-size: 1.25rem;
+    position: absolute;
+    bottom: 15vh;
+    right: 10vw;
+    color: rgb(55, 55, 55);
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 2;
+}
+
+div#setting-form {
+    flex: 1;
+}
+
+div#homepage-fragment {
+    display: flex;
+    flex-direction: column;
+}
+
+div.campaign-container {
+    width: 100%;
+    height: 35vh;
+}

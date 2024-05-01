@@ -5,7 +5,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
-import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.service.AdminService;
 import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
@@ -35,21 +34,21 @@ public class HomepageController {
 		}
 
 		// institution info setting
-		if (action != null && action.equals("update")) {
-			model.addAttribute("action", "get-info-form");
-		} else {
-			model.addAttribute("action", "get-info");
-		}
-		homepageService.getInstitution(domain, model);
+//		if (action != null && action.equals("update")) {
+//			model.addAttribute("action", "get-info-form");
+//		} else {
+//			model.addAttribute("action", "get-info");
+//		}
+//		homepageService.getInstitution(domain, model);
 
 		return "admin/webpage_setting/set_homepage";
 	}
 
-	@PostMapping("/update/institution")
-	public String updateInstitution(@PathVariable String domain, @ModelAttribute Institution institution) {
-		homepageService.updateInstitution(domain, institution);
-		return "redirect:" + domainPrefix + "admin/" + domain + "/setting/homepage";
-	}
+//	@PostMapping("/update/institution")
+//	public String updateInstitution(@PathVariable String domain, @ModelAttribute Institution institution) {
+//		homepageService.updateInstitution(domain, institution);
+//		return "redirect:" + domainPrefix + "admin/" + domain + "/setting/homepage";
+//	}
 
 	@PostMapping("/preview")
 	public String previewHomepage(@PathVariable String domain, @ModelAttribute HomepageForm homepageForm) {

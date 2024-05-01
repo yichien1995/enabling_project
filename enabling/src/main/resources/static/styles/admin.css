@@ -1,0 +1,141 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #F1F2F0;
+    display: flex;
+}
+
+nav {
+    flex: 1;
+}
+
+main {
+    flex: 4;
+    font-family: "Noto Sans TC", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+h2 {
+    color: #333333;
+    font-size: 1.75rem;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+h3 {
+    color: #71736A;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+div.admin-setting-container {
+    display: flex;
+    margin-right: 2rem;
+}
+
+/*div.submit-form, div.tables {*/
+/*    flex: 1;*/
+/*}*/
+
+div.tables {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin-left: 2rem;
+}
+
+form {
+    margin-top: 0.5rem;
+}
+
+label {
+    margin-top: 0.5rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"] {
+    width: 300px;
+    border: 1px solid #999999;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+textarea {
+    width: 400px;
+    height: 150px;
+    padding: 5px;
+    border: 1px solid #999999;
+    border-radius: 5px;
+    resize: none;
+}
+
+button.create,
+button.delete,
+button.change,
+button.preview,
+button.save,
+button.cancel,
+button.release {
+    margin: 0.25rem 0.5rem;
+    padding: 0.25rem 1rem;
+    border: none;
+    border-radius: 2px;
+    background-color: rgba(113, 115, 106, 0.75);
+    color: white;
+}
+
+button.create:hover,
+button.delete:hover,
+button.change:hover,
+button.preview:hover,
+button.save:hover,
+button.cancel:hover,
+button.release:hover {
+    cursor: pointer;
+    background-color: rgb(113, 115, 106);
+}
+
+button.create {
+    float: right;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding-right: 1rem;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/*account_management.html*/
+div#institution-info p {
+    margin-top: 0.5rem;
+}
+
+div#institution-info p strong {
+    font-weight: 550;
+}
+
+#btn-change-institution {
+    margin-left: 10rem;
+    margin-top: 0.5rem;
+}

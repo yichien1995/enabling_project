@@ -3,79 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <link href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          referrerpolicy="no-referrer"
+          rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
-    <style>
-        body {
-            display: flex;
-        }
-
-        nav {
-            flex: 1;
-        }
-
-        main {
-            flex: 4;
-        }
-
-        th, td {
-            text-align: center;
-            padding: 5px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
     <title>評估管理</title>
 </head>
 <body>
 <nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
 <main>
-    <h2>評估管理系統</h2>
-    <h2>新增評估</h2>
-    <form id="evaluation" method="post">
-        <label for="evaluation-date">日期: </label>
-        <input id="evaluation-date" name="evaluationDate" required type="date">
-        <br>
-        <label for="evaluation-time">時間: </label>
-        <input id="evaluation-time" name="evaluationTime" required type="time">
-        <br>
-        <div th:if="${memberData != null}">
-            <label for="evaluators-list">評估人員: </label>
-            <input list="evaluators-list" name="institutionUserId" required type="text">
-            <datalist id="evaluators-list">
-                <option th:each="member : ${memberData}" th:text="${member.name}"
-                        th:value="${member.institutionUserId}"></option>
-            </datalist>
+    <h2>評估管理</h2>
+    <div class="admin-setting-container">
+        <div class="submit-form">
+            <h3>新增評估</h3>
+            <form id="evaluation" method="post">
+                <label for="evaluation-date">日期: </label>
+                <input id="evaluation-date" name="evaluationDate" required type="date">
+                <br>
+                <label for="evaluation-time">時間: </label>
+                <input id="evaluation-time" name="evaluationTime" required type="time">
+                <br>
+                <div th:if="${memberData != null}">
+                    <label for="evaluators-list">評估人員: </label>
+                    <input list="evaluators-list" name="institutionUserId" required type="text">
+                    <datalist id="evaluators-list">
+                        <option th:each="member : ${memberData}" th:text="${member.name}"
+                                th:value="${member.institutionUserId}"></option>
+                    </datalist>
+                </div>
+                <div th:if="${memberData == null}">
+                    <label for="evaluators-default">評估人員: </label>
+                    <input list="evaluators-default" required type="text">
+                    <datalist id="evaluators-default">
+                    </datalist>
+                </div>
+                <button class="create" id="btn-new-evaluation">新增</button>
+            </form>
         </div>
-        <div th:if="${memberData == null}">
-            <label for="evaluators-default">評估人員: </label>
-            <input list="evaluators-default" required type="text">
-            <datalist id="evaluators-default">
-            </datalist>
+        <div class="tables">
+            <h3>評估列表</h3>
+            <table>
+                <tr>
+                    <th>日期</th>
+                    <th>時間</th>
+                    <th>評估人員</th>
+                    <th>個案姓名</th>
+                    <th>生日</th>
+                    <th>聯絡電話</th>
+                    <th>刪除</th>
+                </tr>
+                <tr th:each="evaluation:${evaluations}" th:if="${evaluations != null}">
+                    <td th:text="${evaluation.evaluationDate}"></td>
+                    <td th:text="${evaluation.evaluationTime}"></td>
+                    <td th:text="${evaluation.institutionUserId.userId.username}"></td>
+                    <td th:text="${evaluation.clientName} ?: 'N/A'"></td>
+                    <td th:text="${evaluation.birthday} ?: 'N/A'"></td>
+                    <td th:text="${evaluation.tel} ?: 'N/A'"></td>
+                    <td>
+                        <button class="delete" th:attr="onclick='deleteEvaluation(\'' + ${evaluation.id} + '\')'">刪除
+                        </button>
+                    </td>
+                </tr>
+            </table>
         </div>
-        <br>
-        <button id="btn-new-evaluation">新增</button>
-    </form>
-    <h2>評估列表</h2>
-    <table>
-        <tr>
-            <th>日期</th>
-            <th>時間</th>
-            <th>評估人員</th>
-            <th>個案姓名</th>
-            <th>生日</th>
-            <th>聯絡電話</th>
-            <th>刪除</th>
-        </tr>
-        <tr th:each="evaluation:${evaluations}" th:if="${evaluations != null}">
-            <td th:text="${evaluation.evaluationDate}"></td>
-            <td th:text="${evaluation.evaluationTime}"></td>
-            <td th:text="${evaluation.institutionUserId.userId.username}"></td>
-            <td th:text="${evaluation.clientName} ?: 'N/A'"></td>
-            <td th:text="${evaluation.birthday} ?: 'N/A'"></td>
-            <td th:text="${evaluation.tel} ?: 'N/A'"></td>
-            <td>
-                <button th:attr="onclick='deleteEvaluation(\'' + ${evaluation.id} + '\')'">刪除</button>
-            </td>
-        </tr>
-    </table>
+    </div>
 </main>
 </body>
 <script>

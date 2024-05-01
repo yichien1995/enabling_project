@@ -3,72 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <link href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          referrerpolicy="no-referrer"
+          rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
-    <style>
-        body {
-            display: flex;
-        }
-
-        nav {
-            flex: 1;
-        }
-
-        main {
-            flex: 4;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
 </head>
 <body>
 <nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
 <main>
     <h2>團隊成員管理</h2>
-    <h3>新增成員</h3>
-    <form id="management-team" method="post">
-        <label>員工編號: </label>
-        <input min="1" name="employeeId" type="number">
-        <br>
-        <label>信箱: </label>
-        <input name="email" required type="email">
-        <br>
-        <p>身份: </p>
-        <input name="roleId" required type="radio" value="1">
-        <label>管理者</label>
-        <input name="roleId" th:value="2" type="radio">
-        <label>治療師</label>
-        <br>
-        <button id="btn-create">送出</button>
-    </form>
-    <h3>團隊成員列表</h3>
-    <table>
-        <tr>
-            <th>員工編號</th>
-            <th>姓名</th>
-            <th>信箱</th>
-            <th>身份</th>
-            <th>刪除</th>
-        </tr>
-        <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">
-            <td th:text="${info.employeeId}"></td>
-            <td th:text="${info.userName}"></td>
-            <td th:text="${info.email}"></td>
-            <td th:text="${info.role}"></td>
-            <td th:if="${info.employeeId != 1}">
-                <button th:attr="onclick='deleteMember(\'' + ${info.institutionUserId} + '\')'">刪除</button>
-            </td>
-        </tr>
-        <!--            Update team member info-->
-        <!--            <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">-->
-        <!--                <td><input type="number"></td>-->
-        <!--                <td th:text="${info.userName}"></td>-->
-        <!--                <td><input th:value="${info.email}" type="email"></td>-->
-        <!--                <td>-->
-        <!--                    <input name="role" required type="radio" value="1">-->
-        <!--                    <label>管理者</label>-->
-        <!--                    <input name="role" th:value="2" type="radio">-->
-        <!--                    <label>治療師</label>-->
-        <!--                </td>-->
-        <!--            </tr>-->
-    </table>
+    <div class="admin-setting-container">
+        <div class="submit-form">
+            <h3>新增成員</h3>
+            <form id="management-team" method="post">
+                <label>員編: </label>
+                <input min="1" name="employeeId" type="number">
+                <br>
+                <label>信箱: </label>
+                <input name="email" required type="email">
+                <br>
+                <p>身份: </p>
+                <input name="roleId" required type="radio" value="1">
+                <label>管理者</label>
+                <input name="roleId" th:value="2" type="radio">
+                <label>治療師</label>
+                <br>
+                <button class="create" id="btn-create">新增</button>
+            </form>
+        </div>
+        <div class="tables">
+            <h3>團隊成員列表</h3>
+            <table>
+                <tr>
+                    <th>員編</th>
+                    <th>姓名</th>
+                    <th>信箱</th>
+                    <th>身份</th>
+                    <th>刪除</th>
+                </tr>
+                <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">
+                    <td th:text="${info.employeeId}"></td>
+                    <td th:text="${info.userName}"></td>
+                    <td th:text="${info.email}"></td>
+                    <td th:text="${info.role}"></td>
+                    <td th:if="${info.employeeId != 1}">
+                        <button class="delete" th:attr="onclick='deleteMember(\'' + ${info.institutionUserId} + '\')'">
+                            刪除
+                        </button>
+                    </td>
+                </tr>
+                <!--            Update team member info-->
+                <!--            <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">-->
+                <!--                <td><input type="number"></td>-->
+                <!--                <td th:text="${info.userName}"></td>-->
+                <!--                <td><input th:value="${info.email}" type="email"></td>-->
+                <!--                <td>-->
+                <!--                    <input name="role" required type="radio" value="1">-->
+                <!--                    <label>管理者</label>-->
+                <!--                    <input name="role" th:value="2" type="radio">-->
+                <!--                    <label>治療師</label>-->
+                <!--                </td>-->
+                <!--            </tr>-->
+            </table>
+        </div>
+    </div>
+
 </main>
 <script>
     const RELATIVE_PATH = window.location.origin;

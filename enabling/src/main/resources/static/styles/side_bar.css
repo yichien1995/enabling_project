@@ -1,18 +1,39 @@
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a#index {
+    display: block;
+    margin-top: 1rem;
+}
 
 #side-bar {
-    width: 250px;
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-right: 1px solid #ccc;
+    width: 18vw;
+    background-color: #F2EFDF;
+    padding: 1rem 2rem;
     height: 100vh;
+    font-family: "Noto Sans TC", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.4);
 }
 
 #side-bar h2 {
     margin-top: 0;
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #333333;
+
 }
 
 #side-bar h3 {
     margin-top: 20px;
+    color: #71736A;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-bottom: 1px solid #40312C;
 }
 
 #side-bar ul {
@@ -20,39 +41,29 @@
     padding-left: 0;
 }
 
-#side-bar ul ul {
-    padding-left: 20px;
+#side-bar ul li {
+    margin: 0.5rem 0;
 }
 
-#side-bar a {
-    text-decoration: none;
-    color: #333;
+#side-bar li a {
+    font-size: 1.1rem;
+    color: #40312C;
 }
 
-#side-bar a:hover {
-    color: #007bff;
+#side-bar i {
+    margin-right: 0.75rem;
+    color: #40312C
 }
 
-
-#side-bar .active {
-    background-color: #007bff;
-    color: #fff;
+#side-bar li a:hover {
+    border-bottom: 1px solid #40312C;
 }
 
-#side-bar .active:hover {
-    background-color: #0056b3;
+#side-bar details summary {
+    margin-left: 1rem;
 }
 
-
-#side-bar ul ul li {
-    margin-top: 5px;
-}
-
-
-#side-bar .article-list {
-    margin-left: 10px;
-}
-
-#side-bar .article-list li {
-    margin-top: 5px;
+#side-bar ul.article li a {
+    font-size: 0.9rem;
+    margin-left: 1rem;
 }

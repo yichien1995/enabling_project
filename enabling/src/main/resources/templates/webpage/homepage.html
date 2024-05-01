@@ -7,25 +7,24 @@
     <title th:text="${homePage.institutionDomain.institutionName}"></title>
 </head>
 <body>
-<div th:fragment="homepageFragment">
-    <div th:fragment="headerFragment">
-        <header class="header-homepage" th:style="'background-color: ' + ${homePage.themeColorId.backgroundColor}">
-            <div class="header-homepage-left">
-                <img alt="institution_logo" class="logo-image" th:src="${logoImage}"/>
-                <h1 class="institution-name" th:text="${homePage.institutionDomain.institutionName}"></h1>
-            </div>
-            <nav class="header-homepage-right">
-                <ul>
-                    <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/homepage.html'}">首頁</a></li>
-                    <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/service.html'}">服務項目</a></li>
-                    <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/member.html'}">團隊介紹</a></li>
-                    <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/articles.html'}">衛教文章</a></li>
-                    <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/evaluation.html'}">進行預約</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
-    </div>
+<div id="homepage-fragment" th:fragment="homepageFragment">
+    <header class="header-homepage" th:fragment="headerFragment"
+            th:style="'background-color: ' + ${homePage.themeColorId.backgroundColor}">
+        <div class="header-homepage-left">
+            <img alt="institution_logo" class="logo-image" th:src="${logoImage}"/>
+            <h1 class="institution-name" th:text="${homePage.institutionDomain.institutionName}"></h1>
+        </div>
+        <nav class="header-homepage-right">
+            <ul>
+                <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/homepage.html'}">首頁</a></li>
+                <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/service.html'}">服務項目</a></li>
+                <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/member.html'}">團隊介紹</a></li>
+                <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/articles.html'}">衛教文章</a></li>
+                <li><a th:href="@{'/' +${homePage.institutionDomain.domainName}+'/evaluation.html'}">進行預約</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
     <main>
         <div class="campaign-container">
@@ -58,27 +57,26 @@
         </div>
     </main>
 
-    <div class="footer-fragment-container" th:fragment="footerFragment">
-        <footer th:style="'background-color: ' + ${homePage.themeColorId.backgroundColor}">
-            <div class="footer-container">
-                <div class="footer-container-left">
-                    <span class="footer-span-title">聯絡我們</span>
-                    <div class="footer-span-container">
-                        <span class="footer-span">地址： </span>
-                        <p th:text="${homePage.institutionDomain.address}"></p>
-                    </div>
-                    <div class="footer-span-container">
-                        <span class="footer-span">電話： </span>
-                        <p th:text="${homePage.institutionDomain.tel}"></p>
-                    </div>
+    <footer class="footer-fragment-container" th:fragment="footerFragment"
+            th:style="'background-color: ' + ${homePage.themeColorId.backgroundColor}">
+        <div class="footer-container">
+            <div class="footer-container-left">
+                <span class="footer-span-title">聯絡我們</span>
+                <div class="footer-span-container">
+                    <span class="footer-span">地址： </span>
+                    <p th:text="${homePage.institutionDomain.address}"></p>
                 </div>
-                <div class="footer-container-right">
-                    <span class="footer-span-title">營業時間</span>
-                    <div th:utext="${businessHour}"></div>
+                <div class="footer-span-container">
+                    <span class="footer-span">電話： </span>
+                    <p th:text="${homePage.institutionDomain.tel}"></p>
                 </div>
             </div>
-        </footer>
-    </div>
+            <div class="footer-container-right">
+                <span class="footer-span-title">營業時間</span>
+                <div th:utext="${businessHour}"></div>
+            </div>
+        </div>
+    </footer>
 </div>
 </body>
 </html>
