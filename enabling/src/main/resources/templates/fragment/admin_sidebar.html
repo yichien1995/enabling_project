@@ -1,5 +1,5 @@
 <nav id="side-bar" th:fragment="admin_sidebar">
-    <a th:href="@{'/admin/' +${domain}}"><h2>管理者頁面</h2></a>
+    <a th:href="@{'/admin/' +${domain}}"><h2 th:text="${institutionName}"></h2></a>
     <a id="index" target="_blank" th:href="@{'/' +${domain}+'/homepage.html'}"><i class="fa-solid fa-house"></i>機構網頁</a>
     <h3>網頁管理</h3>
     <ul>

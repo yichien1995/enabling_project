@@ -32,6 +32,7 @@ public class HomepageController {
 		} else {
 			homepageService.renderHomepage(domain, model);
 		}
+		adminService.renderAdminSidebar(domain, model);
 
 		// institution info setting
 //		if (action != null && action.equals("update")) {
@@ -43,12 +44,6 @@ public class HomepageController {
 
 		return "admin/webpage_setting/set_homepage";
 	}
-
-//	@PostMapping("/update/institution")
-//	public String updateInstitution(@PathVariable String domain, @ModelAttribute Institution institution) {
-//		homepageService.updateInstitution(domain, institution);
-//		return "redirect:" + domainPrefix + "admin/" + domain + "/setting/homepage";
-//	}
 
 	@PostMapping("/preview")
 	public String previewHomepage(@PathVariable String domain, @ModelAttribute HomepageForm homepageForm) {

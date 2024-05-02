@@ -8,6 +8,19 @@
         h2 {
             text-align: center;
         }
+
+        div.service-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        img.img-service {
+            width: 100%;
+        }
+
+        h3, p {
+            text-align: center;
+        }
     </style>
 
     <title>服務項目</title>
@@ -16,12 +29,15 @@
 <div th:insert="~{webpage/homepage.html:: headerFragment}"></div>
 <main>
     <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">服務項目</h2>
-    <div th:each="serviceItem:${serviceItems}" th:if="${serviceItems != null}">
-        <img th:src="${serviceItem.image}">
-        <h3 th:text="${serviceItem.title}"></h3>
-        <h3>收費說明: </h3>
-        <p th:utext="${serviceItem.price}"></p>
+    <div class="service-container">
+        <div th:each="serviceItem:${serviceItems}" th:if="${serviceItems != null}">
+            <img class="img-service" th:src="${serviceItem.image}">
+            <h3 th:text="${serviceItem.title}"></h3>
+            <h3>收費說明: </h3>
+            <p th:utext="${serviceItem.price}"></p>
+        </div>
     </div>
+
 </main>
 <div th:insert="~{webpage/homepage.html:: footerFragment}"></div>
 </body>

@@ -26,7 +26,7 @@
     <div th:if="${article != null}">
         <h2>衛教文章管理</h2>
         <h3>修改文章</h3>
-        <form class="article-form" enctype="multipart/form-data" method="post">
+        <form class="article-form" enctype="multipart/form-data">
             <label>上傳文章封面: </label>
             <input class="cover" name="cover" type="file"/>
             <br/>
@@ -40,14 +40,14 @@
             <button class="delete btn-delete">刪除</button>
             <button class="save btn-save" th:unless="${released}">存檔</button>
             <button class="release btn-release">發布</button>
+            <button class="cancel btn-cancel">取消</button>
         </form>
-        <button class="cancel btn-cancel">取消</button>
     </div>
 
     <div th:if="${article == null}">
         <h2>衛教文章管理</h2>
         <h3>新增文章</h3>
-        <form class="article-form" enctype="multipart/form-data" method="post">
+        <form class="article-form" enctype="multipart/form-data">
             <label>上傳文章封面: </label>
             <input class="cover" name="cover" type="file"/>
             <br/>
@@ -60,8 +60,8 @@
             <button class="preview btn-preview">預覽</button>
             <button class="save btn-save">存檔</button>
             <button class="release btn-release">發布</button>
+            <button class="cancel btn-cancel">取消</button>
         </form>
-        <button class="cancel btn-cancel">取消</button>
     </div>
 </main>
 <script>
@@ -176,7 +176,8 @@
         })()
     });
 
-    $('.btn-cancel').click(() => {
+    $('.btn-cancel').click((event) => {
+        event.preventDefault();
         window.location.href = currentUrl;
     });
 

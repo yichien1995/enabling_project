@@ -38,7 +38,8 @@ public class MainPageController {
 	}
 
 	@GetMapping("/myinstitution")
-	public String user(Model model, @CookieValue(value = "enabling", required = false) String sessionID) throws JsonProcessingException {
+	public String user(Model model, @CookieValue(value = "enabling", required = false) String sessionID)
+			throws JsonProcessingException {
 		if (sessionID == null) {
 			return "redirect:" + domainPrefix;
 		}
@@ -50,7 +51,11 @@ public class MainPageController {
 	}
 
 	@GetMapping("/myinstitution/create")
-	public String createInstitutionPage() {
+	public String createInstitutionPage(Model model,
+	                                    @CookieValue(value = "enabling", required = false) String sessionID)
+			throws JsonProcessingException {
+		String userName = sessionService.getUserInfoDTOFromSession(sessionID).getUserName();
+		model.addAttribute("userName", userName);
 		return "main_page/create_institution";
 	}
 

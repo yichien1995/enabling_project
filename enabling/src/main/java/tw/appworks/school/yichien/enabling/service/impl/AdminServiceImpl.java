@@ -1,8 +1,8 @@
 package tw.appworks.school.yichien.enabling.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
-import tw.appworks.school.yichien.enabling.repository.webpage.ThemeColorRepository;
 import tw.appworks.school.yichien.enabling.service.AdminService;
 
 @Service
@@ -10,12 +10,8 @@ public class AdminServiceImpl implements AdminService {
 
 	private final InstitutionRepository institutionRepository;
 
-	private final ThemeColorRepository themeColorRepository;
-
-	public AdminServiceImpl(InstitutionRepository institutionRepository,
-	                        ThemeColorRepository themeColorRepository) {
+	public AdminServiceImpl(InstitutionRepository institutionRepository) {
 		this.institutionRepository = institutionRepository;
-		this.themeColorRepository = themeColorRepository;
 	}
 
 	@Override
@@ -23,6 +19,11 @@ public class AdminServiceImpl implements AdminService {
 		return institutionRepository.existsInstitutionByDomainName(domain);
 	}
 
-	;
+	@Override
+	public void renderAdminSidebar(String domain, Model model) {
+		String institutionName = institutionRepository.getInstitutionNameByDomain(domain);
+		model.addAttribute("institutionName", institutionName);
+		model.addAttribute("domain", domain);
+	}
 
 }

@@ -1,5 +1,8 @@
 package tw.appworks.school.yichien.enabling.controller.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,14 +28,25 @@ public class InstitutionController {
 
 	@PostMapping("/create")
 	public ResponseEntity<?> createNewInstitution(@ModelAttribute NewInstitutionForm form,
-	                                              @CookieValue(value = "enabling") String sessionID) {
+	                                              HttpServletResponse response,
+	                                              @CookieValue(value = "enabling") String sessionID) throws JsonProcessingException {
 		Map<String, Object> domainErrorMsg = institutionService.domainErrorMsg(form.getInstitutionDomain());
 		if (domainErrorMsg != null) {
 			return ResponseEntity.badRequest().body(domainErrorMsg);
 		}
-		// get userId from session
+		// get userinfo from session
 		long userId = sessionService.getUserInfoDTOFromSession(sessionID).getUserId();
+		String email = sessionService.getUserInfoDTOFromSession(sessionID).getUserEmail();
+
 		institutionService.createNewInstitution(userId, form);
+
+		// reset cookie
+		Cookie cookie = new Cookie("enabling", null);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+		response.addCookie(cookie);
+		sessionService.setCookieAndStoreSession(email, response);
+
 		Map<String, Object> result = new HashMap<>();
 		result.put("success", "Create institution successfully.");
 		return ResponseEntity.status(HttpStatus.OK).body(result);

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import tw.appworks.school.yichien.enabling.service.AdminService;
 import tw.appworks.school.yichien.enabling.service.ReportService;
 import tw.appworks.school.yichien.enabling.service.TeamManagementService;
 import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
@@ -21,16 +22,19 @@ public class ManagementController {
 
 	private final HomepageService homepageService;
 
-	public ManagementController(TeamManagementService teamManagementService, ReportService reportService, HomepageService homepageService) {
+	private final AdminService adminService;
+
+	public ManagementController(TeamManagementService teamManagementService, ReportService reportService, HomepageService homepageService, AdminService adminService) {
 		this.teamManagementService = teamManagementService;
 		this.reportService = reportService;
 		this.homepageService = homepageService;
+		this.adminService = adminService;
 	}
 
 	@GetMapping("/team")
 	public String teamManagement(@PathVariable String domain, Model model) {
 		teamManagementService.renderTeamManagementPage(domain, model);
-		model.addAttribute("domain", domain);
+		adminService.renderAdminSidebar(domain, model);
 		return "admin/team_management";
 	}
 
@@ -43,13 +47,14 @@ public class ManagementController {
 			model.addAttribute("action", "get-info");
 		}
 		homepageService.getInstitution(domain, model);
+		adminService.renderAdminSidebar(domain, model);
 		return "admin/account_management";
 	}
 
 	@GetMapping("/report")
 	public String caseReport(@PathVariable String domain, Model model) {
-		model.addAttribute("domain", domain);
 		reportService.renderReportPage(domain, model);
+		adminService.renderAdminSidebar(domain, model);
 		return "admin/report";
 	}
 }

@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.NewEvaluationForm;
 import tw.appworks.school.yichien.enabling.dto.form.ReserveEvaluationForm;
+import tw.appworks.school.yichien.enabling.service.AdminService;
 import tw.appworks.school.yichien.enabling.service.webpage.EvaluationService;
 
 @Controller
@@ -15,16 +16,20 @@ public class EvaluationController {
 
 	private final EvaluationService evaluationService;
 
+	private final AdminService adminService;
+
 	@Value("${prefix.domain}")
 	private String domainPrefix;
 
-	public EvaluationController(EvaluationService evaluationService) {
+	public EvaluationController(EvaluationService evaluationService, AdminService adminService) {
 		this.evaluationService = evaluationService;
+		this.adminService = adminService;
 	}
 
 	@GetMapping
 	public String setArticle(@PathVariable String domain, Model model) {
 		evaluationService.renderEvaluationSettingPage(domain, model);
+		adminService.renderAdminSidebar(domain, model);
 		return "admin/webpage_setting/set_evaluation";
 	}
 

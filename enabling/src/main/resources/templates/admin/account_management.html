@@ -38,7 +38,7 @@
             <button class="change" id="btn-change-institution">更改</button>
         </div>
         <div th:case="'get-info-form'">
-            <form id="institution-form" method="post">
+            <form id="institution-form">
                 <label for="institution_name">機構名稱:</label>
                 <input id="institution_name" name="institutionName" required th:value="${i.institutionName}"
                        type="text">
@@ -53,9 +53,9 @@
                 <br>
                 <textarea id="business_hour" name="businessHour" required th:utext="${i.businessHour}"></textarea>
                 <br>
-                <button id="btn-update">儲存</button>
+                <button class="save" id="btn-update">儲存</button>
+                <button class="cancel" id="btn-cancel">取消</button>
             </form>
-            <button id="btn-cancel">取消</button>
         </div>
     </div>
 </main>

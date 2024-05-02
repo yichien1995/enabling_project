@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.ArticleForm;
+import tw.appworks.school.yichien.enabling.service.AdminService;
 import tw.appworks.school.yichien.enabling.service.webpage.ArticleService;
 import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
@@ -16,19 +17,23 @@ public class ArticleController {
 
 	private final ArticleService articleService;
 
+	private final AdminService adminService;
+
 	private final HomepageService homepageService;
 
 	@Value("${prefix.domain}")
 	private String domainPrefix;
 
-	public ArticleController(ArticleService articleService, HomepageService homepageService) {
+	public ArticleController(ArticleService articleService, AdminService adminService, HomepageService homepageService) {
 		this.articleService = articleService;
+		this.adminService = adminService;
 		this.homepageService = homepageService;
 	}
 
 	@GetMapping
 	public String setArticle(@PathVariable String domain, Model model) {
 		articleService.renderArticleList(domain, model);
+		adminService.renderAdminSidebar(domain, model);
 		return "admin/webpage_setting/set_article";
 	}
 
@@ -64,6 +69,7 @@ public class ArticleController {
 		}
 		articleService.renderPageByArticleId(id, model);
 		articleService.renderArticleList(domain, model);
+		adminService.renderAdminSidebar(domain, model);
 		return "admin/webpage_setting/set_article";
 	}
 
