@@ -57,4 +57,5 @@ public class ManagementController {
 		adminService.renderAdminSidebar(domain, model);
 		return "admin/report";
 	}
+	
 }

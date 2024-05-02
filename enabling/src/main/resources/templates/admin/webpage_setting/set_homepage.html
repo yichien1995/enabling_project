@@ -23,42 +23,6 @@
 <main id="homepage-setting-main">
     <div id="homepage-preview" th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
     <div id="setting-form">
-        <!--        <h2>機構資料設定</h2>-->
-        <!--        <div th:switch="${action}">-->
-        <!--            <div th:case="'get-info'">-->
-        <!--                <label for="institution_name" th:text="'機構名稱: ' + ${i.institutionName}"></label>-->
-        <!--                <br>-->
-        <!--                <label for="tel" th:text="'電話: ' + ${i.tel}"></label>-->
-        <!--                <br>-->
-        <!--                <label for="address" th:text="'地址: ' + ${i.address}"></label>-->
-        <!--                <br>-->
-        <!--                <label for="business_hour" th:text="'營業時間: '"></label>-->
-        <!--                <p th:utext=" ${businessHour}"></p>-->
-        <!--                <br>-->
-        <!--                <button id="btn-change">更改</button>-->
-        <!--            </div>-->
-        <!--            <div th:case="'get-info-form'">-->
-        <!--                <form id="institution-form" method="post">-->
-        <!--                    <label for="institution_name">機構名稱:</label>-->
-        <!--                    <input id="institution_name" name="institutionName" required th:value="${i.institutionName}"-->
-        <!--                           type="text">-->
-        <!--                    <br>-->
-        <!--                    <label for="tel">電話:</label>-->
-        <!--                    <input id="tel" name="tel" required th:value="${i.tel}" type="text">-->
-        <!--                    <br>-->
-        <!--                    <label for="address">地址:</label>-->
-        <!--                    <input id="address" name="address" required th:value="${i.address}" type="text">-->
-        <!--                    <br>-->
-        <!--                    <label for="business_hour">營業時間:</label>-->
-        <!--                    <br>-->
-        <!--                    <textarea id="business_hour" name="businessHour" required th:utext="${i.businessHour}"></textarea>-->
-        <!--                    <br>-->
-        <!--                    <button id="btn-update">儲存</button>-->
-        <!--                </form>-->
-        <!--                <button id="btn-cancel">取消</button>-->
-        <!--            </div>-->
-        <!--        </div>-->
-
         <h2>首頁設定</h2>
         <form enctype="multipart/form-data" id="homepage-form" method="post" th:object="${HomepageForm}">
             <h3>機構介紹</h3>
@@ -68,14 +32,14 @@
             <label for="main-image">主要圖片 </label>
             <input id="main-image" name="mainImage" required type="file"/>
             <br>
-            <label for="image-intro">圖片敘述: </label>
+            <label for="setting-image-intro">圖片敘述: </label>
             <br>
-            <textarea id="image-intro" name="imageDescription" required
+            <textarea id="setting-image-intro" name="imageDescription" required
                       th:text="${homePage.imageDescription}"></textarea>
             <br>
-            <label for="institution-intro">關於我們:</label>
+            <label for="setting-institution-intro">關於我們:</label>
             <br>
-            <textarea id="institution-intro" name="institutionIntro" required
+            <textarea id="setting-institution-intro" name="institutionIntro" required
                       th:text="${homePage.institutionIntro}"></textarea>
             <h3>選擇顏色</h3>
             <div>
@@ -93,32 +57,25 @@
             <button class="preview" id="btn-preview-style">預覽</button>
             <button class="save" id="btn-update-style">儲存</button>
         </form>
+        <button class="preview" id="btn-preview-homepage">預覽完整畫面</button>
         <button class="cancel" id="btn-cancel-style">取消</button>
     </div>
+
 </main>
 
 </body>
 <script>
-    // // Institution setting
-    // // change to form page
-    // $('#btn-change').click(() => {
-    //     const currentUrl = window.location.href;
-    //     window.location.href = currentUrl.split('?')[0] + "?action=update";
-    // });
-    //
-    // $('#btn-cancel').click(() => {
-    //     const currentUrl = window.location.href;
-    //     window.location.href = currentUrl.split('?')[0];
-    // });
-    //
-    // // POST form data to back end
-    // let targetURL = window.location.href.split('?')[0] + "/update/institution";
-    // $('#institution-form').attr('action', targetURL)
+    const RELATIVE_PATH = window.location.origin;
+    let currentUrl = window.location.href;
 
+    // get user's domain name
+    const DOMAIN_REGEX = /\/admin\/([^/]+)/;
+    let domain = DOMAIN_REGEX.exec(currentUrl)[1];
     // homepage style setting
     // POST form data to back end
 
     $("#btn-preview-style").click(function (event) {
+        // send preview data to back end
         let form = $("#homepage-form")[0];
         if (!form.checkValidity()) {
             return;
@@ -126,17 +83,50 @@
         event.preventDefault();
 
         let formData = new FormData(form);
-        const baseUrl = window.location.href.split('?')[0];
-        let endpoint = baseUrl + "/preview"
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/homepage/preview`;
         try {
             (async function postData() {
-                await sendData(formData, endpoint);
-                window.location.href = baseUrl + "?action=preview"
+                let response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                })
             })()
         } catch (error) {
             console.error('Error:', error);
         }
-    });
+
+        // render preview data
+        let selectedValue = $('input[name="color"]:checked').val();
+        let setImageIntro = $('#setting-image-intro').val();
+        let setInstitutionIntro = $('#setting-institution-intro').val();
+
+        $('.main-image-description').html(setImageIntro);
+        $('.institution-intro').html(setInstitutionIntro);
+
+        let backgroundColor, headingColor;
+        if (selectedValue === '1') {
+            backgroundColor = '#A61C00';
+            headingColor = '#5B0F00';
+        } else if (selectedValue === '2') {
+            backgroundColor = '#FFAB40';
+            headingColor = '#B45F06';
+        } else if (selectedValue === '3') {
+            backgroundColor = '#5AC7AA';
+            headingColor = '#196853';
+        } else if (selectedValue === '4') {
+            backgroundColor = '#3481C7';
+            headingColor = '#124470';
+        } else if (selectedValue === '5') {
+            backgroundColor = '#654DA3';
+            headingColor = '#1E0A52';
+        }
+
+        $('.header-homepage').attr('style', 'background-color: ' + backgroundColor);
+        $('.footer-fragment-container').attr('style', 'background-color: ' + backgroundColor);
+        $('.heading-intro, .heading-info, .phone, .address, .business-hour').attr('style', 'color: ' + headingColor);
+
+    })
+    ;
 
     $("#btn-update-style").click(function (event) {
         let form = $("#homepage-form")[0];
@@ -146,35 +136,72 @@
         event.preventDefault();
 
         let formData = new FormData(form);
-        const baseUrl = window.location.href.split('?')[0];
-        let endpoint = baseUrl + "/update/style"
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/homepage/update`;
         try {
             (async function postData() {
-                await sendData(formData, endpoint);
-                window.location.href = baseUrl;
+                let response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                })
+                if (response.ok) {
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/homepage`;
+                    }, 0);
+                }
             })()
         } catch (error) {
             console.error('Error:', error);
         }
     });
 
+    $("#btn-preview-homepage").click(function (event) {
+        let previewUrl = `${RELATIVE_PATH}/admin/${domain}/setting/homepage?action=preview`;
+        window.open(previewUrl, '_blank', 'width=1200,height=600');
+    })
+
     $('#btn-cancel-style').click(() => {
         const currentUrl = window.location.href;
         window.location.href = currentUrl.split('?')[0];
     });
+    
 
-    async function sendData(formData, endpoint) {
-        try {
-            let response = await fetch(endpoint, {
-                method: 'POST',
-                body: formData
-            });
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-        } catch (error) {
-            console.error('There has been a problem with your fetch operation:', error);
-            throw error;
+    $(document).ready(function () {
+        $('#logo').change(function () {
+            previewLogo();
+        })
+    })
+
+    function previewLogo() {
+        let logoImage = $('.logo-image');
+        let file = $('#logo')[0].files[0];
+        let reader = new FileReader();
+
+        reader.onloadend = function () {
+            logoImage.attr('src', reader.result);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+
+    $(document).ready(function () {
+        $('#main-image').change(function () {
+            previewMainImage();
+        })
+    })
+
+    function previewMainImage() {
+        let mainImage = $('.main-image');
+        let file = $('#main-image')[0].files[0];
+        let reader = new FileReader();
+
+        reader.onloadend = function () {
+            mainImage.attr('src', reader.result);
+        };
+
+        if (file) {
+            reader.readAsDataURL(file);
         }
     }
 
