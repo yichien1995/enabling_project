@@ -14,5 +14,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 	@Query(value = "SELECT * FROM member WHERE institution_domain = :domain", nativeQuery = true)
 	List<Member> getAllMemberByDomain(@Param("domain") String domain);
 
+	Member getMemberById(Long id);
+
 	void deleteMemberById(Long id);
 }

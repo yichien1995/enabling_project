@@ -13,6 +13,19 @@
           rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+    <style>
+        #update-member-form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 4rem;
+            border-radius: 5px;
+            box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+    </style>
     <title>團隊介紹管理</title>
 </head>
 <body>
@@ -49,11 +62,21 @@
                 <tr>
                     <th>姓名</th>
                     <th>頭銜</th>
+                    <th>經歷</th>
+                    <th>學歷</th>
+                    <th>更新</th>
                     <th>刪除</th>
                 </tr>
                 <tr th:each="member:${members}" th:if="${members != null}">
-                    <td th:text="${member.name}"></td>
-                    <td th:text="${member.title}"></td>
+                    <td th:id="'name-' + ${member.id}" th:text="${member.name}"></td>
+                    <td th:id="'title-' + ${member.id}" th:text="${member.title}"></td>
+                    <td th:id="'qualification-' + ${member.id}" th:utext="${member.qualification}"></td>
+                    <td th:id="'education-' + ${member.id}" th:utext="${member.education}"></td>
+                    <td>
+                    <td>
+                        <button class="change">更新
+                        </button>
+                    </td>
                     <td>
                         <button class="delete" th:attr="onclick='deleteMember(\'' + ${member.id} + '\')'">刪除</button>
                     </td>
@@ -61,6 +84,28 @@
             </table>
         </div>
     </div>
+    <form enctype="multipart/form-data" id="update-member-form">
+        <label for="update-member-name">姓名:</label>
+        <input id="update-member-name" name="name" required type="text">
+        <br>
+        <label for="update-photo">圖片:</label>
+        <input id="update-photo" name="photo" type="file">
+        <br>
+        <label for="update-title">頭銜:</label>
+        <input id="update-title" name="title" required type="text">
+        <br>
+        <label for="update-qualification">經歷: </label>
+        <br>
+        <textarea id="update-qualification" name="qualification" required></textarea>
+        <br>
+        <label for="update-education">學歷: </label>
+        <br>
+        <textarea id="update-education" name="education" required></textarea>
+        <br>
+        <button class="cancel" id="btn-cancel">取消</button>
+        <button class="update" id="btn-update">更新</button>
+    </form>
+
 </main>
 <script>
     const RELATIVE_PATH = window.location.origin;
@@ -116,6 +161,65 @@
             })()
         }
     }
+
+    $(document).ready(function () {
+        $('#update-member-form').hide();
+    });
+
+    $('.change').click(function () {
+        $('#update-member-form').show();
+        let row = $(this).closest('tr');
+        let id = row.find('td:first').attr('id').split('-')[1];
+        let name = row.find('td:nth-child(1)').text();
+        let title = row.find('td:nth-child(2)').text();
+        let qualification = row.find('td:nth-child(3)').text();
+        let education = row.find('td:nth-child(4)').text();
+
+        $('#update-member-name').val(name);
+        $('#update-title').val(title);
+        $('#update-qualification').val(qualification);
+        $('#update-education').val(education);
+        $('#btn-update').attr('data-id', id);
+    });
+
+    $('#btn-update').click(function (event) {
+        event.preventDefault();
+
+        let id = $(this).attr('data-id');
+        updateMember(id);
+    });
+
+    function updateMember(id) {
+        let form = $("#update-member-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/member/` + id;
+        (async function updateData() {
+            try {
+                let response = await fetch(endpoint, {
+                    method: 'PATCH',
+                    body: formData
+                })
+                if (response.ok) {
+                    // alert("成功更新成員資訊")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/member`;
+                    }, 0);
+                }
+            } catch (e) {
+                console.error('Error:', e)
+            }
+        })()
+    }
+
+    $('#btn-cancel').click((event) => {
+        event.preventDefault();
+        $('#update-member-form').hide();
+    });
+
 </script>
 </body>
 </html>

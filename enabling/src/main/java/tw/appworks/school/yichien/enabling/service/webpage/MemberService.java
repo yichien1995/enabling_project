@@ -9,5 +9,7 @@ public interface MemberService {
 
 	void renderMemberPage(String domain, Model model);
 
+	void updateMember(String domain, Long id, MemberForm form);
+
 	void deleteMemberById(Long id);
 }

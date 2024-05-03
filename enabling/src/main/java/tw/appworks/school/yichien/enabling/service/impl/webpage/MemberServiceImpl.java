@@ -62,6 +62,23 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public void updateMember(String domain, Long id, MemberForm form) {
+		Member member = memberRepository.getMemberById(id);
+		member.setName(form.getName());
+		member.setTitle(form.getTitle());
+		member.setQualification(form.getQualification());
+		member.setEducation(form.getEducation());
+
+		if (!form.getPhoto().isEmpty()) {
+			// save image relative URL
+			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
+			member.setPhoto(uploadAndGetPath);
+		}
+		memberRepository.save(member);
+
+	}
+
+	@Override
 	@Transactional
 	public void deleteMemberById(Long id) {
 		memberRepository.deleteMemberById(id);

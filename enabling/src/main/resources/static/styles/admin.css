@@ -81,6 +81,7 @@ button.change,
 button.preview,
 button.save,
 button.cancel,
+button.update,
 button.release {
     margin: 0.25rem 0.5rem;
     padding: 0.25rem 1rem;
@@ -96,6 +97,7 @@ button.change:hover,
 button.preview:hover,
 button.save:hover,
 button.cancel:hover,
+button.update:hover,
 button.release:hover {
     cursor: pointer;
     background-color: rgb(113, 115, 106);
