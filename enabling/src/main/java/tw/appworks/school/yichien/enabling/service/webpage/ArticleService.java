@@ -20,5 +20,7 @@ public interface ArticleService {
 
 	void savePreviewArticlePage(String domain, int draft, int preview, ArticleForm articleForm);
 
+	void previewExistArticle(int articleId, String domain, int draft, int preview, ArticleForm articleForm);
+
 
 }

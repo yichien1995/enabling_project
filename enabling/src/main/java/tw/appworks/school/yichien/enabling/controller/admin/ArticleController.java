@@ -47,7 +47,12 @@ public class ArticleController {
 		int draftValue = action.equals("release") ? 0 : Integer.parseInt(draft);
 
 		if (action.equals("preview")) {
-			articleService.savePreviewArticlePage(domain, draftValue, previewStatus, articleForm);
+			if (id == null || id.isEmpty()) {
+				articleService.savePreviewArticlePage(domain, draftValue, previewStatus, articleForm);
+			} else {
+				int idValue = Integer.parseInt(id);
+				articleService.previewExistArticle(idValue, domain, draftValue, previewStatus, articleForm);
+			}
 			return "redirect:" + domainPrefix + "admin/" + domain + "/setting/articles";
 		}
 

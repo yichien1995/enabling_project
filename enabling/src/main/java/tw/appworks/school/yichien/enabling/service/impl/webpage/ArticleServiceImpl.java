@@ -85,8 +85,34 @@ public class ArticleServiceImpl implements ArticleService {
 				existPreviewArticle.setTitle(articleForm.getTitle());
 				existPreviewArticle.setContent(articleForm.getContent());
 				// save image relative URL
+
 				String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", articleForm.getCover());
 				existPreviewArticle.setCover(uploadAndGetPath);
+				articleRepository.save(existPreviewArticle);
+			}
+		} catch (IncorrectResultSizeDataAccessException e) {
+			logger.error("Error in savePreviewArticlePage: {}", e.getMessage());
+		}
+	}
+
+	@Override
+	public void previewExistArticle(int articleId, String domain, int draft, int preview, ArticleForm articleForm) {
+		Article existArticle = articleRepository.findArticleById(articleId);
+		try {
+			Article existPreviewArticle = articleRepository.getPreviewArticle(domain);
+			if (existPreviewArticle == null) {
+				saveNewArticle(domain, draft, preview, articleForm);
+			} else {
+				existPreviewArticle.setTitle(articleForm.getTitle());
+				existPreviewArticle.setContent(articleForm.getContent());
+//				// save image relative URL
+				if (!articleForm.getCover().isEmpty()) {
+
+					String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", articleForm.getCover());
+					existPreviewArticle.setCover(uploadAndGetPath);
+				} else {
+					existPreviewArticle.setCover(existArticle.getCover());
+				}
 				articleRepository.save(existPreviewArticle);
 			}
 		} catch (IncorrectResultSizeDataAccessException e) {
