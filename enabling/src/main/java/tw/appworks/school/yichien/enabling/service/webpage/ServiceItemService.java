@@ -9,5 +9,7 @@ public interface ServiceItemService {
 
 	void renderServicePage(String domain, Model model);
 
+	void updateService(String domain, Long id, ServicesForm form);
+
 	void deleteServiceItemById(Long id);
 }

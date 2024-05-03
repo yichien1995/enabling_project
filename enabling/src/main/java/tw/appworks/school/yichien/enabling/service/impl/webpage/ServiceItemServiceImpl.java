@@ -58,6 +58,20 @@ public class ServiceItemServiceImpl implements ServiceItemService {
 	}
 
 	@Override
+	public void updateService(String domain, Long id, ServicesForm form) {
+		ServiceItem serviceItem = serviceItemRepository.getServiceItemById(id);
+		serviceItem.setTitle(form.getTitle());
+		serviceItem.setPrice(form.getPrice());
+
+		if (!form.getImage().isEmpty()) {
+			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+			serviceItem.setImage(uploadAndGetPath);
+		}
+
+		serviceItemRepository.save(serviceItem);
+	}
+
+	@Override
 	@Transactional
 	public void deleteServiceItemById(Long id) {
 		serviceItemRepository.deleteServiceItemById(id);

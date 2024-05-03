@@ -42,11 +42,15 @@
                 <tr>
                     <th>項目名稱</th>
                     <th>收費說明</th>
+                    <th>更新</th>
                     <th>刪除</th>
                 </tr>
                 <tr th:each="serviceItem:${serviceItems}" th:if="${serviceItems != null}">
-                    <td th:text="${serviceItem.title}"></td>
-                    <td th:utext="${serviceItem.price}"></td>
+                    <td th:id="'title-' + ${serviceItem.id}" th:text="${serviceItem.title}"></td>
+                    <td th:id="'price-' + ${serviceItem.id}" th:utext="${serviceItem.price}"></td>
+                    <td>
+                        <button class="change">更新</button>
+                    </td>
                     <td>
                         <button class="delete" th:attr="onclick='deleteServiceItem(\'' + ${serviceItem.id} + '\')'">
                             刪除
@@ -56,8 +60,20 @@
             </table>
         </div>
     </div>
-
-
+    <form enctype="multipart/form-data" id="update-service-form">
+        <label for="update-service-image">圖片:</label>
+        <input id="update-service-image" name="image" type="file">
+        <br>
+        <label for="update-title">項目名稱: </label>
+        <input id="update-title" name="title" required type="text">
+        <br>
+        <label for="update-price">收費說明: </label>
+        <br>
+        <textarea id="update-price" name="price" required></textarea>
+        <br>
+        <button class="cancel" id="btn-cancel">取消</button>
+        <button class="update" id="btn-update">更新</button>
+    </form>
 </main>
 <script>
     const RELATIVE_PATH = window.location.origin;
@@ -113,6 +129,56 @@
             })()
         }
     }
+
+    $(document).ready(function () {
+        $('#update-service-form').hide();
+    });
+
+    $('.change').click(function () {
+        $('#update-service-form').show();
+        let row = $(this).closest('tr');
+        let id = row.find('td:first').attr('id').split('-')[1];
+        let title = row.find('td:nth-child(1)').text();
+        let price = row.find('td:nth-child(2)').text();
+
+        $('#update-title').val(title);
+        $('#update-price').val(price);
+        $('#btn-update').attr('data-id', id);
+    });
+
+    $('#btn-update').click(function (event) {
+        event.preventDefault();
+
+        let id = $(this).attr('data-id');
+        updateService(id);
+    });
+
+    function updateService(id) {
+        let form = $("#update-service-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/service/` + id;
+        (async function updateData() {
+            try {
+                let response = await fetch(endpoint, {
+                    method: 'PATCH',
+                    body: formData
+                })
+                if (response.ok) {
+                    // alert("成功更新服務項目")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/service`;
+                    }, 0);
+                }
+            } catch (e) {
+                console.error('Error:', e)
+            }
+        })()
+    }
+
 </script>
 </body>
 </html>

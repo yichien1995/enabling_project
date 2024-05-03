@@ -73,9 +73,7 @@
                     <td th:id="'qualification-' + ${member.id}" th:utext="${member.qualification}"></td>
                     <td th:id="'education-' + ${member.id}" th:utext="${member.education}"></td>
                     <td>
-                    <td>
-                        <button class="change">更新
-                        </button>
+                        <button class="change">更新</button>
                     </td>
                     <td>
                         <button class="delete" th:attr="onclick='deleteMember(\'' + ${member.id} + '\')'">刪除</button>

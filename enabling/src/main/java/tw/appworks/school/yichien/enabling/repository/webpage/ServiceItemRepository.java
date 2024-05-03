@@ -14,5 +14,7 @@ public interface ServiceItemRepository extends JpaRepository<ServiceItem, Long> 
 	@Query(value = "SELECT * FROM services WHERE institution_domain = :domain", nativeQuery = true)
 	List<ServiceItem> getAllServicesItemByDomain(@Param("domain") String domain);
 
+	ServiceItem getServiceItemById(Long id);
+
 	void deleteServiceItemById(Long id);
 }

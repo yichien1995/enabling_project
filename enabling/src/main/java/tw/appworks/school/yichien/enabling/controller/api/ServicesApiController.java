@@ -29,6 +29,15 @@ public class ServicesApiController {
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
+	@PatchMapping(path = "/{id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+	public ResponseEntity<?> updateMember(@PathVariable String id, @PathVariable String domain, @ModelAttribute ServicesForm servicesForm) {
+		long idValue = Long.parseLong(id);
+		serviceItemService.updateService(domain, idValue, servicesForm);
+		Map<String, Object> result = new HashMap<>();
+		result.put("success", "Update service info successfully.");
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
 	@DeleteMapping("/{id}")
 	@ResponseBody
 	public ResponseEntity<?> deleteServiceItem(@PathVariable String id, @PathVariable String domain) {
