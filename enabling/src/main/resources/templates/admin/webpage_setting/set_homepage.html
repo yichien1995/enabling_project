@@ -24,7 +24,7 @@
     <div id="homepage-preview" th:insert="~{webpage/homepage.html:: homepageFragment}"></div>
     <div id="setting-form">
         <h2>首頁設定</h2>
-        <form enctype="multipart/form-data" id="homepage-form" method="post" th:object="${HomepageForm}">
+        <form enctype="multipart/form-data" id="homepage-form" th:object="${HomepageForm}">
             <h3>機構介紹</h3>
             <label for="logo">機構 Logo </label>
             <input id="logo" name="logo" required type="file">
@@ -54,11 +54,11 @@
                 <input id="color-purple" name="color" type="radio" value="5"/>
                 <label for="color-purple">紫色</label>
             </div>
+            <button class="cancel" id="btn-cancel-style">取消</button>
             <button class="preview" id="btn-preview-style">預覽</button>
+            <button class="preview" id="btn-preview-homepage">預覽完整畫面</button>
             <button class="save" id="btn-update-style">儲存</button>
         </form>
-        <button class="preview" id="btn-preview-homepage">預覽完整畫面</button>
-        <button class="cancel" id="btn-cancel-style">取消</button>
     </div>
 
 </main>
@@ -73,6 +73,10 @@
     let domain = DOMAIN_REGEX.exec(currentUrl)[1];
     // homepage style setting
     // POST form data to back end
+
+    $(document).ready(function () {
+        $("#btn-preview-homepage").hide();
+    })
 
     $("#btn-preview-style").click(function (event) {
         // send preview data to back end
@@ -125,6 +129,7 @@
         $('.footer-fragment-container').attr('style', 'background-color: ' + backgroundColor);
         $('.heading-intro, .heading-info, .phone, .address, .business-hour').attr('style', 'color: ' + headingColor);
 
+        $("#btn-preview-homepage").show();
     })
     ;
 
@@ -155,15 +160,16 @@
     });
 
     $("#btn-preview-homepage").click(function (event) {
+        event.preventDefault();
         let previewUrl = `${RELATIVE_PATH}/admin/${domain}/setting/homepage?action=preview`;
         window.open(previewUrl, '_blank', 'width=1200,height=600');
     })
 
-    $('#btn-cancel-style').click(() => {
-        const currentUrl = window.location.href;
-        window.location.href = currentUrl.split('?')[0];
+    $('#btn-cancel-style').click(function (event) {
+        event.preventDefault();
+        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/homepage`;
     });
-    
+
 
     $(document).ready(function () {
         $('#logo').change(function () {

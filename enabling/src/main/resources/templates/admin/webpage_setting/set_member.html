@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
@@ -167,7 +167,7 @@
     $('.change').click(function () {
         $('#update-member-form').show();
         let row = $(this).closest('tr');
-        let id = row.find('td:first').attr('id').split('-')[1];
+        let id = row.find('td:first').attr('id').split('-').slice(-1)[0];
         let name = row.find('td:nth-child(1)').text();
         let title = row.find('td:nth-child(2)').text();
         let qualification = row.find('td:nth-child(3)').text();

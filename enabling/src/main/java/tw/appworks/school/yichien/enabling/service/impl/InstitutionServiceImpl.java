@@ -96,6 +96,7 @@ public class InstitutionServiceImpl implements InstitutionService {
 		ThemeColor themeColor = themeColorRepository.findById(1);
 
 		homepage.setThemeColorId(themeColor);
+		// TODO: set preview image URL
 		homepage.setLogo("機構Logo");
 		homepage.setMainImage("主要圖片");
 		homepage.setImageDescription("輸入主要圖片敘述");

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <link href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          referrerpolicy="no-referrer"
+          rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+    <title>個案資訊</title>
+</head>
+<body>
+<nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
+<main>
+    <h2>個案資訊管理</h2>
+    <div class="admin-setting-container">
+        <div class="submit-form">
+            <h3>新增個案</h3>
+            <form id="client-form">
+                <label for="medical-record-number">病歷號: </label>
+                <br>
+                <input id="medical-record-number" min="1" name="medicalRecordNumber" required type="number">
+                <br>
+                <label for="national-id-number">身分證字號: </label>
+                <br>
+                <input id="national-id-number" maxlength="10" minlength="10" name="nationalIdNumber" required
+                       type="text">
+                <br>
+                <label for="name">姓名: </label>
+                <br>
+                <input id="name" name="name" required type="text">
+                <br>
+                <label for="birthday">生日: </label>
+                <br>
+                <input id="birthday" name="birthday" required type="date">
+                <br>
+                <label for="tel">聯絡電話: </label>
+                <br>
+                <input id="tel" name="tel" required type="text">
+                <br>
+                <label for="email">信箱: </label>
+                <br>
+                <input id="email" name="email" type="text">
+                <br>
+                <button class="create" id="btn-create">新增</button>
+            </form>
+        </div>
+        <div class="tables">
+            <h3>個案列表</h3>
+            <table>
+                <tr>
+                    <th>病歷號</th>
+                    <th>身分證字號</th>
+                    <th>姓名</th>
+                    <th>生日</th>
+                    <th>聯絡電話</th>
+                    <th>信箱</th>
+                    <th>修改</th>
+                    <th>刪除</th>
+                </tr>
+                <tr th:each="medicalRecord:${medicalRecords}" th:if="${medicalRecords != null}">
+                    <td th:id="'medical-record-number-' + ${medicalRecord.id}"
+                        th:text="${medicalRecord.medicalRecordNumber}"></td>
+                    <td th:id="'national-id-number-' + ${medicalRecord.id}"
+                        th:text="${medicalRecord.nationalIdNumber}"></td>
+                    <td th:id="'name-' + ${medicalRecord.id}" th:text="${medicalRecord.name}"></td>
+                    <td th:id="'birthday-' + ${medicalRecord.id}" th:text="${medicalRecord.birthday}"></td>
+                    <td th:id="'tel-' + ${medicalRecord.id}" th:text="${medicalRecord.tel}"></td>
+                    <td th:id="'email-' + ${medicalRecord.id}" th:text="${medicalRecord.email}"></td>
+                    <td>
+                        <button class="change">更新</button>
+                    </td>
+                    <td>
+                        <button class="delete" th:attr="onclick='deleteMedicalRecord(\'' + ${medicalRecord.id} + '\')'">
+                            刪除
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <form id="update-client-form">
+        <label for="update-medical-record-number">病歷號: </label>
+        <br>
+        <input id="update-medical-record-number" min="1" name="medicalRecordNumber" required type="number">
+        <br>
+        <label for="update-national-id-number">身分證字號: </label>
+        <br>
+        <input id="update-national-id-number" maxlength="10" minlength="10" name="nationalIdNumber" required
+               type="text">
+        <br>
+        <label for="update-name">姓名: </label>
+        <br>
+        <input id="update-name" name="name" required type="text">
+        <br>
+        <label for="update-birthday">生日: </label>
+        <br>
+        <input id="update-birthday" name="birthday" required type="date">
+        <br>
+        <label for="update-tel">聯絡電話: </label>
+        <br>
+        <input id="update-tel" name="tel" required type="text">
+        <br>
+        <label for="update-email">信箱: </label>
+        <br>
+        <input id="update-email" name="email" type="text">
+        <br>
+        <button class="cancel" id="btn-cancel">取消</button>
+        <button class="update" id="btn-update">更新</button>
+    </form>
+</main>
+<script>
+    const RELATIVE_PATH = window.location.origin;
+    let currentUrl = window.location.href;
+
+    // get user's domain name
+    const DOMAIN_REGEX = /\/admin\/([^/]+)/;
+    let domain = DOMAIN_REGEX.exec(currentUrl)[1];
+
+    $("#btn-create").click(function (event) {
+        let form = $("#client-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+        event.preventDefault();
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/management/client`;
+        try {
+            (async function postData() {
+                let response = await fetch(endpoint, {
+                    method: 'POST',
+                    body: formData
+                })
+                if (response.ok) {
+                    // alert("成功新增服務項目")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/management/client`;
+                    }, 0);
+                }
+            })()
+
+        } catch (error) {
+            console.error('Error:', error)
+        }
+    })
+
+    function deleteMedicalRecord(id) {
+        if (confirm("確定刪除?")) {
+            let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/management/client/` + id;
+            (async function deleteData() {
+                try {
+                    let response = await fetch(endpoint, {
+                        method: 'DELETE'
+                    })
+                    if (response.ok) {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/management/client`
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (e) {
+                    console.error('Error:', e);
+                }
+            })()
+        }
+    }
+
+    $(document).ready(function () {
+        $('#update-client-form').hide();
+    });
+
+    $('.change').click(function () {
+        $('#update-client-form').show();
+        let row = $(this).closest('tr');
+        let id = row.find('td:first').attr('id').split('-').slice(-1)[0];
+        let medicalRecordNumber = row.find('td:nth-child(1)').text();
+        let nationalIdNumber = row.find('td:nth-child(2)').text();
+        let name = row.find('td:nth-child(3)').text();
+        let birthday = row.find('td:nth-child(4)').text();
+        let tel = row.find('td:nth-child(5)').text();
+        let email = row.find('td:nth-child(6)').text();
+
+        $('#update-medical-record-number').val(medicalRecordNumber);
+        $('#update-national-id-number').val(nationalIdNumber);
+        $('#update-name').val(name);
+        $('#update-birthday').val(birthday);
+        $('#update-tel').val(tel);
+        $('#update-email').val(email);
+        $('#btn-update').attr('data-id', id);
+    });
+
+    $('#btn-update').click(function (event) {
+        event.preventDefault();
+
+        let id = $(this).attr('data-id');
+        updateMedicalRecord(id);
+    });
+
+    function updateMedicalRecord(id) {
+        let form = $("#update-client-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/management/client/` + id;
+        (async function updateData() {
+            try {
+                let response = await fetch(endpoint, {
+                    method: 'PATCH',
+                    body: formData
+                })
+                if (response.ok) {
+                    // alert("成功更新個案資訊")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/management/client`;
+                    }, 0);
+                }
+            } catch (e) {
+                console.error('Error:', e)
+            }
+        })()
+    }
+
+    $('#btn-cancel').click((event) => {
+        event.preventDefault();
+        $('#update-client-form').hide();
+    });
+
+</script>
+
+</body>
+</html>

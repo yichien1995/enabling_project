@@ -13,13 +13,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/1.0/admin/{domain}/management")
-public class ManagementApiController {
+public class TeamManagementApiController {
 
 	private final TeamManagementService teamManagementService;
 
 	private final HomepageService homepageService;
 
-	public ManagementApiController(TeamManagementService teamManagementService, HomepageService homepageService) {
+	public TeamManagementApiController(TeamManagementService teamManagementService, HomepageService homepageService) {
 		this.teamManagementService = teamManagementService;
 		this.homepageService = homepageService;
 	}

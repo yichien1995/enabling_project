@@ -6,9 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import tw.appworks.school.yichien.enabling.service.AdminService;
-import tw.appworks.school.yichien.enabling.service.ReportService;
-import tw.appworks.school.yichien.enabling.service.TeamManagementService;
+import tw.appworks.school.yichien.enabling.service.*;
 import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
 
@@ -16,19 +14,21 @@ import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 @RequestMapping("/admin/{domain}/management")
 public class ManagementController {
 
+	private final AdminService adminService;
 	private final TeamManagementService teamManagementService;
 
 	private final ReportService reportService;
 
 	private final HomepageService homepageService;
 
-	private final AdminService adminService;
+	private final ClientManagementService clientManagementService;
 
-	public ManagementController(TeamManagementService teamManagementService, ReportService reportService, HomepageService homepageService, AdminService adminService) {
+	public ManagementController(TeamManagementService teamManagementService, ReportService reportService, HomepageService homepageService, AdminService adminService, ClientService clientService, ClientManagementService clientManagementService) {
 		this.teamManagementService = teamManagementService;
 		this.reportService = reportService;
 		this.homepageService = homepageService;
 		this.adminService = adminService;
+		this.clientManagementService = clientManagementService;
 	}
 
 	@GetMapping("/team")
@@ -57,5 +57,12 @@ public class ManagementController {
 		adminService.renderAdminSidebar(domain, model);
 		return "admin/report";
 	}
-	
+
+	@GetMapping("/client")
+	public String clientManagement(@PathVariable String domain, Model model) {
+		adminService.renderAdminSidebar(domain, model);
+		clientManagementService.renderClientManagementPage(domain, model);
+		return "admin/client_management";
+	}
+
 }
