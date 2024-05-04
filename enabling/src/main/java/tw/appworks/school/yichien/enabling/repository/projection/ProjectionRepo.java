@@ -9,6 +9,8 @@ import tw.appworks.school.yichien.enabling.dto.account.MemberDto;
 import tw.appworks.school.yichien.enabling.dto.account.MyInstitutionDto;
 import tw.appworks.school.yichien.enabling.dto.account.UserInfoDto;
 import tw.appworks.school.yichien.enabling.dto.management.ClientReportDto;
+import tw.appworks.school.yichien.enabling.dto.management.InterventionDto;
+import tw.appworks.school.yichien.enabling.dto.management.MedicalRecordDto;
 import tw.appworks.school.yichien.enabling.dto.management.TeamMemberInfoDto;
 
 import java.util.List;
@@ -94,4 +96,42 @@ public class ProjectionRepo {
 				})
 				.getResultList();
 	}
+
+	public List<MedicalRecordDto> getMedicalRecordDto(String domain) {
+		String query = """
+				SELECT m.id,m.medical_record_number,m.name FROM medical_record AS m 
+				WHERE m.institution_domain = '%s'
+				""";
+		return entityManager.createNativeQuery(query.formatted(domain), MedicalRecordDto.class).getResultList();
+	}
+
+	public List<InterventionDto> getInterventionDto(Long institutionUserId) {
+		String query = """
+				SELECT i.id,m.medical_record_number,m.name,m.birthday,m.tel,m.email 
+				FROM intervention AS i JOIN medical_record AS m ON i.medical_record_id = m.id 
+				WHERE i.institution_user_id = %d
+				""";
+		return entityManager.createNativeQuery(query.formatted(institutionUserId)).
+				unwrap(org.hibernate.query.NativeQuery.class)
+				.setResultTransformer(new ResultTransformer() {
+					@Override
+					public Object transformTuple(Object[] objects, String[] strings) {
+						return new InterventionDto(
+								(Long) objects[0],
+								(Integer) objects[1],
+								(String) objects[2],
+								((java.sql.Date) objects[3]).toLocalDate(),
+								(String) objects[4],
+								(String) objects[5]
+						);
+					}
+
+					@Override
+					public List transformList(List list) {
+						return list;
+					}
+				})
+				.getResultList();
+	}
+	
 }

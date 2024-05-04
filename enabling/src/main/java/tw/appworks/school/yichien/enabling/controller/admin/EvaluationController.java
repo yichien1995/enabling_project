@@ -27,7 +27,7 @@ public class EvaluationController {
 	}
 
 	@GetMapping
-	public String setArticle(@PathVariable String domain, Model model) {
+	public String setEvaluation(@PathVariable String domain, Model model) {
 		evaluationService.renderEvaluationSettingPage(domain, model);
 		adminService.renderAdminSidebar(domain, model);
 		return "admin/webpage_setting/set_evaluation";

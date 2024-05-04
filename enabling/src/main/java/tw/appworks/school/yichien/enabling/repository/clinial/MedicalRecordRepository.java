@@ -14,7 +14,7 @@ public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Lo
 	@Query(value = "SELECT * FROM medical_record WHERE institution_domain = :domain", nativeQuery = true)
 	List<MedicalRecord> getAllMedicalRecordByDomain(@Param("domain") String domain);
 
-	MedicalRecord getMedicalRecordById(Long id);
+	MedicalRecord findMedicalRecordById(Long id);
 
 	void deleteMedicalRecordById(Long id);
 }

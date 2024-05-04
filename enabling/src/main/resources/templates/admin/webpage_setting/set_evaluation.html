@@ -43,7 +43,7 @@
                     <datalist id="evaluators-default">
                     </datalist>
                 </div>
-                <button class="create" id="btn-new-evaluation">新增</button>
+                <button class="create" id="btn-new-evaluation" th:if="${memberData != null}">新增</button>
             </form>
         </div>
         <div class="tables">

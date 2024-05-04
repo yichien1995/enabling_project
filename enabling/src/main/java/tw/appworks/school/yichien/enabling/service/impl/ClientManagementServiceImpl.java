@@ -48,7 +48,7 @@ public class ClientManagementServiceImpl implements ClientManagementService {
 
 	@Override
 	public void updateMedicalRecord(Long id, MedicalRecordForm form) {
-		MedicalRecord medicalRecord = medicalRecordRepository.getMedicalRecordById(id);
+		MedicalRecord medicalRecord = medicalRecordRepository.findMedicalRecordById(id);
 		medicalRecord.setMedicalRecordNumber(form.getMedicalRecordNumber());
 		medicalRecord.setNationalIdNumber(form.getNationalIdNumber());
 		medicalRecord.setName(form.getName());
