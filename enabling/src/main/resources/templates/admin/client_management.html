@@ -54,6 +54,7 @@
         <div class="tables">
             <h3>個案列表</h3>
             <table>
+                <thead>
                 <tr>
                     <th>病歷號</th>
                     <th>身分證字號</th>
@@ -64,6 +65,8 @@
                     <th>修改</th>
                     <th>刪除</th>
                 </tr>
+                </thead>
+                <tbody>
                 <tr th:each="medicalRecord:${medicalRecords}" th:if="${medicalRecords != null}">
                     <td th:id="'medical-record-number-' + ${medicalRecord.id}"
                         th:text="${medicalRecord.medicalRecordNumber}"></td>
@@ -82,6 +85,7 @@
                         </button>
                     </td>
                 </tr>
+                </tbody>
             </table>
         </div>
     </div>

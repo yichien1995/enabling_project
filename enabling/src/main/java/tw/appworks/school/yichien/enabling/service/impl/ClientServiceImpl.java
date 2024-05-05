@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import tw.appworks.school.yichien.enabling.dto.form.ClientReportForm;
+import tw.appworks.school.yichien.enabling.dto.management.ClientReportDto;
 import tw.appworks.school.yichien.enabling.dto.management.InterventionDto;
 import tw.appworks.school.yichien.enabling.dto.management.MedicalRecordDto;
 import tw.appworks.school.yichien.enabling.model.account.InstitutionUser;
@@ -45,6 +46,20 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
+	public void renderClientListPage(Long institutionUserId, String domain, Model model) {
+		List<MedicalRecordDto> medicalRecords = getMedicalRecordDto(domain);
+		List<InterventionDto> interventions = projectionRepo.getInterventionDto(institutionUserId);
+		model.addAttribute("medicalRecords", medicalRecords);
+		model.addAttribute("interventionDto", interventions);
+	}
+
+	@Override
+	public void renderClientReportPage(Long institutionUserId, Model model) {
+		List<ClientReportDto> clientReports = projectionRepo.getClientReportDto(institutionUserId);
+		model.addAttribute("clientReports", clientReports);
+	}
+
+	@Override
 	public void saveClientReport(Long institutionUserId, ClientReportForm form) {
 		ClientReport clientReport = new ClientReport();
 		InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
@@ -54,6 +69,20 @@ public class ClientServiceImpl implements ClientService {
 		clientReport.setInstitutionUserId(institutionUser);
 
 		clientReportRepository.save(clientReport);
+	}
+
+	@Override
+	public void updateClientReportById(Long id, ClientReportForm form) {
+		ClientReport clientReport = clientReportRepository.findClientReportById(id);
+		clientReport.setDate(form.getDate());
+		clientReport.setTotalAttendance(form.getTotalAttendance());
+		clientReportRepository.save(clientReport);
+	}
+
+	@Override
+	@Transactional
+	public void deleteClientReportById(Long id) {
+		clientReportRepository.deleteClientReportById(id);
 	}
 
 	@Override
@@ -68,13 +97,6 @@ public class ClientServiceImpl implements ClientService {
 		interventionRepository.save(intervention);
 	}
 
-	@Override
-	public void renderClientListPage(Long institutionUserId, String domain, Model model) {
-		List<MedicalRecordDto> medicalRecords = getMedicalRecordDto(domain);
-		List<InterventionDto> interventions = projectionRepo.getInterventionDto(institutionUserId);
-		model.addAttribute("medicalRecords", medicalRecords);
-		model.addAttribute("interventionDto", interventions);
-	}
 
 	@Override
 	@Transactional

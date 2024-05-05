@@ -32,13 +32,48 @@
 
 <nav th:insert="~{fragment/therapist_sidebar.html:: therapist_sidebar}"></nav>
 <main>
-    <h2>每日個案回報</h2>
+    <h2>業績回報</h2>
+    <h3>每日個案回報</h3>
     <form id="client-report-form" method="post">
         <label>日期: </label>
         <input name="date" required type="date">
         <label>今日個案量: </label>
         <input min="0" name="totalAttendance" required type="number">
         <button id="btn-submit">送出</button>
+    </form>
+    <h3>每日個案列表</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>日期</th>
+            <th>個案量</th>
+            <th>更改</th>
+            <th>刪除</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="clientReport:${clientReports}" th:if="${clientReports != null}">
+            <td th:id="'date-' + ${clientReport.id}" th:text="${clientReport.date}"></td>
+            <td th:id="'total-attendance-' + ${clientReport.id}" th:text="${clientReport.totalAttendance}"></td>
+            <td>
+                <button class="change">更改</button>
+            </td>
+            <td>
+                <button class="delete"
+                        th:attr="onclick='deleteClientReport(\'' + ${clientReport.id} + '\')'">
+                    刪除
+                </button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <form id="update-client-report-form">
+        <label for="update-date">日期: </label>
+        <input id="update-date" name="date" required type="date">
+        <label for="update-total-attendance">今日個案量: </label>
+        <input id="update-total-attendance" min="0" name="totalAttendance" required type="number">
+        <button class="update" id="btn-update">更新</button>
+        <button class="cancel" id="btn-cancel">取消</button>
     </form>
 </main>
 <script>
@@ -75,6 +110,82 @@
             console.error('Error:', error)
         }
     })
+
+    $(document).ready(function () {
+        $('#update-client-report-form').hide();
+    });
+
+    $('.change').click(function () {
+        $('#update-client-report-form').show();
+        let row = $(this).closest('tr');
+        let id = row.find('td:first').attr('id').split('-').slice(-1)[0];
+        let date = row.find('td:nth-child(1)').text();
+        let totalAttendance = row.find('td:nth-child(2)').text();
+
+        $('#update-date').val(date);
+        $('#update-total-attendance').val(totalAttendance);
+        $('#btn-update').attr('data-id', id);
+    });
+
+    $('#btn-update').click(function (event) {
+        event.preventDefault();
+
+        let id = $(this).attr('data-id');
+        updateClientReport(id);
+    });
+
+    function updateClientReport(id) {
+        let form = $("#update-client-report-form")[0];
+        if (!form.checkValidity()) {
+            return;
+        }
+
+        let formData = new FormData(form);
+        let endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/client/report/` + id;
+        (async function updateData() {
+            try {
+                let response = await fetch(endpoint, {
+                    method: 'PATCH',
+                    body: formData
+                })
+                if (response.ok) {
+                    // alert("成功更新成員資訊")
+                    setTimeout(function () {
+                        window.location.href = `${RELATIVE_PATH}/therapist/${domain}/client/report`;
+                    }, 0)
+                }
+            } catch (e) {
+                console.error('Error:', e)
+            }
+        })()
+    }
+
+    $('#btn-cancel').click((event) => {
+        event.preventDefault();
+        $('#update-client-report-form').hide();
+    });
+
+    function deleteClientReport(id) {
+        if (confirm("確定刪除?")) {
+            let endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/client/report/` + id;
+            (async function deleteData() {
+                try {
+                    let response = await fetch(endpoint, {
+                        method: 'DELETE'
+                    })
+                    if (response.ok) {
+                        setTimeout(function () {
+                            window.location.href = `${RELATIVE_PATH}/therapist/${domain}/client/report`;
+                        }, 0)
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (e) {
+                    console.error('Error:', e);
+                }
+            })()
+        }
+    }
 </script>
 </body>
 </html>

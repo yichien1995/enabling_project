@@ -30,7 +30,11 @@ public class TherapistController {
 	}
 
 	@GetMapping("/client/report")
-	public String clientReportPage(@PathVariable String domain, Model model) {
+	public String clientReportPage(@PathVariable String domain, Model model,
+	                               @CookieValue(value = "enabling", required = false) String sessionID)
+			throws JsonProcessingException {
+		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
+		clientService.renderClientReportPage(institutionUserId, model);
 		model.addAttribute("domain", domain);
 		return "therapist/client_report";
 	}

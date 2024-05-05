@@ -41,7 +41,34 @@ public class ClientApiController {
 		}
 
 		clientService.saveClientReport(institutionUserId, clientReportForm);
-		result.put("success", "Report client total attendance successfully.");
+		result.put("success", "Save client total attendance successfully.");
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
+	@PatchMapping(path = "/report/{id}")
+	public ResponseEntity<?> updateClientReport(@PathVariable String id,
+	                                            @PathVariable String domain,
+	                                            @ModelAttribute ClientReportForm clientReportForm,
+	                                            @CookieValue(value = "enabling", required = false) String sessionID)
+			throws JsonProcessingException {
+		Map<String, Object> result = new HashMap<>();
+		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
+		if (institutionUserId == null) {
+			return handleForbiddenRequest(result);
+		}
+		long idValue = Long.parseLong(id);
+		clientService.updateClientReportById(idValue, clientReportForm);
+		result.put("success", "Update client report successfully.");
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+	}
+
+	@DeleteMapping("/report/{id}")
+	@ResponseBody
+	public ResponseEntity<?> deleteClientReport(@PathVariable String id, @PathVariable String domain) {
+		Map<String, Object> result = new HashMap<>();
+		long idValue = Long.parseLong(id);
+		clientService.deleteClientReportById(idValue);
+		result.put("success", "Delete client report id: " + id);
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
@@ -58,16 +85,18 @@ public class ClientApiController {
 			return handleForbiddenRequest(result);
 		}
 		clientService.saveIntervention(medicalRecordId, institutionUserId);
-		result.put("success", "Add client to list successfully.");
+		result.put("success", "Add intervention successfully.");
 		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 	@DeleteMapping("/list/{id}")
 	@ResponseBody
 	public ResponseEntity<?> deleteIntervention(@PathVariable String id, @PathVariable String domain) {
+		Map<String, Object> result = new HashMap<>();
 		long idValue = Long.parseLong(id);
 		clientService.deleteInterventionById(idValue);
-		return ResponseEntity.ok("Delete member id: " + id);
+		result.put("success", "Delete intervention id: " + id);
+		return ResponseEntity.status(HttpStatus.OK).body(result);
 	}
 
 	private ResponseEntity<?> handleForbiddenRequest(Map<String, Object> result) {

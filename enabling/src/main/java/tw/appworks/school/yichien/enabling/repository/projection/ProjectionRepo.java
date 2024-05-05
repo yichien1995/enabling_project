@@ -100,7 +100,7 @@ public class ProjectionRepo {
 	public List<MedicalRecordDto> getMedicalRecordDto(String domain) {
 		String query = """
 				SELECT m.id,m.medical_record_number,m.name FROM medical_record AS m 
-				WHERE m.institution_domain = '%s'
+				WHERE m.institution_domain = '%s' ORDER BY m.medical_record_number
 				""";
 		return entityManager.createNativeQuery(query.formatted(domain), MedicalRecordDto.class).getResultList();
 	}
@@ -109,7 +109,7 @@ public class ProjectionRepo {
 		String query = """
 				SELECT i.id,m.medical_record_number,m.name,m.birthday,m.tel,m.email 
 				FROM intervention AS i JOIN medical_record AS m ON i.medical_record_id = m.id 
-				WHERE i.institution_user_id = %d
+				WHERE i.institution_user_id = %d ORDER BY m.medical_record_number
 				""";
 		return entityManager.createNativeQuery(query.formatted(institutionUserId)).
 				unwrap(org.hibernate.query.NativeQuery.class)
@@ -133,5 +133,5 @@ public class ProjectionRepo {
 				})
 				.getResultList();
 	}
-	
+
 }
