@@ -33,8 +33,8 @@ public class TherapistArticleController {
 	@GetMapping
 	public String setArticle(@PathVariable String domain, Model model) {
 		articleService.renderArticleList(domain, model);
-		adminService.renderAdminSidebar(domain, model);
-		return "admin/webpage_setting/set_article";
+//		adminService.renderAdminSidebar(domain, model);
+		return "therapist/set_article_therapist";
 	}
 
 	@PostMapping("/save")
@@ -75,7 +75,7 @@ public class TherapistArticleController {
 		articleService.renderPageByArticleId(id, model);
 		articleService.renderArticleList(domain, model);
 		adminService.renderAdminSidebar(domain, model);
-		return "admin/webpage_setting/set_article";
+		return "therapist/set_article_therapist";
 	}
 
 	@GetMapping("/preview")
