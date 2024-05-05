@@ -7,10 +7,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import tw.appworks.school.yichien.enabling.middleware.AdminFilter;
+import tw.appworks.school.yichien.enabling.middleware.CustomAuthenticationEntryPoint;
+import tw.appworks.school.yichien.enabling.middleware.TherapistFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -18,13 +19,17 @@ public class SecurityConfig {
 
 	public static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 
-	private final PasswordEncoder passwordEncoder;
-
 	private final AdminFilter adminFilter;
 
-	public SecurityConfig(PasswordEncoder passwordEncoder, AdminFilter adminFilter) {
-		this.passwordEncoder = passwordEncoder;
+	private final TherapistFilter therapistFilter;
+
+	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+
+	public SecurityConfig(AdminFilter adminFilter,
+	                      TherapistFilter therapistFilter, CustomAuthenticationEntryPoint customAuthenticationEntryPoint) {
 		this.adminFilter = adminFilter;
+		this.therapistFilter = therapistFilter;
+		this.customAuthenticationEntryPoint = customAuthenticationEntryPoint;
 	}
 
 	@Bean
@@ -35,9 +40,14 @@ public class SecurityConfig {
 						authorizeRequests
 								.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
 								.requestMatchers("/admin", "/admin/**").hasAuthority("admin")
+								.requestMatchers("/therapist", "/therapist/**").hasAuthority("therapist")
 								.anyRequest().permitAll()
 				)
-				.addFilterAfter(adminFilter, UsernamePasswordAuthenticationFilter.class);
+				.addFilterAfter(adminFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterAfter(therapistFilter, UsernamePasswordAuthenticationFilter.class)
+				.exceptionHandling(exceptionHandling ->
+						exceptionHandling.authenticationEntryPoint(customAuthenticationEntryPoint)
+				);
 		return http.build();
 	}
 

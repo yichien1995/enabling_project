@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class AdminFilter extends OncePerRequestFilter {
+public class TherapistFilter extends OncePerRequestFilter {
 
 	@Autowired
 	private AuthenticationServiceImpl authenticationService;
@@ -43,8 +43,8 @@ public class AdminFilter extends OncePerRequestFilter {
 								sessionService.getInstitutionUserDTOFromSession(sessionId);
 
 						for (InstitutionUserDto data : institutionUserDtos) {
-							if (data.getInstitutionDomain().equals(domain) && data.getRoleId() == 1) {
-								authenticationService.authenticateWithRole("admin");
+							if (data.getInstitutionDomain().equals(domain) && data.getRoleId() == 2) {
+								authenticationService.authenticateWithRole("therapist");
 							}
 						}
 					}
@@ -55,7 +55,7 @@ public class AdminFilter extends OncePerRequestFilter {
 	}
 
 	private String extractDomain(String requestURI) {
-		Pattern pattern = Pattern.compile("^/admin/([^/]+)/?");
+		Pattern pattern = Pattern.compile("^/therapist/([^/]+)/?");
 		Matcher matcher = pattern.matcher(requestURI);
 
 		if (matcher.find()) {

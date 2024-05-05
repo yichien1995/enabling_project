@@ -1,10 +1,12 @@
 package tw.appworks.school.yichien.enabling.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import tw.appworks.school.yichien.enabling.service.AdminService;
 import tw.appworks.school.yichien.enabling.service.webpage.*;
 
 @Controller
@@ -21,22 +23,36 @@ public class WebpageController {
 
 	private final MemberService memberService;
 
-	public WebpageController(HomepageService homepageService, ArticleService articleService, EvaluationService evaluationService, ServiceItemService serviceItemService, MemberService memberService) {
+	private final AdminService adminService;
+
+	@Value("${prefix.domain}")
+	private String domainPrefix;
+
+	public WebpageController(HomepageService homepageService, ArticleService articleService, EvaluationService evaluationService, ServiceItemService serviceItemService, MemberService memberService, AdminService adminService) {
 		this.homepageService = homepageService;
 		this.articleService = articleService;
 		this.evaluationService = evaluationService;
 		this.serviceItemService = serviceItemService;
 		this.memberService = memberService;
+		this.adminService = adminService;
 	}
 
 	@GetMapping("/homepage.html")
 	public String HomePage(@PathVariable String domain, Model model) {
+		boolean checkDomainExists = adminService.checkDomain(domain);
+		if (!checkDomainExists) {
+			return "redirect:" + domainPrefix;
+		}
 		homepageService.renderHomepage(domain, model);
 		return "webpage/homepage";
 	}
 
 	@GetMapping("/articles.html")
 	public String articleListPage(@PathVariable String domain, Model model) {
+		boolean checkDomainExists = adminService.checkDomain(domain);
+		if (!checkDomainExists) {
+			return "redirect:" + domainPrefix;
+		}
 		homepageService.renderHomepage(domain, model);
 		articleService.renderArticleListPage(domain, model);
 		return "webpage/articles";
@@ -45,6 +61,10 @@ public class WebpageController {
 	@GetMapping("/article/{id}")
 	public String articlePage(@PathVariable String domain,
 	                          @PathVariable String id, Model model) {
+		boolean checkDomainExists = adminService.checkDomain(domain);
+		if (!checkDomainExists) {
+			return "redirect:" + domainPrefix;
+		}
 		homepageService.renderHomepage(domain, model);
 		articleService.renderPageByArticleId(id, model);
 		return "webpage/article_page";
@@ -52,6 +72,10 @@ public class WebpageController {
 
 	@GetMapping("/evaluation.html")
 	public String evaluationPage(@PathVariable String domain, Model model) {
+		boolean checkDomainExists = adminService.checkDomain(domain);
+		if (!checkDomainExists) {
+			return "redirect:" + domainPrefix;
+		}
 		homepageService.renderHomepage(domain, model);
 		evaluationService.renderEvaluationPage(domain, model);
 		return "webpage/evaluation";
@@ -59,6 +83,10 @@ public class WebpageController {
 
 	@GetMapping("/service.html")
 	public String servicePage(@PathVariable String domain, Model model) {
+		boolean checkDomainExists = adminService.checkDomain(domain);
+		if (!checkDomainExists) {
+			return "redirect:" + domainPrefix;
+		}
 		homepageService.renderHomepage(domain, model);
 		serviceItemService.renderServicePage(domain, model);
 		return "webpage/service";
@@ -66,6 +94,10 @@ public class WebpageController {
 
 	@GetMapping("/member.html")
 	public String teamPage(@PathVariable String domain, Model model) {
+		boolean checkDomainExists = adminService.checkDomain(domain);
+		if (!checkDomainExists) {
+			return "redirect:" + domainPrefix;
+		}
 		homepageService.renderHomepage(domain, model);
 		memberService.renderMemberPage(domain, model);
 		return "webpage/member";

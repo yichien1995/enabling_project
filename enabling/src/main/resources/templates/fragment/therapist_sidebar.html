@@ -3,26 +3,25 @@
     <li><a target="_blank" th:href="@{'/' +${domain}+'/homepage.html'}">機構網頁</a></li>
     <h3>網頁管理</h3>
     <ul>
-        <!--        <li><a th:href="@{'/admin/' +${domain}+'/setting/articles'}">衛教文章</a></li>-->
-        <!--        <div th:if="${released_article != null || draft != null}">-->
-        <!--            <ul>-->
-        <!--                <li>已發布文章</li>-->
-        <!--                <ul th:if="${released_article != null}">-->
-        <!--                    <li th:each="article : ${released_article}">-->
-        <!--                        <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=0'}"-->
-        <!--                           th:text="${article.title}"></a>-->
-        <!--                    </li>-->
-        <!--                </ul>-->
-        <!--                <li>草稿</li>-->
-        <!--                <ul th:if="${drafts != null}">-->
-        <!--                    <li th:each="article : ${drafts}">-->
-        <!--                        <a th:href="@{'/admin/' +${domain}+'/setting/articles/'+${article.id} + '?draft=1'}"-->
-        <!--                           th:text="${article.title}"></a>-->
-        <!--                    </li>-->
-        <!--                </ul>-->
-        <!--            </ul>-->
-        <!--        </div>-->
-        <!--        <li><a th:href="@{'/admin/' +${domain}+'/setting/evaluation'}">評估管理</a></li>-->
+        <li><a th:href="@{'/therapist/' +${domain}+'/setting/articles'}">衛教文章</a></li>
+        <div th:if="${released_article != null || draft != null}">
+            <ul>
+                <li>已發布文章</li>
+                <ul th:if="${released_article != null}">
+                    <li th:each="article : ${released_article}">
+                        <a th:href="@{'/therapist/' +${domain}+'/setting/articles/'+${article.id} + '?draft=0'}"
+                           th:text="${article.title}"></a>
+                    </li>
+                </ul>
+                <li>草稿</li>
+                <ul th:if="${drafts != null}">
+                    <li th:each="article : ${drafts}">
+                        <a th:href="@{'/therapist/' +${domain}+'/setting/articles/'+${article.id} + '?draft=1'}"
+                           th:text="${article.title}"></a>
+                    </li>
+                </ul>
+            </ul>
+        </div>
     </ul>
     <h3>個案管理</h3>
     <ul>
