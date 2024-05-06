@@ -69,7 +69,11 @@ public class HomepageServiceImpl implements HomepageService {
 	@Override
 	public void renderHomepagePreview(String domain, Model model) {
 		Homepage homepage = homepageRepository.getHomepage(domain, 0);
+		String address = homepage.getInstitutionDomain().getAddress();
+		LocationDto location = geocodingService.getGeocodingResponse(address);
 		addHomepageModelAttr(homepage, model);
+		model.addAttribute("location", location);
+		model.addAttribute("key", API_KEY);
 	}
 
 	private void addHomepageModelAttr(Homepage homepage, Model model) {

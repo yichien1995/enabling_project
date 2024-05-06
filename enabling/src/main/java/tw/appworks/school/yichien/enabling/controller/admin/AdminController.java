@@ -45,7 +45,7 @@ public class AdminController {
 			homepageService.renderHomepagePreview(domain, model);
 			return "webpage/homepage";
 		}
-		homepageService.renderHeaderAndFooter(domain, model);
+		homepageService.renderHomePage(domain, model);
 		return "admin/webpage_setting/set_homepage";
 	}
 
