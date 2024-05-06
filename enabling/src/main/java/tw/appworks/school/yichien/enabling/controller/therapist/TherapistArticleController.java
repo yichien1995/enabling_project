@@ -79,7 +79,7 @@ public class TherapistArticleController {
 	}
 
 	@GetMapping("/preview")
-	public String previewArticle(@PathVariable String domain, Model model) {
+	public String previewArticle(@PathVariable String domain, Model model) throws Exception {
 		homepageService.renderHomepage(domain, model);
 		articleService.renderArticlePreviewPage(domain, model);
 		return "admin/webpage_setting/preview_article";

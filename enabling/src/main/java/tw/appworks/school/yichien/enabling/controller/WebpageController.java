@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tw.appworks.school.yichien.enabling.service.AdminService;
+import tw.appworks.school.yichien.enabling.service.google.GeocodingServiceImpl;
 import tw.appworks.school.yichien.enabling.service.webpage.*;
 
 @Controller
@@ -25,16 +26,22 @@ public class WebpageController {
 
 	private final AdminService adminService;
 
+	private final GeocodingServiceImpl geocodingService;
+
 	@Value("${prefix.domain}")
 	private String domainPrefix;
 
-	public WebpageController(HomepageService homepageService, ArticleService articleService, EvaluationService evaluationService, ServiceItemService serviceItemService, MemberService memberService, AdminService adminService) {
+	@Value("${google.api.key}")
+	private String API_KEY;
+
+	public WebpageController(HomepageService homepageService, ArticleService articleService, EvaluationService evaluationService, ServiceItemService serviceItemService, MemberService memberService, AdminService adminService, GeocodingServiceImpl geocodingService) {
 		this.homepageService = homepageService;
 		this.articleService = articleService;
 		this.evaluationService = evaluationService;
 		this.serviceItemService = serviceItemService;
 		this.memberService = memberService;
 		this.adminService = adminService;
+		this.geocodingService = geocodingService;
 	}
 
 	@GetMapping("/homepage.html")
@@ -44,6 +51,8 @@ public class WebpageController {
 			return "redirect:" + domainPrefix;
 		}
 		homepageService.renderHomepage(domain, model);
+		geocodingService.getGeocodingResponse("台北市中正區仁愛路二段99號", model);
+		model.addAttribute("apiKey", API_KEY);
 		return "webpage/homepage";
 	}
 
