@@ -13,6 +13,7 @@ import tw.appworks.school.yichien.enabling.repository.account.InstitutionReposit
 import tw.appworks.school.yichien.enabling.repository.webpage.HomepageRepository;
 import tw.appworks.school.yichien.enabling.service.FileStorageService;
 import tw.appworks.school.yichien.enabling.service.google.GeocodingServiceImpl;
+import tw.appworks.school.yichien.enabling.service.impl.S3UploadServiceImpl;
 import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
 @Service
@@ -26,6 +27,8 @@ public class HomepageServiceImpl implements HomepageService {
 
 	private final GeocodingServiceImpl geocodingService;
 
+	private final S3UploadServiceImpl s3UploadService;
+
 	@Value("${prefix.image}")
 	private String imageUrlPrefix;
 
@@ -33,11 +36,12 @@ public class HomepageServiceImpl implements HomepageService {
 	private String API_KEY;
 
 	public HomepageServiceImpl(InstitutionRepository institutionRepository,
-	                           HomepageRepository homepageRepository, FileStorageService fileStorageService, GeocodingServiceImpl geocodingService) {
+	                           HomepageRepository homepageRepository, FileStorageService fileStorageService, GeocodingServiceImpl geocodingService, S3UploadServiceImpl s3UploadService) {
 		this.institutionRepository = institutionRepository;
 		this.homepageRepository = homepageRepository;
 		this.fileStorageService = fileStorageService;
 		this.geocodingService = geocodingService;
+		this.s3UploadService = s3UploadService;
 	}
 
 	@Override
@@ -146,8 +150,11 @@ public class HomepageServiceImpl implements HomepageService {
 		ThemeColor newColor = new ThemeColor();
 		newColor.setId(hf.getColor());
 
-		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
-		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
+//		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
+//		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
+
+		String logoPath = s3UploadService.uploadFileToS3(domain, "logo_" + fileType, hf.getLogo());
+		String mainImagePath = s3UploadService.uploadFileToS3(domain, "main_" + fileType, hf.getMainImage());
 
 		homepage.setLogo(logoPath);
 		homepage.setMainImage(mainImagePath);

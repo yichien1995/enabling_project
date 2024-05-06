@@ -10,6 +10,7 @@ import tw.appworks.school.yichien.enabling.model.webpage.ServiceItem;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
 import tw.appworks.school.yichien.enabling.repository.webpage.ServiceItemRepository;
 import tw.appworks.school.yichien.enabling.service.FileStorageService;
+import tw.appworks.school.yichien.enabling.service.impl.S3UploadServiceImpl;
 import tw.appworks.school.yichien.enabling.service.webpage.ServiceItemService;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class ServiceItemServiceImpl implements ServiceItemService {
 
 	private final FileStorageService fileStorageService;
 
+	private final S3UploadServiceImpl s3UploadService;
+
 	private final ServiceItemRepository serviceItemRepository;
 
 	private final InstitutionRepository institutionRepository;
@@ -26,8 +29,9 @@ public class ServiceItemServiceImpl implements ServiceItemService {
 	@Value("${prefix.image}")
 	private String imageUrlPrefix;
 
-	public ServiceItemServiceImpl(FileStorageService fileStorageService, ServiceItemRepository serviceItemRepository, InstitutionRepository institutionRepository) {
+	public ServiceItemServiceImpl(FileStorageService fileStorageService, S3UploadServiceImpl s3UploadService, ServiceItemRepository serviceItemRepository, InstitutionRepository institutionRepository) {
 		this.fileStorageService = fileStorageService;
+		this.s3UploadService = s3UploadService;
 		this.serviceItemRepository = serviceItemRepository;
 		this.institutionRepository = institutionRepository;
 	}
@@ -37,7 +41,8 @@ public class ServiceItemServiceImpl implements ServiceItemService {
 		Institution institution = institutionRepository.getInstitution(domain);
 
 		// save image relative URL
-		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+//		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+		String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getTitle(), form.getImage());
 		serviceItem.setImage(uploadAndGetPath);
 
 		serviceItem.setTitle(form.getTitle());
@@ -64,7 +69,8 @@ public class ServiceItemServiceImpl implements ServiceItemService {
 		serviceItem.setPrice(form.getPrice());
 
 		if (!form.getImage().isEmpty()) {
-			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+//			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+			String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getTitle(), form.getImage());
 			serviceItem.setImage(uploadAndGetPath);
 		}
 

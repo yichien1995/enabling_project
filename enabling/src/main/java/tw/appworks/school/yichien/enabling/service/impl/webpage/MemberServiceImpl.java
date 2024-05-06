@@ -10,6 +10,7 @@ import tw.appworks.school.yichien.enabling.model.webpage.Member;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
 import tw.appworks.school.yichien.enabling.repository.webpage.MemberRepository;
 import tw.appworks.school.yichien.enabling.service.FileStorageService;
+import tw.appworks.school.yichien.enabling.service.impl.S3UploadServiceImpl;
 import tw.appworks.school.yichien.enabling.service.webpage.MemberService;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class MemberServiceImpl implements MemberService {
 
 	private final FileStorageService fileStorageService;
 
+	private final S3UploadServiceImpl s3UploadService;
+
 	private final MemberRepository memberRepository;
 
 	private final InstitutionRepository institutionRepository;
@@ -26,8 +29,9 @@ public class MemberServiceImpl implements MemberService {
 	@Value("${prefix.image}")
 	private String imageUrlPrefix;
 
-	public MemberServiceImpl(FileStorageService fileStorageService, MemberRepository memberRepository, InstitutionRepository institutionRepository) {
+	public MemberServiceImpl(FileStorageService fileStorageService, S3UploadServiceImpl s3UploadService, MemberRepository memberRepository, InstitutionRepository institutionRepository) {
 		this.fileStorageService = fileStorageService;
+		this.s3UploadService = s3UploadService;
 		this.memberRepository = memberRepository;
 		this.institutionRepository = institutionRepository;
 	}
@@ -38,7 +42,8 @@ public class MemberServiceImpl implements MemberService {
 		Institution institution = institutionRepository.getInstitution(domain);
 
 		// save image relative URL
-		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
+//		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
+		String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getName(), form.getPhoto());
 
 		member.setName(form.getName());
 		member.setPhoto(uploadAndGetPath);
@@ -71,7 +76,8 @@ public class MemberServiceImpl implements MemberService {
 
 		if (!form.getPhoto().isEmpty()) {
 			// save image relative URL
-			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
+//			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
+			String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getName(), form.getPhoto());
 			member.setPhoto(uploadAndGetPath);
 		}
 		memberRepository.save(member);

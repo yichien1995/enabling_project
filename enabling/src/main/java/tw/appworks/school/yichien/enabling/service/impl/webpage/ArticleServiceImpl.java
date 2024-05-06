@@ -15,6 +15,7 @@ import tw.appworks.school.yichien.enabling.model.webpage.Article;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
 import tw.appworks.school.yichien.enabling.repository.webpage.ArticleRepository;
 import tw.appworks.school.yichien.enabling.service.FileStorageService;
+import tw.appworks.school.yichien.enabling.service.impl.S3UploadServiceImpl;
 import tw.appworks.school.yichien.enabling.service.webpage.ArticleService;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class ArticleServiceImpl implements ArticleService {
 	private final InstitutionRepository institutionRepository;
 	private final ArticleRepository articleRepository;
 	private final FileStorageService fileStorageService;
+	private final S3UploadServiceImpl s3UploadService;
 
 	@Value("${prefix.image}")
 	private String imageUrlPrefix;
@@ -33,10 +35,11 @@ public class ArticleServiceImpl implements ArticleService {
 	@Autowired
 	private EntityManager entityManager;
 
-	public ArticleServiceImpl(InstitutionRepository institutionRepository, ArticleRepository articleRepository, FileStorageService fileStorageService) {
+	public ArticleServiceImpl(InstitutionRepository institutionRepository, ArticleRepository articleRepository, FileStorageService fileStorageService, S3UploadServiceImpl s3UploadService) {
 		this.institutionRepository = institutionRepository;
 		this.articleRepository = articleRepository;
 		this.fileStorageService = fileStorageService;
+		this.s3UploadService = s3UploadService;
 	}
 
 	@Override
@@ -44,7 +47,8 @@ public class ArticleServiceImpl implements ArticleService {
 		Article existArticle = articleRepository.findArticleById(articleId);
 
 		if (!articleForm.getCover().isEmpty()) {
-			String uploadAndGetPath = fileStorageService.uploadFile(existArticle.getInstitutionDomain().getDomainName(), articleForm.getTitle(), articleForm.getCover());
+//			String uploadAndGetPath = fileStorageService.uploadFile(existArticle.getInstitutionDomain().getDomainName(), articleForm.getTitle(), articleForm.getCover());
+			String uploadAndGetPath = s3UploadService.uploadFileToS3(existArticle.getInstitutionDomain().getDomainName(), articleForm.getTitle(), articleForm.getCover());
 			existArticle.setCover(uploadAndGetPath);
 		}
 		existArticle.setTitle(articleForm.getTitle());
@@ -67,7 +71,8 @@ public class ArticleServiceImpl implements ArticleService {
 		article.setPreview(preview);
 
 		// save image relative URL
-		String uploadAndGetPath = fileStorageService.uploadFile(institution.getDomainName(), articleForm.getTitle(), articleForm.getCover());
+//		String uploadAndGetPath = fileStorageService.uploadFile(institution.getDomainName(), articleForm.getTitle(), articleForm.getCover());
+		String uploadAndGetPath = s3UploadService.uploadFileToS3(institution.getDomainName(), articleForm.getTitle(), articleForm.getCover());
 		article.setCover(uploadAndGetPath);
 
 		article.setInstitutionDomain(institution);
@@ -86,7 +91,8 @@ public class ArticleServiceImpl implements ArticleService {
 				existPreviewArticle.setContent(articleForm.getContent());
 				// save image relative URL
 
-				String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", articleForm.getCover());
+//				String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", articleForm.getCover());
+				String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, "preview", articleForm.getCover());
 				existPreviewArticle.setCover(uploadAndGetPath);
 				articleRepository.save(existPreviewArticle);
 			}
@@ -108,7 +114,8 @@ public class ArticleServiceImpl implements ArticleService {
 //				// save image relative URL
 				if (!articleForm.getCover().isEmpty()) {
 
-					String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", articleForm.getCover());
+//					String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", articleForm.getCover());
+					String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, "preview", articleForm.getCover());
 					existPreviewArticle.setCover(uploadAndGetPath);
 				} else {
 					existPreviewArticle.setCover(existArticle.getCover());
