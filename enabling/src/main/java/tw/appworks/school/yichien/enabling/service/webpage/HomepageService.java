@@ -7,7 +7,9 @@ import tw.appworks.school.yichien.enabling.model.webpage.Homepage;
 
 public interface HomepageService {
 
-	void renderHomepage(String domain, Model model);
+	void renderHomePage(String domain, Model model);
+
+	void renderHeaderAndFooter(String domain, Model model);
 
 	void renderHomepagePreview(String domain, Model model);
 

@@ -80,7 +80,7 @@ public class ArticleController {
 
 	@GetMapping("/preview")
 	public String previewArticle(@PathVariable String domain, Model model) {
-		homepageService.renderHomepage(domain, model);
+		homepageService.renderHeaderAndFooter(domain, model);
 		articleService.renderArticlePreviewPage(domain, model);
 		return "admin/webpage_setting/preview_article";
 	}

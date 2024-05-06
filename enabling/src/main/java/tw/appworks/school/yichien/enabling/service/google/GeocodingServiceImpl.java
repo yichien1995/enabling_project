@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
+import tw.appworks.school.yichien.enabling.dto.webpage.LocationDto;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -24,33 +24,38 @@ public class GeocodingServiceImpl {
 	@Value("${google.api.key}")
 	private String API_KEY;
 
-	public void getGeocodingResponse(String address, Model model) {
+	public LocationDto getGeocodingResponse(String address) {
 		RestTemplate restTemplate = new RestTemplate();
 
 		String targetUrl = API_URL + address + "&key=" + API_KEY;
 		ResponseEntity<Map> response = restTemplate.getForEntity(targetUrl, Map.class);
+		logger.info("fetch status {}", response);
+
+		try {
+			if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null && !response.getBody().isEmpty()) {
+				Map<String, Object> data = response.getBody();
+				ArrayList<Object> results = (ArrayList<Object>) data.get("results");
+				Map<String, Object> resultsData = (Map<String, Object>) results.get(0);
+				Map<String, Object> geometry = (Map<String, Object>) resultsData.get("geometry");
+				Map<String, Object> location = (Map<String, Object>) geometry.get("location");
 
 
-		if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null && !response.getBody().isEmpty()) {
-			Map<String, Object> data = response.getBody();
-			ArrayList<Object> results = (ArrayList<Object>) data.get("results");
-			Map<String, Object> resultsData = (Map<String, Object>) results.get(0);
-			Map<String, Object> geometry = (Map<String, Object>) resultsData.get("geometry");
-			Map<String, Object> location = (Map<String, Object>) geometry.get("location");
+				ObjectMapper objectMapper = new ObjectMapper();
+				LocationDto locationDto = objectMapper.convertValue(location, LocationDto.class);
 
-
-			ObjectMapper objectMapper = new ObjectMapper();
-			LocationObject locationObject = objectMapper.convertValue(location, LocationObject.class);
-
-			logger.info("fetch data: {}", locationObject);
-			model.addAttribute("location", locationObject);
+				logger.info("location data: {}", locationDto);
+				return locationDto;
+			}
+			return null;
+		} catch (IndexOutOfBoundsException e) {
+			return null;
 		}
 	}
 
 	@Data
 	@AllArgsConstructor
 	@NoArgsConstructor
-	private static class LocationObject {
+	public static class LocationObject {
 		private Double lat;
 		private Double lng;
 	}

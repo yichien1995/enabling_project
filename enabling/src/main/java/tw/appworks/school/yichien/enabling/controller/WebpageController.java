@@ -50,8 +50,7 @@ public class WebpageController {
 		if (!checkDomainExists) {
 			return "redirect:" + domainPrefix;
 		}
-		homepageService.renderHomepage(domain, model);
-		geocodingService.getGeocodingResponse("台北市中正區仁愛路二段99號", model);
+		homepageService.renderHomePage(domain, model);
 		model.addAttribute("apiKey", API_KEY);
 		return "webpage/homepage";
 	}
@@ -62,7 +61,7 @@ public class WebpageController {
 		if (!checkDomainExists) {
 			return "redirect:" + domainPrefix;
 		}
-		homepageService.renderHomepage(domain, model);
+		homepageService.renderHeaderAndFooter(domain, model);
 		articleService.renderArticleListPage(domain, model);
 		return "webpage/articles";
 	}
@@ -74,7 +73,7 @@ public class WebpageController {
 		if (!checkDomainExists) {
 			return "redirect:" + domainPrefix;
 		}
-		homepageService.renderHomepage(domain, model);
+		homepageService.renderHeaderAndFooter(domain, model);
 		articleService.renderPageByArticleId(id, model);
 		return "webpage/article_page";
 	}
@@ -85,7 +84,7 @@ public class WebpageController {
 		if (!checkDomainExists) {
 			return "redirect:" + domainPrefix;
 		}
-		homepageService.renderHomepage(domain, model);
+		homepageService.renderHeaderAndFooter(domain, model);
 		evaluationService.renderEvaluationPage(domain, model);
 		return "webpage/evaluation";
 	}
@@ -96,7 +95,7 @@ public class WebpageController {
 		if (!checkDomainExists) {
 			return "redirect:" + domainPrefix;
 		}
-		homepageService.renderHomepage(domain, model);
+		homepageService.renderHeaderAndFooter(domain, model);
 		serviceItemService.renderServicePage(domain, model);
 		return "webpage/service";
 	}
@@ -107,7 +106,7 @@ public class WebpageController {
 		if (!checkDomainExists) {
 			return "redirect:" + domainPrefix;
 		}
-		homepageService.renderHomepage(domain, model);
+		homepageService.renderHeaderAndFooter(domain, model);
 		memberService.renderMemberPage(domain, model);
 		return "webpage/member";
 	}

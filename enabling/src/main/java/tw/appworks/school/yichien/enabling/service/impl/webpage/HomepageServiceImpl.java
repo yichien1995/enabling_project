@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
+import tw.appworks.school.yichien.enabling.dto.webpage.LocationDto;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.model.webpage.Homepage;
 import tw.appworks.school.yichien.enabling.model.webpage.ThemeColor;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
 import tw.appworks.school.yichien.enabling.repository.webpage.HomepageRepository;
 import tw.appworks.school.yichien.enabling.service.FileStorageService;
+import tw.appworks.school.yichien.enabling.service.google.GeocodingServiceImpl;
 import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
 @Service
@@ -22,18 +24,39 @@ public class HomepageServiceImpl implements HomepageService {
 
 	private final FileStorageService fileStorageService;
 
+	private final GeocodingServiceImpl geocodingService;
+
 	@Value("${prefix.image}")
 	private String imageUrlPrefix;
 
+	@Value("${google.api.key}")
+	private String API_KEY;
+
 	public HomepageServiceImpl(InstitutionRepository institutionRepository,
-	                           HomepageRepository homepageRepository, FileStorageService fileStorageService) {
+	                           HomepageRepository homepageRepository, FileStorageService fileStorageService, GeocodingServiceImpl geocodingService) {
 		this.institutionRepository = institutionRepository;
 		this.homepageRepository = homepageRepository;
 		this.fileStorageService = fileStorageService;
+		this.geocodingService = geocodingService;
 	}
 
 	@Override
-	public void renderHomepage(String domain, Model model) {
+	public void renderHomePage(String domain, Model model) {
+		Homepage homepage;
+		if (homepageRepository.getHomepage(domain, 1) != null) {
+			homepage = homepageRepository.getHomepage(domain, 1);
+		} else {
+			homepage = homepageRepository.getHomepage(domain, 0);
+		}
+		String address = homepage.getInstitutionDomain().getAddress();
+		LocationDto location = geocodingService.getGeocodingResponse(address);
+		addHomepageModelAttr(homepage, model);
+		model.addAttribute("location", location);
+		model.addAttribute("key", API_KEY);
+	}
+
+	@Override
+	public void renderHeaderAndFooter(String domain, Model model) {
 		Homepage homepage;
 		if (homepageRepository.getHomepage(domain, 1) != null) {
 			homepage = homepageRepository.getHomepage(domain, 1);
