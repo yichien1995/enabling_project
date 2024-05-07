@@ -1,6 +1,12 @@
 <nav id="side-bar" th:fragment="admin_sidebar">
     <a th:href="@{'/admin/' +${domain}}"><h2 th:text="${institutionName}"></h2></a>
-    <a id="index" target="_blank" th:href="@{'/' +${domain}+'/homepage.html'}"><i class="fa-solid fa-house"></i>機構網頁</a>
+    <ul>
+        <li id="index">
+            <i class="fa-solid fa-house"></i>
+            <a target="_blank" th:href="@{'/' +${domain}+'/homepage.html'}">機構網頁</a>
+        </li>
+    </ul>
+
     <h3>網頁管理</h3>
     <ul>
         <li><i class="fa-solid fa-sliders"></i><a th:href="@{'/admin/' +${domain}+'/setting/homepage'}">首頁設定</a>

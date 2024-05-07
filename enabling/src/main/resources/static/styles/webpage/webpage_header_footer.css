@@ -1,5 +1,17 @@
-body {
+body.webpage {
     box-sizing: border-box;
+    font-family: "Noto Sans TC", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+main.webpage {
+    flex: 1;
 }
 
 /*header*/
@@ -7,7 +19,7 @@ header.header-homepage {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2rem;
+    padding: 1rem 3rem;
 }
 
 div.header-homepage-left {
@@ -20,6 +32,8 @@ img.logo-image {
 }
 
 h1.institution-name {
+    font-size: 2.25rem;
+    font-weight: 700;
     color: white;
     margin-left: 1rem;
 }
@@ -33,58 +47,12 @@ nav.header-homepage-right ul li a {
     text-decoration: none;
     color: white;
     margin: 0 1rem;
-    font-size: 1.1rem;
-}
-
-div.campaign-container {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    width: 98vw;
-    height: 70vh;
-    overflow: hidden;
-    margin-top: 5px;
-}
-
-img.main-image {
-    position: relative;
-    width: 100%;
-    height: auto;
-    z-index: -1;
-}
-
-p.main-image-description {
     font-size: 1.25rem;
-    position: absolute;
-    bottom: 15vh;
-    right: 10vw;
-    color: rgb(55, 55, 55);
-    background-color: rgba(255, 255, 255, 0.5);
-    z-index: 1;
-}
-
-h2.heading-intro, h2.heading-info, p.institution-intro {
-    text-align: center;
-}
-
-div.info-container {
-    display: flex;
-    justify-content: center;
-}
-
-div.google-map {
-    border: 1px solid gray;
-    height: 400px;
-    width: 400px;
 }
 
 /*footer*/
-div.footer-fragment-container {
+footer.footer-fragment-container {
     margin-top: 3rem;
-}
-
-div.info-description-container {
-    margin-left: 100px;
 }
 
 div.footer-container {
@@ -93,19 +61,22 @@ div.footer-container {
 }
 
 div.footer-container-left, div.footer-container-right {
-    margin-left: 3rem;
+    margin-left: 5rem;
 }
 
 span.footer-span-title,
 span.footer-span,
-div.footer-container p,
-div.footer-container-right div {
+div.footer-span-container {
     color: white;
 }
 
 span.footer-span-title {
     font-size: 1.1rem;
     font-weight: bold;
+}
+
+div.footer-span-container {
+    margin-top: 0.5rem;
 }
 
 @media screen and (max-width: 1100px) {
@@ -118,5 +89,3 @@ span.footer-span-title {
         margin: 0;
     }
 }
-
-

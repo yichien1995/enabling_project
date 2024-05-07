@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <link rel="stylesheet" th:href="@{/styles/homepage.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/styles/webpage/webpage_header_footer.css}"/>
     <style>
         main {
             display: flex;
@@ -17,9 +21,9 @@
     </style>
     <title th:text="${article.title}"></title>
 </head>
-<body th:fragment="articlePageFragment">
+<body class="webpage" th:fragment="articlePageFragment">
 <div th:insert="~{webpage/homepage.html:: headerFragment}"></div>
-<main>
+<main class="webpage">
     <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}" th:text="${article.title}"></h2>
     <div class="article-container">
         <p th:utext="${article.content}"></p>

@@ -1,5 +1,7 @@
 package tw.appworks.school.yichien.enabling.service.impl.webpage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +20,11 @@ import java.util.List;
 @Service
 public class ServiceItemServiceImpl implements ServiceItemService {
 
+	private static final Logger logger = LoggerFactory.getLogger(ServiceItemServiceImpl.class);
 	private final FileStorageService fileStorageService;
-
 	private final S3UploadServiceImpl s3UploadService;
-
 	private final ServiceItemRepository serviceItemRepository;
-
 	private final InstitutionRepository institutionRepository;
-
 	@Value("${prefix.image}")
 	private String imageUrlPrefix;
 

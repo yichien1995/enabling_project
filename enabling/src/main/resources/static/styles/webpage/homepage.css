@@ -1,0 +1,90 @@
+/*main*/
+div.campaign-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100vw;
+    height: 70vh;
+    overflow: hidden;
+}
+
+img.main-image {
+    position: relative;
+    width: 100%;
+    height: auto;
+    z-index: -1;
+}
+
+p.main-image-description {
+    font-size: 1.5rem;
+    position: absolute;
+    bottom: 15vh;
+    right: 10vw;
+    color: rgb(55, 55, 55);
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 1;
+}
+
+div.intro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h2.heading-intro, h2.heading-info {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 1.75rem 0;
+}
+
+p.institution-intro {
+    width: 60vw;
+    text-align: center;
+    font-size: 1.25rem;
+    line-height: 1.5;
+}
+
+div.info-container {
+    display: flex;
+    justify-content: center;
+}
+
+div.info-container-2 {
+    display: flex;
+    width: 60vw;
+}
+
+div.google-map {
+    border: 1px solid gray;
+    width: 450px;
+    height: 450px;
+}
+
+div.info-description-container {
+    display: flex;
+    flex: 3;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.info-description {
+    margin: 1rem 5rem;
+}
+
+
+div.info-description h3 {
+    font-size: 1.5rem;
+    font-weight: 450;
+}
+
+div.info-description p {
+    font-size: 1.25rem;
+    margin: 0.75rem 0;
+    line-height: 1.25;
+}
+
+
+
+

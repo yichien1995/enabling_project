@@ -19,7 +19,7 @@ main#homepage-setting-main {
 div#homepage-preview {
     flex: 1;
     padding: 10px;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 95vh;
     border: 2px solid black;
     border-radius: 5px;

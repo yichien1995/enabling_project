@@ -5,6 +5,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -20,15 +22,16 @@ import java.util.regex.Pattern;
 @Component
 public class AdminFilter extends OncePerRequestFilter {
 
+	private static final Logger logger = LoggerFactory.getLogger(AdminFilter.class);
 	@Autowired
 	private AuthenticationServiceImpl authenticationService;
-
 	@Autowired
 	private SessionServiceImpl sessionService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+		logger.info("Filter get request");
 		String requestUrl = request.getRequestURI();
 		String domain = null;
 		if (extractDomain(requestUrl) != null) {
@@ -41,10 +44,10 @@ public class AdminFilter extends OncePerRequestFilter {
 						String sessionId = cookie.getValue();
 						List<InstitutionUserDto> institutionUserDtos =
 								sessionService.getInstitutionUserDTOFromSession(sessionId);
-
 						for (InstitutionUserDto data : institutionUserDtos) {
 							if (data.getInstitutionDomain().equals(domain) && data.getRoleId() == 1) {
 								authenticationService.authenticateWithRole("admin");
+								logger.info("get authenticated");
 							}
 						}
 					}

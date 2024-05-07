@@ -1,5 +1,7 @@
 package tw.appworks.school.yichien.enabling.controller.admin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +17,12 @@ import tw.appworks.school.yichien.enabling.service.webpage.ServiceItemService;
 @RequestMapping("/admin/{domain}")
 public class AdminController {
 
+	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
 	private final HomepageService homepageService;
-
 	private final ServiceItemService serviceItemService;
-
 	private final AdminService adminService;
-
 	private final MemberService memberService;
+
 
 	public AdminController(HomepageService homepageService, ServiceItemService serviceItemService, AdminService adminService, MemberService memberService) {
 		this.homepageService = homepageService;

@@ -1,5 +1,7 @@
 package tw.appworks.school.yichien.enabling.service.impl.webpage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,19 +21,14 @@ import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 @Service
 public class HomepageServiceImpl implements HomepageService {
 
+	private static final Logger logger = LoggerFactory.getLogger(HomepageServiceImpl.class);
 	private final InstitutionRepository institutionRepository;
-
 	private final HomepageRepository homepageRepository;
-
 	private final FileStorageService fileStorageService;
-
 	private final GeocodingServiceImpl geocodingService;
-
 	private final S3UploadServiceImpl s3UploadService;
-
 	@Value("${prefix.image}")
 	private String imageUrlPrefix;
-
 	@Value("${google.api.key}")
 	private String API_KEY;
 
@@ -150,11 +147,11 @@ public class HomepageServiceImpl implements HomepageService {
 		ThemeColor newColor = new ThemeColor();
 		newColor.setId(hf.getColor());
 
-//		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
-//		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
+		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
+		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
 
-		String logoPath = s3UploadService.uploadFileToS3(domain, "logo_" + fileType, hf.getLogo());
-		String mainImagePath = s3UploadService.uploadFileToS3(domain, "main_" + fileType, hf.getMainImage());
+//		String logoPath = s3UploadService.uploadFileToS3(domain, "logo_" + fileType, hf.getLogo());
+//		String mainImagePath = s3UploadService.uploadFileToS3(domain, "main_" + fileType, hf.getMainImage());
 
 		homepage.setLogo(logoPath);
 		homepage.setMainImage(mainImagePath);

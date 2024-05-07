@@ -1,5 +1,7 @@
 package tw.appworks.school.yichien.enabling.service.impl.webpage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,14 +20,11 @@ import java.util.List;
 @Service
 public class MemberServiceImpl implements MemberService {
 
+	private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
 	private final FileStorageService fileStorageService;
-
 	private final S3UploadServiceImpl s3UploadService;
-
 	private final MemberRepository memberRepository;
-
 	private final InstitutionRepository institutionRepository;
-
 	@Value("${prefix.image}")
 	private String imageUrlPrefix;
 
@@ -57,7 +56,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void renderMemberPage(String domain, Model model) {
+
 		List<Member> members = memberRepository.getAllMemberByDomain(domain);
+
 		for (Member member : members) {
 			member.setQualification(member.getQualification().replace("\n", "<br>"));
 			member.setEducation(member.getEducation().replace("\n", "<br>"));
