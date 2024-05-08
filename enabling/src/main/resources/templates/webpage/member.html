@@ -10,40 +10,7 @@
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/styles/webpage/webpage_header_footer.css}"/>
-    <style>
-        h2 {
-            text-align: center;
-        }
-
-        div.member-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 5rem;
-        }
-
-        div.member-info {
-            flex: 2;
-        }
-
-        div.img-member-container {
-            flex: 1;
-        }
-
-        img.img-member {
-            width: 100%;
-        }
-
-        h3 {
-            margin-bottom: 0.5rem;
-        }
-
-        h4 {
-            font-weight: 400;
-            margin-top: 0;
-        }
-
-    </style>
+    <link rel="stylesheet" th:href="@{/styles/webpage/member.css}"/>
     <title>團隊介紹</title>
 </head>
 <body class="webpage">
@@ -51,16 +18,18 @@
 <main class="webpage">
     <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">團隊介紹</h2>
     <div class="member-container" th:each="member:${members}" th:if="${members != null}">
-        <div class="img-member-container">
-            <img class="img-member" th:src="${member.photo}">
-        </div>
-        <div class="member-info">
-            <h3 th:style="'color: ' + ${homePage.themeColorId.headingColor}" th:text="${member.name}"></h3>
-            <h4 th:text="${member.title}"></h4>
-            <h3 th:style="'color: ' + ${homePage.themeColorId.headingColor}">工作經歷:</h3>
-            <p th:utext="${member.qualification}"></p>
-            <h3 th:style="'color: ' + ${homePage.themeColorId.headingColor}">學歷:</h3>
-            <p th:utext="${member.education}"></p>
+        <div class="member-item-container">
+            <div class="img-member-container">
+                <img class="img-member" th:src="${member.photo}">
+            </div>
+            <div class="member-info">
+                <h3 th:style="'color: ' + ${homePage.themeColorId.headingColor}" th:text="${member.name}"></h3>
+                <h4 th:text="${member.title}"></h4>
+                <h3 class="qualification" th:style="'color: ' + ${homePage.themeColorId.headingColor}">工作經歷:</h3>
+                <p th:utext="${member.qualification}"></p>
+                <h3 th:style="'color: ' + ${homePage.themeColorId.headingColor}">學歷:</h3>
+                <p th:utext="${member.education}"></p>
+            </div>
         </div>
     </div>
 </main>

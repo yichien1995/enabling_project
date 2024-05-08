@@ -9,25 +9,7 @@
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/styles/webpage/webpage_header_footer.css}"/>
-    <style>
-        h2 {
-            text-align: center;
-        }
-
-        div.service-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-        }
-
-        img.img-service {
-            width: 100%;
-        }
-
-        h3, p {
-            text-align: center;
-        }
-    </style>
-
+    <link rel="stylesheet" th:href="@{/styles/webpage/service.css}"/>
     <title>服務項目</title>
 </head>
 <body class="webpage">
@@ -35,14 +17,17 @@
 <main class="webpage">
     <h2 th:style="'color: ' + ${homePage.themeColorId.headingColor}">服務項目</h2>
     <div class="service-container">
-        <div th:each="serviceItem:${serviceItems}" th:if="${serviceItems != null}">
-            <img class="img-service" th:src="${serviceItem.image}">
-            <h3 th:text="${serviceItem.title}"></h3>
-            <h3>收費說明: </h3>
-            <p th:utext="${serviceItem.price}"></p>
+        <div class="service-item-container" th:each="serviceItem:${serviceItems}" th:if="${serviceItems != null}">
+            <div class="img-service-container">
+                <img class="img-service" th:src="${serviceItem.image}">
+            </div>
+            <h3 th:style="'color: ' + ${homePage.themeColorId.headingColor}" th:text="${serviceItem.title}"></h3>
+            <div class="price-container">
+                <h4>收費說明：</h4>
+                <p class="price" th:utext="${serviceItem.price}"></p>
+            </div>
         </div>
     </div>
-
 </main>
 <div th:insert="~{webpage/homepage.html:: footerFragment}"></div>
 </body>

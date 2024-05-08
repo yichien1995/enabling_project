@@ -1,0 +1,61 @@
+main.webpage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 1.75rem 0;
+}
+
+div.member-container {
+    width: 80vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 5rem;
+}
+
+div.member-item-container {
+    display: flex;
+    align-items: center;
+    margin: 2rem
+}
+
+
+div.img-member-container {
+    flex: 1;
+    align-items: center;
+
+}
+
+img.img-member {
+    width: 100%;
+}
+
+div.member-info {
+    flex: 2;
+    margin-left: 5rem;
+}
+
+h3 {
+    margin: 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 450;
+}
+
+h3.qualification {
+    margin-top: 1.5rem;
+}
+
+h4 {
+    font-weight: 500;
+    font-size: 1.15rem;
+}
+
+div.member-info p {
+    margin: 0.75rem 0;
+    line-height: 1.25;
+}
