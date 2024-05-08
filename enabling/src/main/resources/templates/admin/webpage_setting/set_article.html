@@ -28,7 +28,7 @@
         <h3>修改文章</h3>
         <form class="article-form" enctype="multipart/form-data">
             <label>上傳文章封面: </label>
-            <input class="cover" name="cover" type="file"/>
+            <input accept="image/png, image/jpeg" class="cover" name="cover" type="file"/>
             <br/>
             <label>文章標題: </label>
             <input class="title" name="title" required th:value="${article.title}" type="text"/>
@@ -49,7 +49,7 @@
         <h3>新增文章</h3>
         <form class="article-form" enctype="multipart/form-data">
             <label>上傳文章封面: </label>
-            <input class="cover" name="cover" type="file"/>
+            <input accept="image/png, image/jpeg" class="cover" name="cover" required type="file"/>
             <br/>
             <label>文章標題: </label>
             <input class="title" name="title" required type="text"/>

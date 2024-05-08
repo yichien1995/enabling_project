@@ -127,9 +127,14 @@ public class HomepageServiceImpl implements HomepageService {
 			Institution institution = institutionRepository.findByDomainName(domain);
 			Homepage homepage = new Homepage();
 
+			// create new public homepage
 			homepage.setStatus(1);
 			homepage.setInstitutionDomain(institution);
+			homepage.setLogo("enabling/default/logo_public.png");
+			homepage.setMainImage("enabling/default/main_public.jpg");
 			homepageRepository.save(homepage);
+
+			// save homepage form
 			saveHomepageForm(domain, "public", hf, homepage);
 		}
 	}
@@ -147,14 +152,17 @@ public class HomepageServiceImpl implements HomepageService {
 		ThemeColor newColor = new ThemeColor();
 		newColor.setId(hf.getColor());
 
-//		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
-//		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
+		if (!hf.getLogo().isEmpty()) {
+			//		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
+			String logoPath = s3UploadService.uploadFileToS3(domain, "logo_" + fileType, hf.getLogo());
+			homepage.setLogo(logoPath);
+		}
 
-		String logoPath = s3UploadService.uploadFileToS3(domain, "logo_" + fileType, hf.getLogo());
-		String mainImagePath = s3UploadService.uploadFileToS3(domain, "main_" + fileType, hf.getMainImage());
-
-		homepage.setLogo(logoPath);
-		homepage.setMainImage(mainImagePath);
+		if (!hf.getMainImage().isEmpty()) {
+			//		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
+			String mainImagePath = s3UploadService.uploadFileToS3(domain, "main_" + fileType, hf.getMainImage());
+			homepage.setMainImage(mainImagePath);
+		}
 
 		homepage.setThemeColorId(newColor);
 		homepageRepository.save(homepage);

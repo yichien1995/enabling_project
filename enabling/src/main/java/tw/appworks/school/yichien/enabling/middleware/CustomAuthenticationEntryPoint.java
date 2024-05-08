@@ -3,6 +3,8 @@ package tw.appworks.school.yichien.enabling.middleware;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -15,12 +17,15 @@ import java.util.regex.Pattern;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+	private static final Logger logger = LoggerFactory.getLogger(CustomAuthenticationEntryPoint.class);
 	@Value("${prefix.domain}")
 	private String domainPrefix;
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
 			throws IOException, ServletException {
+		logger.info("Request: {}", request);
+		logger.info("Exception: {}", String.valueOf(authException));
 		String requestUrl = request.getRequestURI();
 		String domain = extractDomain(requestUrl);
 		String redirectUrl = domainPrefix + domain + "/homepage.html";

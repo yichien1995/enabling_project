@@ -1,5 +1,7 @@
 package tw.appworks.school.yichien.enabling.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,23 +16,16 @@ import tw.appworks.school.yichien.enabling.service.webpage.*;
 @RequestMapping("/{domain}")
 public class WebpageController {
 
+	private static final Logger logger = LoggerFactory.getLogger(WebpageController.class);
 	private final HomepageService homepageService;
-
 	private final ArticleService articleService;
-
 	private final EvaluationService evaluationService;
-
 	private final ServiceItemService serviceItemService;
-
 	private final MemberService memberService;
-
 	private final AdminService adminService;
-
 	private final GeocodingServiceImpl geocodingService;
-
 	@Value("${prefix.domain}")
 	private String domainPrefix;
-
 	@Value("${google.api.key}")
 	private String API_KEY;
 
@@ -46,6 +41,8 @@ public class WebpageController {
 
 	@GetMapping("/homepage.html")
 	public String HomePage(@PathVariable String domain, Model model) {
+		logger.info("homepage Controller get http request");
+
 		boolean checkDomainExists = adminService.checkDomain(domain);
 		if (!checkDomainExists) {
 			return "redirect:" + domainPrefix;

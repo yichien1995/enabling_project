@@ -24,7 +24,7 @@
             <h3>新增服務項目</h3>
             <form enctype="multipart/form-data" id="service-form" method="post">
                 <label for="service-image">圖片:</label>
-                <input id="service-image" name="image" required type="file">
+                <input accept="image/png, image/jpeg" id="service-image" name="image" required type="file">
                 <br>
                 <label for="title">項目名稱: </label>
                 <input id="title" name="title" required type="text">
@@ -62,7 +62,7 @@
     </div>
     <form enctype="multipart/form-data" id="update-service-form">
         <label for="update-service-image">圖片:</label>
-        <input id="update-service-image" name="image" type="file">
+        <input accept="image/png, image/jpeg" id="update-service-image" name="image" type="file">
         <br>
         <label for="update-title">項目名稱: </label>
         <input id="update-title" name="title" required type="text">
