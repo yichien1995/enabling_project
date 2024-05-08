@@ -116,8 +116,15 @@
         event.preventDefault();
 
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=preview&id=${articleId}`;
+        let endpoint;
+        if (articleId !== null) {
+            endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=preview&id=${articleId}`;
+        } else {
+            endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/articles/save?draft=${draftValue}&action=preview`;
+        }
+
         let previewUrl = `${RELATIVE_PATH}/admin/${domain}/setting/articles/preview`;
+        console.log(endpoint);
         try {
             (async function postData() {
                 await sendData(formData, endpoint);

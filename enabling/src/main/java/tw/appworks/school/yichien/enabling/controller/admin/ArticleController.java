@@ -47,7 +47,8 @@ public class ArticleController {
 		int draftValue = action.equals("release") ? 0 : Integer.parseInt(draft);
 
 		if (action.equals("preview")) {
-			if (id == null || id.isEmpty()) {
+			if (id == null) {
+				System.out.println("here");
 				articleService.savePreviewArticlePage(domain, draftValue, previewStatus, articleForm);
 			} else {
 				int idValue = Integer.parseInt(id);
