@@ -1,9 +1,15 @@
 <nav id="side-bar" th:fragment="therapist_sidebar">
     <a th:href="@{'/therapist/' +${domain}}"><h2>治療師頁面</h2></a>
-    <li><a target="_blank" th:href="@{'/' +${domain}+'/homepage.html'}">機構網頁</a></li>
+    <ul>
+        <li id="index">
+            <i class="fa-solid fa-house"></i>
+            <a target="_blank" th:href="@{'/' +${domain}+'/homepage.html'}">機構網頁</a>
+        </li>
+    </ul>
     <h3>網頁管理</h3>
     <ul>
-        <li><a th:href="@{'/therapist/' +${domain}+'/setting/articles'}">衛教文章</a></li>
+        <li><i class="fa-solid fa-book"></i><a th:href="@{'/therapist/' +${domain}+'/setting/articles'}">衛教文章</a>
+        </li>
         <div th:if="${released_article != null || draft != null}">
             <details>
                 <summary>已發布文章</summary>
@@ -27,11 +33,13 @@
     </ul>
     <h3>個案管理</h3>
     <ul>
-        <li><a th:href="@{'/therapist/' +${domain}+'/client/list'}">個案管理</a></li>
-        <li><a th:href="@{'/therapist/' +${domain}+'/client/report'}">業績回報</a></li>
+        <li><i class="fa-solid fa-hospital-user"></i><a
+                th:href="@{'/therapist/' +${domain}+'/client/list'}">個案管理</a></li>
+        <li><i class="fa-solid fa-chart-line"></i><a th:href="@{'/therapist/' +${domain}+'/client/report'}">業績回報</a>
+        </li>
     </ul>
     <h3>帳號管理</h3>
     <ul>
-        <li><a th:href="@{'/myinstitution'}">我的機構總覽</a></li>
+        <li><i class="fa-solid fa-left-long"></i><a th:href="@{'/myinstitution'}">我的機構總覽</a></li>
     </ul>
 </nav>

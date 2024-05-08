@@ -13,6 +13,26 @@
           rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+    <style>
+        input[type="text"],
+        input[type="number"],
+        input[type="email"] {
+            width: 250px;
+            height: 24px;
+            border: 1px solid #999999;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        #client-table td, #client-table td button {
+            font-size: 0.9rem;
+            vertical-align: middle
+        }
+
+        #client-table td button {
+            padding: 0.25rem 0.5rem;
+        }
+    </style>
     <title>個案資訊</title>
 </head>
 <body>
@@ -53,7 +73,7 @@
         </div>
         <div class="tables">
             <h3>個案列表</h3>
-            <table>
+            <table id="client-table">
                 <thead>
                 <tr>
                     <th>病歷號</th>
@@ -62,7 +82,7 @@
                     <th>生日</th>
                     <th>聯絡電話</th>
                     <th>信箱</th>
-                    <th>修改</th>
+                    <th>更新</th>
                     <th>刪除</th>
                 </tr>
                 </thead>

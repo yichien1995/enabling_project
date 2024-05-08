@@ -147,11 +147,11 @@ public class HomepageServiceImpl implements HomepageService {
 		ThemeColor newColor = new ThemeColor();
 		newColor.setId(hf.getColor());
 
-		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
-		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
+//		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
+//		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
 
-//		String logoPath = s3UploadService.uploadFileToS3(domain, "logo_" + fileType, hf.getLogo());
-//		String mainImagePath = s3UploadService.uploadFileToS3(domain, "main_" + fileType, hf.getMainImage());
+		String logoPath = s3UploadService.uploadFileToS3(domain, "logo_" + fileType, hf.getLogo());
+		String mainImagePath = s3UploadService.uploadFileToS3(domain, "main_" + fileType, hf.getMainImage());
 
 		homepage.setLogo(logoPath);
 		homepage.setMainImage(mainImagePath);

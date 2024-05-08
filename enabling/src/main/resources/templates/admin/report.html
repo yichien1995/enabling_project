@@ -14,39 +14,48 @@
           rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+    <style>
+        #chart-container {
+            margin-top: 2rem;
+            height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
     <title>業績報表</title>
 </head>
 <body>
 <nav th:insert="~{fragment/admin_sidebar.html:: admin_sidebar}"></nav>
 <main>
     <h2>業績報表</h2>
-    <div th:each="chartData :${allChartData}" th:if="${allChartData != null}">
-        <div th:id="'chart-' + ${chartData.institutionUserId}"></div>
-        <script th:inline="javascript">
-            var id = [[${chartData.institutionUserId}]];
-            var chartData = [
-                {
-                    x: [[${chartData.xData}]],
-                    y: [[${chartData.yData}]],
-                    type: 'bar',
-                    marker: {
-                        color: 'rgb(158,202,225)',
-                        opacity: 0.6,
-                        line: {
-                            color: 'rgb(8,48,107)',
-                            width: 1.5
+    <div id="chart-container">
+        <div th:each="chartData :${allChartData}" th:if="${allChartData != null}">
+            <div th:id="'chart-' + ${chartData.institutionUserId}"></div>
+            <script th:inline="javascript">
+                var id = [[${chartData.institutionUserId}]];
+                var chartData = [
+                    {
+                        x: [[${chartData.xData}]],
+                        y: [[${chartData.yData}]],
+                        type: 'bar',
+                        marker: {
+                            color: 'rgb(158,202,225)',
+                            opacity: 0.6,
+                            line: {
+                                color: 'rgb(8,48,107)',
+                                width: 1.5
+                            }
                         }
                     }
+                ];
+                var layout = {
+                    xaxis: {
+                        type: 'category'
+                    },
+                    title: [[${chartData.name}]] + '個案報表'
                 }
-            ];
-            var layout = {
-                xaxis: {
-                    type: 'category'
-                },
-                title: [[${chartData.name}]] + '個案報表'
-            }
-            Plotly.newPlot('chart-' + id, chartData, layout)
-        </script>
+                Plotly.newPlot('chart-' + id, chartData, layout)
+            </script>
+        </div>
     </div>
 </main>
 </body>

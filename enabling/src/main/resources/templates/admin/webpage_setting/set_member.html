@@ -14,17 +14,31 @@
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
     <style>
+        textarea {
+            width: 350px
+        }
+
         #update-member-form {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: white;
-            padding: 4rem;
+            padding: 2rem;
             border-radius: 5px;
             box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
             z-index: 10;
         }
+
+        #member-table td, #member-table td button {
+            font-size: 0.9rem;
+            vertical-align: middle
+        }
+
+        #member-table td button {
+            padding: 0.25rem 0.5rem;
+        }
+
     </style>
     <title>團隊介紹管理</title>
 </head>
@@ -57,8 +71,8 @@
             </form>
         </div>
         <div class="tables">
-            <h3>刪除團隊介紹</h3>
-            <table>
+            <h3>編輯團隊介紹</h3>
+            <table id="member-table">
                 <tr>
                     <th>姓名</th>
                     <th>頭銜</th>

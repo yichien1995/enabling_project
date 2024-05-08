@@ -1,0 +1,184 @@
+body.webpage {
+    box-sizing: border-box;
+    font-family: "Noto Sans TC", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 200;
+    font-style: normal;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+main.webpage {
+    flex: 1;
+}
+
+/*header*/
+header.header-homepage {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 2.25rem;
+}
+
+div.header-homepage-left {
+    display: flex;
+    align-items: center;
+}
+
+nav.header-homepage-right {
+    margin-left: 2rem;
+}
+
+img.logo-image {
+    height: 25px;
+}
+
+h1.institution-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin-left: 1rem;
+}
+
+nav.header-homepage-right ul {
+    display: flex;
+    list-style-type: none;
+}
+
+nav.header-homepage-right ul li a {
+    text-decoration: none;
+    color: white;
+    margin: 0 0.75rem;
+    font-size: 0.9rem;
+}
+
+/*footer*/
+footer.footer-fragment-container {
+    margin-top: 3rem;
+}
+
+div.footer-container {
+    display: flex;
+    padding: 1rem;
+}
+
+div.footer-container-left, div.footer-container-right {
+    margin-left: 1rem;
+}
+
+span.footer-span-title,
+span.footer-span,
+div.footer-span-container {
+    font-size: 0.6rem;
+    color: white;
+}
+
+span.footer-span-title {
+    font-size: 0.6rem;
+    font-weight: bold;
+}
+
+div.footer-span-container {
+    margin-top: 0.5rem;
+}
+
+@media screen and (max-width: 1100px) {
+    header.header-homepage, nav.header-homepage-right ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav.header-homepage-right ul li a {
+        margin: 0;
+    }
+}
+
+/*homepage.css*/
+/*main*/
+div.campaign-container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    width: 100vw;
+    height: 50vh;
+    overflow: hidden;
+}
+
+img.main-image {
+    position: relative;
+    width: 100%;
+    height: auto;
+    z-index: -1;
+}
+
+p.main-image-description {
+    font-size: 1rem;
+    position: absolute;
+    bottom: 7.5vh;
+    right: 5vw;
+    color: rgb(55, 55, 55);
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 1;
+}
+
+div.intro-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+h2.heading-intro, h2.heading-info {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.75rem 0;
+}
+
+p.institution-intro {
+    width: 35vw;
+    text-align: center;
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+div.info-container {
+    display: flex;
+    justify-content: center;
+}
+
+div.info-container-2 {
+    display: flex;
+    width: 30vw;
+}
+
+div.google-map {
+    border: 1px solid gray;
+    width: 300px;
+    height: 300px;
+}
+
+div.info-description-container {
+    display: flex;
+    flex: 3;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.info-description {
+    margin: 0.5rem 1.5rem;
+}
+
+
+div.info-description h3 {
+    font-size: 1rem;
+    font-weight: 450;
+}
+
+div.info-description p {
+    font-size: 0.8rem;
+    margin: 0.75rem 0;
+    line-height: 1.25;
+}

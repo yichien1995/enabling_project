@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="stylesheet" th:href="@{/styles/reset.css}"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
     <link href="http://yui.yahooapis.com/3.18.1/build/cssreset/cssreset-min.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
@@ -14,20 +16,7 @@
     <link rel="stylesheet" th:href="@{https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}">
     <link rel="stylesheet" th:href="@{/richtext/richtext.min.css}">
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
-    <style>
-        body {
-            display: flex;
-        }
-
-        nav {
-            flex: 1;
-        }
-
-        main {
-            flex: 4;
-        }
-    </style>
-    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/styles/therapist.css}"/>
     <script th:src="@{/richtext/jquery.richtext.js}"></script>
     <script th:src="@{/richtext/jquery.richtext.min.js}"></script>
     <title>衛教文章管理</title>
