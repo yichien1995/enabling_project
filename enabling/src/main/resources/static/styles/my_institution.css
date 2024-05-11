@@ -57,6 +57,19 @@ i {
     margin-right: 1rem;
 }
 
+div#my-institution-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    padding: 2rem;
+}
+
+div.my-institution-item-container {
+    border: 1px solid #71736A;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
 a.a-institution {
     display: block;
     text-decoration: none;

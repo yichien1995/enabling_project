@@ -40,6 +40,10 @@ a {
     border-bottom: 1px solid #40312C;
 }
 
+#side-bar h3:hover {
+    cursor: default;
+}
+
 #side-bar ul {
     list-style-type: none;
     padding-left: 0;
@@ -63,8 +67,16 @@ a {
     border-bottom: 1px solid #40312C;
 }
 
+#side-bar details summary::-webkit-details-marker {
+    display: inline-block;
+}
+
 #side-bar details summary {
     margin: 0 0 0.5rem 1rem;
+}
+
+#side-bar details summary:hover {
+    cursor: pointer;
 }
 
 #side-bar ul.article li {

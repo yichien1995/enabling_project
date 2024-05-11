@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" th:href="@{/favicon.png}" type="image/png">
     <link rel="stylesheet" th:href="@{/styles/reset.css}"/>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
@@ -69,10 +70,14 @@
     <form action="/api/1.0/admin/institution/create" id="new-institution-form" method="post"
           th:object="${NewInstitutionForm}">
         <label for="institution_domain">*網域名稱:</label>
+        <!--        <input id="institution_domain"-->
+        <!--               name="institutionDomain"-->
+        <!--               placeholder="不得包含 &lt; &gt; &quot; ' # % { } | \\ ^ ~ [ ] ` ( ) ; ? : @ &amp; = + $ , / ! * 等符號"-->
+        <!--               required type="text">-->
         <input id="institution_domain"
+               maxlength="20"
                name="institutionDomain"
-               placeholder="不得包含 &lt; &gt; &quot; ' # % { } | \\ ^ ~ [ ] ` ( ) ; ? : @ &amp; = + $ , / ! * 等符號"
-               required type="text">
+               placeholder="20字內大小寫英文字母與數字組合" required type="text">
         <p> 輸入機構基本資料(可於稍後設定)</p>
         <label for="institution_name">機構名稱:</label>
         <input id="institution_name" name="institutionName" placeholder="輸入機構名稱" type="text">

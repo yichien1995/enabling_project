@@ -19,8 +19,6 @@ import tw.appworks.school.yichien.enabling.service.InstitutionService;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 public class InstitutionServiceImpl implements InstitutionService {
@@ -59,7 +57,7 @@ public class InstitutionServiceImpl implements InstitutionService {
 		Institution institution = new Institution();
 		institution.setDomainName(form.getInstitutionDomain());
 		String institutionName =
-				(form.getInstitutionName() == null || form.getInstitutionName().isEmpty()) ? "輸入機構名稱" : form.getInstitutionName();
+				(form.getInstitutionName() == null || form.getInstitutionName().isEmpty()) ? "我的新機構" : form.getInstitutionName();
 		String tel =
 				(form.getTel() == null || form.getTel().isEmpty()) ? "輸入機構電話" : form.getTel();
 		String address =
@@ -111,8 +109,9 @@ public class InstitutionServiceImpl implements InstitutionService {
 	public Map<String, Object> domainErrorMsg(String domain) {
 		Map<String, Object> errorMsg = new HashMap<>();
 		if (!checkDomainValidation(domain)) {
-			errorMsg.put("error", "不得包含 < > \" ' # % { } | \\ ^ ~ [ ] ` ( ) ; " +
-					"? : @ & = + $ , / ! * 等符號");
+//			errorMsg.put("error", "不得包含 < > \" ' # % { } | \\ ^ ~ [ ] ` ( ) ; " +
+//					"? : @ & = + $ , / ! * 等符號");
+			errorMsg.put("error", "請輸入20字內大小寫英文字母與數字組合");
 			return errorMsg;
 		}
 
@@ -123,12 +122,22 @@ public class InstitutionServiceImpl implements InstitutionService {
 		return null;
 	}
 
+//	private boolean checkDomainValidation(String domain) {
+//		String regex = "[<>\"'#%{}|\\\\^~\\[\\]`();?:@&=+$,\\/!\\s*]";
+//
+//		Pattern pattern = Pattern.compile(regex);
+//		Matcher matcher = pattern.matcher(domain);
+//
+//		return !matcher.find();
+//	}
+
 	private boolean checkDomainValidation(String domain) {
-		String regex = "[<>\"'#%{}|\\\\^~\\[\\]`();?:@&=+$,\\/!\\s*]";
+		if (domain.length() > 20)
+			return false;
 
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(domain);
+		if (!domain.matches("[a-zA-Z0-9]+"))
+			return false;
 
-		return !matcher.find();
+		return true;
 	}
 }

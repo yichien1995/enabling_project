@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" th:href="@{/favicon.png}" type="image/png">
     <link rel="stylesheet" th:href="@{/styles/reset.css}"/>
     <link href="https://fonts.googleapis.com" rel="preconnect">
     <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
@@ -24,13 +25,31 @@
 </nav>
 <main>
     <h1><i class="fa-solid fa-house-chimney-medical"></i>我的機構</h1>
-    <div th:each="myInstitution : ${myInstitutions}" th:if="${myInstitutions != null}">
-        <a class="a-institution" th:href="@{'/' + ${myInstitution.role}+'/' + ${myInstitution.institutionDomain}}"
-           th:text="${myInstitution.institutionName}"></a>
-        <!--        <div th:if="${myInstitution.role == 'admin'}">-->
-        <!--            <button th:attr="onclick='deleteInstition(\'' + ${myInstitution.id} + '\')'">刪除</button>-->
-        <!--        </div>-->
+    <div id="my-institution-container">
+        <div class="my-institution-item-container" th:each="myInstitution : ${myInstitutions}"
+             th:if="${myInstitutions != null}">
+            <p>
+                <strong>機構名稱：</strong>
+                <span th:text="${myInstitution.institutionName}"></span>
+            </p>
+            <p>
+                <strong>電話：</strong>
+                <span th:text="${myInstitution.tel}"></span>
+            </p>
+            <p>
+                <strong>地址：</strong>
+                <span th:text="${myInstitution.address}"></span>
+            </p>
+            <p><strong>營業時間：</strong></p>
+            <p th:utext="${myInstitution.businessHour}"></p>
+            <a class="a-institution" th:href="@{'/' + ${myInstitution.institutionDomain}+'/homepage.html'}">機構首頁</a>
+            <a class="a-institution" th:href="@{'/' + ${myInstitution.role}+'/' + ${myInstitution.institutionDomain}}">前往後台</a>
+            <!--        <div th:if="${myInstitution.role == 'admin'}">-->
+            <!--            <button th:attr="onclick='deleteInstition(\'' + ${myInstitution.id} + '\')'">刪除</button>-->
+            <!--        </div>-->
+        </div>
     </div>
+
 </main>
 <button id="btn-create">新增機構</button>
 <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>

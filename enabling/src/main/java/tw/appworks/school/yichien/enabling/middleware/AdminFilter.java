@@ -31,7 +31,6 @@ public class AdminFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
-		logger.info("Filter get request");
 		String requestUrl = request.getRequestURI();
 		String domain = null;
 		if (extractDomain(requestUrl) != null) {

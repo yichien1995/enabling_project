@@ -24,6 +24,9 @@ public class MainPageServiceImpl implements MainPageService {
 	@Override
 	public void renderMyInstitutionPage(Model model, Long id) {
 		List<MyInstitutionDto> myInstitutions = projectionRepo.getMyInstitutionDTO(id);
+		for (MyInstitutionDto data : myInstitutions) {
+			data.setBusinessHour(data.getBusinessHour().replace("\n", "<br>"));
+		}
 		model.addAttribute("myInstitutions", myInstitutions);
 	}
 }

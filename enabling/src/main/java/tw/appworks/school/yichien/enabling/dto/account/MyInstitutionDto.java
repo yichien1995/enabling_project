@@ -13,4 +13,7 @@ public class MyInstitutionDto {
 	private String role;
 	private String institutionDomain;
 	private String institutionName;
+	private String address;
+	private String tel;
+	private String businessHour;
 }

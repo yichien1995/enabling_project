@@ -37,6 +37,14 @@ public class MainPageController {
 		return "main_page/register_login";
 	}
 
+	@GetMapping("/login")
+	public String login(@CookieValue(value = "enabling", required = false) String sessionID) {
+		if (sessionID != null) {
+			return "redirect:" + domainPrefix + "myinstitution";
+		}
+		return "main_page/register_login";
+	}
+
 	@GetMapping("/myinstitution")
 	public String user(Model model, @CookieValue(value = "enabling", required = false) String sessionID)
 			throws JsonProcessingException {
