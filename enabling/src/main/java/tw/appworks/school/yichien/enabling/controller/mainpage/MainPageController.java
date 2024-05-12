@@ -55,7 +55,7 @@ public class MainPageController {
 		String userName = sessionService.getUserInfoDTOFromSession(sessionID).getUserName();
 		model.addAttribute("userName", userName);
 		mainPageService.renderMyInstitutionPage(model, userId);
-		return "main_page/my_institution";
+		return "main_page/new_my_institution";
 	}
 
 	@GetMapping("/myinstitution/create")

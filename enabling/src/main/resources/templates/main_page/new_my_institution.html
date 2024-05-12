@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <link rel="icon" th:href="@{/favicon.png}" type="image/png">
+    <link rel="stylesheet" th:href="@{/styles/reset.css}"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Noto+Sans+TC:wght@100..900&display=swap"
+          rel="stylesheet">
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+          referrerpolicy="no-referrer"
+          rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/styles/main_page/index_nav.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/main_page/new_my_institution.css}"/>
+    <title>Enabling - 會員</title>
+</head>
+<body>
+<header>
+    <nav id="nav-index">
+        <div id="nav-container-left">
+            <img src="https://d1xz5nhjz9nmve.cloudfront.net/enabling/default/enabling.png">
+            <a href="/"><h1 id="enabling">Enabling</h1></a>
+        </div>
+        <div id="nav-container-right">
+            <p id="user-name" th:text="'你好, ' + ${userName}"></p>
+            <a id="logout">登出</a>
+        </div>
+    </nav>
+</header>
+<main>
+    <h2><i class="fa-solid fa-hospital"></i>我的機構</h2>
+    <!--    <h2><i class="fa-solid fa-house-chimney-medical"></i>我的機構</h2>-->
+    <div id="my-institution-container">
+        <div class="my-institution-item-container" th:each="myInstitution : ${myInstitutions}"
+             th:if="${myInstitutions != null}">
+            <div>
+                <p>
+                    <strong>機構名稱：</strong>
+                    <span th:text="${myInstitution.institutionName}"></span>
+                </p>
+                <p>
+                    <strong>電話：</strong>
+                    <span th:text="${myInstitution.tel}"></span>
+                </p>
+                <p>
+                    <strong>地址：</strong>
+                    <span th:text="${myInstitution.address}"></span>
+                </p>
+                <p><strong>營業時間：</strong></p>
+                <p class="business-hour" th:utext="${myInstitution.businessHour}"></p>
+            </div>
+            <div class="link-container">
+                <a class="a-homepage"
+                   th:href="@{'/' + ${myInstitution.institutionDomain}+'/homepage.html'}">機構首頁</a>
+                <a class="a-institution"
+                   th:href="@{'/' + ${myInstitution.role}+'/' + ${myInstitution.institutionDomain}}">前往後台</a>
+            </div>
+
+            <!--        <div th:if="${myInstitution.role == 'admin'}">-->
+            <!--            <button th:attr="onclick='deleteInstition(\'' + ${myInstitution.id} + '\')'">刪除</button>-->
+            <!--        </div>-->
+        </div>
+    </div>
+
+</main>
+<button id="btn-create">新增機構</button>
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+<script>
+    const RELATIVE_PATH = window.location.origin;
+
+    $('#btn-create').click(() => {
+        window.location.href = `${RELATIVE_PATH}/myinstitution/create`;
+    });
+
+    $('#logout').click(() => {
+        let endpoint = `${RELATIVE_PATH}/api/1.0/user/logout`;
+        (async function logout() {
+            try {
+                let response = await fetch(endpoint, {
+                    method: 'GET'
+                })
+                if (response.ok) {
+                    setTimeout(
+                        function () {
+                            window.location.href = `${RELATIVE_PATH}`
+                        }, 0);
+                }
+            } catch (e) {
+                console.log("Error: " + e)
+            }
+        })()
+
+    })
+</script>
+</body>
+</html>

@@ -72,3 +72,16 @@ div#nav-container-right button#login {
 div#nav-container-right button#login:hover {
     font-weight: 700;
 }
+
+div#nav-container-right p#user-name {
+    margin-right: 2rem;
+    color: #304269;
+    font-weight: 700;
+    font-size: 1.15rem;
+    cursor: default;
+}
+
+div#nav-container-right a#logout:hover {
+    cursor: pointer;
+    font-weight: 550;
+}

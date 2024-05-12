@@ -1,0 +1,113 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    font-family: "Noto Sans TC", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 400;
+    height: auto;
+    flex: 1;
+    margin: 2rem 3rem;
+}
+
+main h2 {
+    cursor: default;
+    font-size: 1.75rem;
+    color: #304269;
+    margin-bottom: 2rem;
+}
+
+main h2 i {
+    margin-right: 1rem;
+}
+
+div#my-institution-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding: 0 2rem;
+}
+
+div.my-institution-item-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(41, 50, 65, 0.5);
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+}
+
+div.my-institution-item-container p {
+    color: #304269;
+    font-weight: 500;
+    margin: 0.5rem 0;
+}
+
+div.my-institution-item-container p span {
+    color: #293241;
+    font-weight: 400;
+}
+
+div.my-institution-item-container p.business-hour {
+    font-weight: 400;
+    line-height: 1.25;
+    color: #293241;
+}
+
+div.link-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+div.link-container a {
+    font-size: 0.8rem;
+    text-decoration: none;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    border: 1px solid #3D5B81;
+    letter-spacing: 1px
+}
+
+div.link-container a:hover {
+    font-weight: 600;
+}
+
+div.link-container a.a-homepage {
+    background-color: white;
+    color: #3D5B81;
+}
+
+div.link-container a.a-institution {
+    background-color: #3D5B81;
+    color: white;
+}
+
+button#btn-create {
+    padding: 10px 20px;
+    background-color: #EE6B4D;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    bottom: 100px;
+    right: 150px;
+    border-radius: 4px;
+    letter-spacing: 2px;
+}
+
+button#btn-create:hover {
+    font-weight: 600;
+}
+
+
+
