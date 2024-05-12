@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-Hunt" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
+    <link rel="icon" th:href="@{/favicon.png}" type="image/png">
+    <link rel="stylesheet" th:href="@{/styles/reset.css}"/>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Noto+Sans+TC:wght@100..900&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/styles/main_page/index_nav.css}"/>
+    <link rel="stylesheet" th:href="@{/styles/main_page/register.css}"/>
+    <title>Enabling - 註冊</title>
+</head>
+<body>
+<header>
+    <nav id="nav-index">
+        <div id="nav-container-left">
+            <img src="https://d1xz5nhjz9nmve.cloudfront.net/enabling/default/enabling.png">
+            <a href="/"><h1 id="enabling">Enabling</h1></a>
+        </div>
+        <div id="nav-container-right">
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="image-container">
+        <img id="main_image" src="https://d1xz5nhjz9nmve.cloudfront.net/enabling/default/register.png">
+    </div>
+    <div class="form-container">
+        <h2>登入</h2>
+        <form action="/api/1.0/user/login" id="login-form" method="post" th:object="${Users}">
+            <label for="login-email">信箱：</label>
+            <input id="login-email" name="email" required type="email"/>
+            <br/>
+            <label for="login-password">密碼：</label>
+            <input
+                    id="login-password"
+                    name="password"
+                    required
+                    type="password"
+            />
+            <br/>
+            <button id="btn-login">登入</button>
+        </form>
+        <div class="switch-form">
+            <a href="/register" id="register-link">註冊新帳號</a>
+        </div>
+    </div>
+</main>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    const relativePath = window.location.origin;
+    $(document).on('submit', '#login-form', async function (event) {
+        event.preventDefault();
+
+        try {
+            let response = await fetch($(this).attr('action'), {
+                body: new FormData(this),
+                method: $(this).attr('method'),
+            });
+            let result = await response.json();
+            if (response.ok) {
+                window.location.href = `${relativePath}/myinstitution`;
+            } else {
+                alert(result["error"])
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+    });
+</script>
+</body>
+</html>

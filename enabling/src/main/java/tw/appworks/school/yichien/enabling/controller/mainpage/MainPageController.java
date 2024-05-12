@@ -34,7 +34,7 @@ public class MainPageController {
 		if (sessionID != null) {
 			return "redirect:" + domainPrefix + "myinstitution";
 		}
-		return "main_page/register_login";
+		return "main_page/register";
 	}
 
 	@GetMapping("/login")
@@ -42,7 +42,7 @@ public class MainPageController {
 		if (sessionID != null) {
 			return "redirect:" + domainPrefix + "myinstitution";
 		}
-		return "main_page/register_login";
+		return "main_page/login";
 	}
 
 	@GetMapping("/myinstitution")
