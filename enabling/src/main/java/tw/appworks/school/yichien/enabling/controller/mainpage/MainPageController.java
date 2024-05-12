@@ -64,7 +64,7 @@ public class MainPageController {
 			throws JsonProcessingException {
 		String userName = sessionService.getUserInfoDTOFromSession(sessionID).getUserName();
 		model.addAttribute("userName", userName);
-		return "main_page/create_institution";
+		return "main_page/new_create_institution";
 	}
 
 }

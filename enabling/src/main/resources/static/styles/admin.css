@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: #F1F2F0;
+    background-color: #FFFFFF;
     display: flex;
 }
 
@@ -20,14 +20,14 @@ main {
 }
 
 h2 {
-    color: #555555;
+    color: #293241;;
     font-size: 1.75rem;
     font-weight: bold;
     margin-top: 1rem;
 }
 
 h3 {
-    color: #71736A;
+    color: #3D5B81;
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0.75rem 0;
@@ -96,7 +96,7 @@ button.release {
     padding: 0.25rem 1rem;
     border: none;
     border-radius: 2px;
-    background-color: rgba(113, 115, 106, 0.75);
+    background-color: #304269;
     color: white;
 }
 
@@ -109,7 +109,7 @@ button.cancel:hover,
 button.update:hover,
 button.release:hover {
     cursor: pointer;
-    background-color: rgb(113, 115, 106);
+    background-color: #EE6B4D;
 }
 
 button.create {

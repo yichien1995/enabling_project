@@ -1,0 +1,68 @@
+form {
+    background-color: #fff;
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+form label#label-domain {
+    font-weight: 600;
+}
+
+form p {
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+form p span {
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 100px;
+    resize: none;
+}
+
+button#btn-create, button#btn-back {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    bottom: 100px;
+    border-radius: 4px;
+    letter-spacing: 2px;
+}
+
+button#btn-create {
+    background-color: #EE6B4D;
+    color: #fff;
+    right: 150px;
+}
+
+button#btn-back {
+    background-color: #3D5B81;
+    color: #fff;
+    left: 150px;
+}
+
+button#btn-create:hover, button#btn-back:hover {
+    font-weight: 600;
+}

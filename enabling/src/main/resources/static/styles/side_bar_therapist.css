@@ -12,7 +12,7 @@ a {
 
 #side-bar {
     width: 17.5vw;
-    background-color: #FFFFFF;
+    background-color: #293241;
     padding: 1rem 2rem;
     height: 100vh;
     font-family: "Noto Sans TC", sans-serif;
@@ -27,17 +27,17 @@ a {
     margin-top: 0;
     font-size: 1.75rem;
     font-weight: bold;
-    color: #293241;
+    color: #FFFFFF;
 
 }
 
 #side-bar h3 {
     margin-top: 20px;
-    color: #3D5B81;
+    color: #D9E8F5;
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
     padding-bottom: 5px;
-    border-bottom: 1px solid #293241;
+    border-bottom: 1px solid #FFFFFF;
 }
 
 #side-bar h3:hover {
@@ -55,16 +55,16 @@ a {
 
 #side-bar li a {
     font-size: 1.1rem;
-    color: #304269;
+    color: #FFFFFF;
 }
 
 #side-bar i {
     margin-right: 0.75rem;
-    color: #304269;
+    color: #FFFFFF;
 }
 
 #side-bar li a:hover {
-    border-bottom: 1px solid #304269;
+    border-bottom: 1px solid #FFFFFF;
 }
 
 #side-bar details summary::-webkit-details-marker {
@@ -73,6 +73,7 @@ a {
 
 #side-bar details summary {
     margin: 0 0 0.5rem 1rem;
+    color: #FFFFFF;
 }
 
 #side-bar details summary:hover {

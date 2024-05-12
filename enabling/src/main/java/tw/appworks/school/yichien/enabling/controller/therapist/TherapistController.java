@@ -23,10 +23,20 @@ public class TherapistController {
 		this.sessionService = sessionService;
 	}
 
+//	@GetMapping
+//	public String therapistMainPage(@PathVariable String domain, Model model) {
+//		model.addAttribute("domain", domain);
+//		return "therapist/therapist";
+//	}
+
 	@GetMapping
-	public String therapistMainPage(@PathVariable String domain, Model model) {
+	public String therapistMainPage(@PathVariable String domain, Model model,
+	                                @CookieValue(value = "enabling", required = false) String sessionID)
+			throws JsonProcessingException {
+		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
 		model.addAttribute("domain", domain);
-		return "therapist/therapist";
+		clientService.renderClientListPage(institutionUserId, domain, model);
+		return "therapist/client_list";
 	}
 
 	@GetMapping("/client/report")

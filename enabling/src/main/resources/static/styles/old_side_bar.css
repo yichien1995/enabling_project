@@ -12,7 +12,7 @@ a {
 
 #side-bar {
     width: 17.5vw;
-    background-color: #FFFFFF;
+    background-color: #F2EFDF;
     padding: 1rem 2rem;
     height: 100vh;
     font-family: "Noto Sans TC", sans-serif;
@@ -27,17 +27,17 @@ a {
     margin-top: 0;
     font-size: 1.75rem;
     font-weight: bold;
-    color: #293241;
+    color: #40312C;
 
 }
 
 #side-bar h3 {
     margin-top: 20px;
-    color: #3D5B81;
+    color: #71736A;
     font-size: 1.5rem;
     font-weight: 700;
     padding-bottom: 5px;
-    border-bottom: 1px solid #293241;
+    border-bottom: 1px solid #40312C;
 }
 
 #side-bar h3:hover {
@@ -55,16 +55,16 @@ a {
 
 #side-bar li a {
     font-size: 1.1rem;
-    color: #304269;
+    color: #40312C;
 }
 
 #side-bar i {
     margin-right: 0.75rem;
-    color: #304269;
+    color: #40312C;
 }
 
 #side-bar li a:hover {
-    border-bottom: 1px solid #304269;
+    border-bottom: 1px solid #40312C;
 }
 
 #side-bar details summary::-webkit-details-marker {

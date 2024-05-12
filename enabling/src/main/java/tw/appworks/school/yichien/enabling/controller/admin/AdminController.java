@@ -34,7 +34,9 @@ public class AdminController {
 	@GetMapping
 	public String adminMainPage(@PathVariable String domain, Model model) {
 		adminService.renderAdminSidebar(domain, model);
-		return "main_page/admin";
+		homepageService.renderHomePage(domain, model);
+		return "admin/webpage_setting/set_homepage";
+//		return "main_page/admin";
 	}
 
 	@GetMapping("/setting/homepage")
