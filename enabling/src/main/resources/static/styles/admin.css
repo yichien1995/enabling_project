@@ -64,7 +64,7 @@ input[type="email"] {
     height: 24px;
     border: 1px solid #999999;
     border-radius: 5px;
-    margin: 5px;
+    margin: 5px 0;
 }
 
 input[type="date"],
@@ -72,10 +72,11 @@ input[type="time"] {
     height: 24px;
     border: 1px solid #999999;
     border-radius: 5px;
-    margin: 5px;
+    margin: 5px 0;
 }
 
 textarea {
+    margin: 5px 0;
     width: 400px;
     height: 150px;
     padding: 5px;
@@ -92,12 +93,13 @@ button.save,
 button.cancel,
 button.update,
 button.release {
-    margin: 0.25rem 0.5rem;
+    margin: 0.5rem 0.5rem;
     padding: 0.25rem 1rem;
     border: none;
-    border-radius: 2px;
+    border-radius: 5px;
     background-color: #304269;
-    color: white;
+    color: #FFFFFF;
+    letter-spacing: 2px;
 }
 
 button.create:hover,
@@ -109,7 +111,7 @@ button.cancel:hover,
 button.update:hover,
 button.release:hover {
     cursor: pointer;
-    background-color: #EE6B4D;
+    background-color: #9BC0D9;
 }
 
 button.create {

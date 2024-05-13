@@ -1,6 +1,10 @@
 <nav id="side-bar" th:fragment="therapist_sidebar">
+    <div class="logo-container">
+        <img src="https://d1xz5nhjz9nmve.cloudfront.net/enabling/default/enabling.png">
+        <a><h1 id="enabling">Enabling</h1></a>
+    </div>
     <!--    <a th:href="@{'/therapist/' +${domain}}"><h2>治療師頁面</h2></a>-->
-    <h2>治療師頁面</h2>
+    <h3 th:text="${institutionName}"></h3>
     <ul>
         <li id="index">
             <i class="fa-solid fa-house"></i>

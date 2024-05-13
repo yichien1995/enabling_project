@@ -52,9 +52,13 @@ button#btn-create, button#btn-back {
 }
 
 button#btn-create {
-    background-color: #EE6B4D;
+    background-color: #9BC0D9;
     color: #fff;
     right: 150px;
+}
+
+button#btn-create:hover {
+    background-color: #3D5B81;
 }
 
 button#btn-back {
@@ -63,6 +67,7 @@ button#btn-back {
     left: 150px;
 }
 
-button#btn-create:hover, button#btn-back:hover {
-    font-weight: 600;
+button#btn-back:hover {
+    /*font-weight: 600;*/
+    background-color: #9BC0D9
 }

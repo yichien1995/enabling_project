@@ -38,14 +38,14 @@ div#my-institution-container {
     padding: 0 2rem;
 }
 
-div.my-institution-item-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    border: 1px solid rgba(41, 50, 65, 0.5);
-    border-radius: 10px;
-    padding: 0.5rem 1rem;
-}
+/*div.my-institution-item-container {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    justify-content: space-between;*/
+/*    border: 1px solid rgba(41, 50, 65, 0.5);*/
+/*    border-radius: 10px;*/
+/*    padding: 0.5rem 1rem;*/
+/*}*/
 
 div.my-institution-item-container p {
     color: #304269;
@@ -64,10 +64,10 @@ div.my-institution-item-container p.business-hour {
     color: #293241;
 }
 
-div.link-container {
-    display: flex;
-    justify-content: space-between;
-}
+/*div.link-container {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*}*/
 
 div.link-container a {
     font-size: 0.8rem;
@@ -94,7 +94,7 @@ div.link-container a.a-institution {
 
 button#btn-create {
     padding: 10px 20px;
-    background-color: #EE6B4D;
+    background-color: #9BC0D9;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -106,8 +106,34 @@ button#btn-create {
 }
 
 button#btn-create:hover {
-    font-weight: 600;
+    /*font-weight: 600;*/
+    background-color: #3D5B81;
 }
 
+/*adminlte*/
 
+div.card-header {
+    background-color: #3D5B81;
+}
+
+h3.card-title {
+    cursor: default;
+    color: #DFFBFC;
+}
+
+div.card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+div.link-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+p#user-name {
+    margin-bottom: 0;
+}
 

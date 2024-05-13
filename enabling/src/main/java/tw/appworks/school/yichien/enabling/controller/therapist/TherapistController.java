@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import tw.appworks.school.yichien.enabling.service.ClientService;
+import tw.appworks.school.yichien.enabling.service.TherapistService;
 import tw.appworks.school.yichien.enabling.service.impl.SessionServiceImpl;
 
 @Controller
@@ -18,9 +19,12 @@ public class TherapistController {
 
 	private final SessionServiceImpl sessionService;
 
-	public TherapistController(ClientService clientService, SessionServiceImpl sessionService) {
+	private final TherapistService therapistService;
+
+	public TherapistController(ClientService clientService, SessionServiceImpl sessionService, TherapistService therapistService) {
 		this.clientService = clientService;
 		this.sessionService = sessionService;
+		this.therapistService = therapistService;
 	}
 
 //	@GetMapping
@@ -35,6 +39,7 @@ public class TherapistController {
 			throws JsonProcessingException {
 		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
 		model.addAttribute("domain", domain);
+		therapistService.renderAdminSidebar(domain, model);
 		clientService.renderClientListPage(institutionUserId, domain, model);
 		return "therapist/client_list";
 	}
@@ -44,8 +49,9 @@ public class TherapistController {
 	                               @CookieValue(value = "enabling", required = false) String sessionID)
 			throws JsonProcessingException {
 		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
+		therapistService.renderAdminSidebar(domain, model);
 		clientService.renderClientReportPage(institutionUserId, model);
-		model.addAttribute("domain", domain);
+//		model.addAttribute("domain", domain);
 		return "therapist/client_report";
 	}
 
@@ -55,7 +61,8 @@ public class TherapistController {
 			throws JsonProcessingException {
 
 		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
-		model.addAttribute("domain", domain);
+//		model.addAttribute("domain", domain);
+		therapistService.renderAdminSidebar(domain, model);
 		clientService.renderClientListPage(institutionUserId, domain, model);
 		return "therapist/client_list";
 	}

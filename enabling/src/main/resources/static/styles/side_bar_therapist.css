@@ -13,7 +13,7 @@ a {
 #side-bar {
     width: 17.5vw;
     background-color: #293241;
-    padding: 1rem 2rem;
+    padding: 0.5rem 2rem;
     height: 100vh;
     font-family: "Noto Sans TC", sans-serif;
     font-optical-sizing: auto;
@@ -21,6 +21,28 @@ a {
     font-style: normal;
     box-shadow: -5px 0 20px rgba(0, 0, 0, 0.4);
     overflow-y: auto;
+}
+
+#side-bar div.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+#side-bar div.logo-container img {
+    width: 3vw;
+    height: 3vw;
+}
+
+h1#enabling {
+    flex: 3;
+    cursor: default;
+    font-family: "Caveat", cursive;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-size: 1.75rem;
+    font-weight: 700;
+    padding: 0 1rem;
+    color: #D9E8F5;
 }
 
 #side-bar h2 {
@@ -34,10 +56,9 @@ a {
 #side-bar h3 {
     margin-top: 20px;
     color: #D9E8F5;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 600;
     padding-bottom: 5px;
-    border-bottom: 1px solid #FFFFFF;
 }
 
 #side-bar h3:hover {
@@ -50,7 +71,7 @@ a {
 }
 
 #side-bar ul li {
-    margin: 0.75rem 0;
+    margin: 1rem 1.75rem;
 }
 
 #side-bar li a {
@@ -72,7 +93,7 @@ a {
 }
 
 #side-bar details summary {
-    margin: 0 0 0.5rem 1rem;
+    margin: 0 0 0.5rem 2rem;
     color: #FFFFFF;
 }
 
