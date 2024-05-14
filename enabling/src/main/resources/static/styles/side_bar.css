@@ -49,8 +49,8 @@ h1#enabling {
 
 }
 
-#side-bar h3 {
-    margin-top: 20px;
+#side-bar h3.h3-side-bar {
+    margin: 20px 0 0 0;
     color: #3D5B81;
     font-size: 1.25rem;
     font-weight: 700;

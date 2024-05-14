@@ -16,6 +16,11 @@
           rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/admin.css}"/>
+    <style>
+        table#service-table td.align-left {
+            text-align: left;
+        }
+    </style>
     <title>服務項目管理</title>
 </head>
 <body>
@@ -29,10 +34,10 @@
                 <label for="service-image">圖片:</label>
                 <input accept="image/png, image/jpeg" id="service-image" name="image" required type="file">
                 <br>
-                <label for="title">項目名稱: </label>
+                <label for="title">名稱: </label>
                 <input id="title" name="title" required type="text">
                 <br>
-                <label for="price">收費說明: </label>
+                <label for="price">說明: </label>
                 <br>
                 <textarea id="price" name="price" required></textarea>
                 <br>
@@ -41,7 +46,7 @@
         </div>
         <div class="tables">
             <h3>服務項目列表</h3>
-            <table>
+            <table id="service-table">
                 <tr>
                     <th>項目名稱</th>
                     <th>收費說明</th>
@@ -50,7 +55,7 @@
                 </tr>
                 <tr th:each="serviceItem:${serviceItems}" th:if="${serviceItems != null}">
                     <td th:id="'title-' + ${serviceItem.id}" th:text="${serviceItem.title}"></td>
-                    <td th:id="'price-' + ${serviceItem.id}" th:utext="${serviceItem.price}"></td>
+                    <td class="align-left" th:id="'price-' + ${serviceItem.id}" th:utext="${serviceItem.price}"></td>
                     <td>
                         <button class="change">更新</button>
                     </td>

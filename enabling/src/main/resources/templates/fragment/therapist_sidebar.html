@@ -4,14 +4,14 @@
         <a><h1 id="enabling">Enabling</h1></a>
     </div>
     <!--    <a th:href="@{'/therapist/' +${domain}}"><h2>治療師頁面</h2></a>-->
-    <h3 th:text="${institutionName}"></h3>
+    <h3 class="h3-side-bar" th:text="${institutionName}"></h3>
     <ul>
         <li id="index">
             <i class="fa-solid fa-house"></i>
             <a target="_blank" th:href="@{'/' +${domain}+'/homepage.html'}">機構網頁</a>
         </li>
     </ul>
-    <h3>網頁管理</h3>
+    <h3 class="h3-side-bar">網頁管理</h3>
     <ul>
         <li><i class="fa-solid fa-book"></i><a th:href="@{'/therapist/' +${domain}+'/setting/articles'}">衛教文章</a>
         </li>
@@ -36,7 +36,7 @@
             </details>
         </div>
     </ul>
-    <h3>個案管理</h3>
+    <h3 class="h3-side-bar">個案管理</h3>
     <ul>
         <li><i class="fa-solid fa-hospital-user"></i><a
                 th:href="@{'/therapist/' +${domain}+'/client/list'}">個案管理</a></li>
@@ -45,6 +45,6 @@
     </ul>
     <h3>帳號管理</h3>
     <ul>
-        <li><i class="fa-solid fa-left-long"></i><a th:href="@{'/myinstitution'}">我的機構總覽</a></li>
+        <li><i class="fa-solid fa-left-long"></i><a th:href="@{'/myinstitution'}">機構總覽</a></li>
     </ul>
 </nav>

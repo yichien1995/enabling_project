@@ -20,6 +20,7 @@
         h1#enabling {
             margin: 0;
         }
+
     </style>
     <title>Enabling - 我的機構</title>
 </head>
@@ -74,6 +75,13 @@
     <div id="my-institution-container">
         <div class="card" th:each="myInstitution : ${myInstitutions}"
              th:if="${myInstitutions != null}">
+            <div class="ribbon-wrapper ribbon-lg" th:if="${myInstitution.role == 'admin'}">
+                <div class="ribbon bg-warning text-lg">管理者</div>
+            </div>
+            <div class="ribbon-wrapper ribbon-lg" th:if="${myInstitution.role == 'therapist'}">
+                <!--                <div class="ribbon bg-info" th:text="${myInstitution.role}"></div>-->
+                <div class="ribbon bg-info text-lg">治療師</div>
+            </div>
             <div class="card-header">
                 <h3 class="card-title" th:text="${myInstitution.institutionName}"></h3>
             </div>

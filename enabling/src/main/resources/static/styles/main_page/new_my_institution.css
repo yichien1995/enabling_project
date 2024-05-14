@@ -94,7 +94,7 @@ div.link-container a.a-institution {
 
 button#btn-create {
     padding: 10px 20px;
-    background-color: #9BC0D9;
+    background-color: #3D5B81;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -107,7 +107,7 @@ button#btn-create {
 
 button#btn-create:hover {
     /*font-weight: 600;*/
-    background-color: #3D5B81;
+    background-color: #9BC0D9;
 }
 
 /*adminlte*/

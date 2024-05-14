@@ -49,16 +49,17 @@ button#btn-create, button#btn-back {
     bottom: 100px;
     border-radius: 4px;
     letter-spacing: 2px;
+    font-size: 1rem;
 }
 
 button#btn-create {
-    background-color: #9BC0D9;
+    background-color: #3D5B81;
     color: #fff;
     right: 150px;
 }
 
 button#btn-create:hover {
-    background-color: #3D5B81;
+    background-color: #9BC0D9;
 }
 
 button#btn-back {

@@ -34,7 +34,8 @@
     <!--    <h1>打造你的機構網站</h1>-->
     <form action="/api/1.0/admin/institution/create" id="new-institution-form" method="post"
           th:object="${NewInstitutionForm}">
-        <label for="institution_domain" id="label-domain">*網域名稱:</label>
+        <label for="institution_domain" id="label-domain">
+            <span th:style="'color: red'">*</span>網域名稱:</label>
         <!--        <input id="institution_domain"-->
         <!--               name="institutionDomain"-->
         <!--               placeholder="不得包含 &lt; &gt; &quot; ' # % { } | \\ ^ ~ [ ] ` ( ) ; ? : @ &amp; = + $ , / ! * 等符號"-->
@@ -57,9 +58,9 @@
         <br>
         <textarea id="business_hour" name="businessHour"></textarea>
         <br>
-        <button id="btn-create">新增機構</button>
+        <button id="btn-create">新增</button>
     </form>
-    <button id="btn-back" onclick="window.location.href='/myinstitution'">回上一頁</button>
+    <button id="btn-back" onclick="window.location.href='/myinstitution'">上一頁</button>
 </main>
 <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js}"></script>
 <script>

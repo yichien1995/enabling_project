@@ -41,7 +41,7 @@ public class ServiceItemServiceImpl implements ServiceItemService {
 
 		// save image relative URL
 //		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
-		String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getTitle(), form.getImage());
+		String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
 		serviceItem.setImage(uploadAndGetPath);
 
 		serviceItem.setTitle(form.getTitle());
@@ -69,7 +69,7 @@ public class ServiceItemServiceImpl implements ServiceItemService {
 
 		if (!form.getImage().isEmpty()) {
 //			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
-			String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getTitle(), form.getImage());
+			String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
 			serviceItem.setImage(uploadAndGetPath);
 		}
 

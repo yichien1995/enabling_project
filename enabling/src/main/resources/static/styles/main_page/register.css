@@ -77,23 +77,23 @@ button {
 }
 
 button {
-    background-color: #9BC0D9;
+    background-color: #304269;
     color: #fff;
     border: none;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #304269;
+    background-color: #9BC0D9;
 }
 
 div.switch-form a {
     text-decoration: none;
-    color: #9BC0D9;
+    color: #304269;
 }
 
 div.switch-form a:hover {
     cursor: pointer;
-    color: #304269;
+    color: #9BC0D9;
 }
 

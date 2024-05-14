@@ -154,13 +154,13 @@ public class HomepageServiceImpl implements HomepageService {
 
 		if (!hf.getLogo().isEmpty()) {
 			//		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
-			String logoPath = s3UploadService.uploadFileToS3(domain, "logo_" + fileType, hf.getLogo());
+			String logoPath = s3UploadService.uploadFileToS3(domain, hf.getLogo().getOriginalFilename() + fileType, hf.getLogo());
 			homepage.setLogo(logoPath);
 		}
 
 		if (!hf.getMainImage().isEmpty()) {
 			//		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
-			String mainImagePath = s3UploadService.uploadFileToS3(domain, "main_" + fileType, hf.getMainImage());
+			String mainImagePath = s3UploadService.uploadFileToS3(domain, hf.getMainImage().getOriginalFilename() + fileType, hf.getMainImage());
 			homepage.setMainImage(mainImagePath);
 		}
 
