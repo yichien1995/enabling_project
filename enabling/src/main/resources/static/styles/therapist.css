@@ -78,9 +78,10 @@ button.release {
     margin: 0.25rem 0.5rem;
     padding: 0.25rem 1rem;
     border: none;
-    border-radius: 2px;
+    border-radius: 5px;
     background-color: #304269;
     color: white;
+    letter-spacing: 2px;
 }
 
 button.create:hover,
@@ -92,7 +93,7 @@ button.cancel:hover,
 button.update:hover,
 button.release:hover {
     cursor: pointer;
-    background-color: #EE6B4D;
+    background-color: #9BC0D9;
 }
 
 /*button.create {*/

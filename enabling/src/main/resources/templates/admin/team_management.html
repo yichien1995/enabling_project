@@ -56,6 +56,9 @@
                     <td th:text="${info.userName}"></td>
                     <td th:text="${info.email}"></td>
                     <td th:text="${info.role}"></td>
+                    <td th:if="${info.employeeId == 1}">
+                        <button class="btn-hide">刪除</button>
+                    </td>
                     <td th:if="${info.employeeId != 1}">
                         <button class="delete" th:attr="onclick='deleteMember(\'' + ${info.institutionUserId} + '\')'">
                             刪除
@@ -136,6 +139,8 @@
             })()
         }
     }
+
+    $('.btn-hide').hide();
 </script>
 </body>
 </html>

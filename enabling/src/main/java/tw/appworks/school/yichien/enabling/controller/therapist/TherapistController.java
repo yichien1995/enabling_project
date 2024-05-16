@@ -51,7 +51,6 @@ public class TherapistController {
 		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
 		therapistService.renderAdminSidebar(domain, model);
 		clientService.renderClientReportPage(institutionUserId, model);
-//		model.addAttribute("domain", domain);
 		return "therapist/client_report";
 	}
 
@@ -61,7 +60,6 @@ public class TherapistController {
 			throws JsonProcessingException {
 
 		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
-//		model.addAttribute("domain", domain);
 		therapistService.renderAdminSidebar(domain, model);
 		clientService.renderClientListPage(institutionUserId, domain, model);
 		return "therapist/client_list";

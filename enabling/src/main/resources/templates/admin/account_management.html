@@ -38,7 +38,7 @@
                 <span th:text="${i.address}"></span>
             </p>
             <p><strong>營業時間：</strong></p>
-            <p th:utext=" ${businessHour}"></p>
+            <p class="business-hour" th:utext=" ${businessHour}"></p>
             <button class="change" id="btn-change-institution">更改</button>
         </div>
         <div th:case="'get-info-form'">

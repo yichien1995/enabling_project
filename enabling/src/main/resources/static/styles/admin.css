@@ -142,11 +142,15 @@ tr:nth-child(even) {
 
 /*account_management.html*/
 div#institution-info p {
-    margin-top: 0.5rem;
+    margin: 1rem 0;
 }
 
 div#institution-info p strong {
     font-weight: 550;
+}
+
+div#institution-info p.business-hour {
+    line-height: 1.5;
 }
 
 #btn-change-institution {

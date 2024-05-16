@@ -41,18 +41,21 @@
                         y: [[${chartData.yData}]],
                         type: 'bar',
                         marker: {
-                            color: 'rgb(158,202,225)',
-                            opacity: 0.6,
-                            line: {
-                                color: 'rgb(8,48,107)',
-                                width: 1.5
-                            }
+                            color: 'rgb(157,192,217)',
+                            opacity: 0.8,
+                            // line: {
+                            //     color: 'rgb(8,48,107)',
+                            //     width: 1.5
+                            // }
                         }
                     }
                 ];
                 var layout = {
                     xaxis: {
                         type: 'category'
+                    },
+                    yaxis: {
+                        title: '人次'
                     },
                     title: [[${chartData.name}]] + ' 個案報表'
                 }
