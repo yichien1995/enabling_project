@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ArticleForm {
-	private MultipartFile cover;
-	private String title;
-	private String content;
+    private MultipartFile cover;
+    private String title;
+    private String content;
 }

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientReportChartData {
-	private Long institutionUserId;
-	private String name;
-	private ArrayList<LocalDate> xData;
-	private ArrayList<Integer> yData;
+    private Long institutionUserId;
+    private String name;
+    private ArrayList<LocalDate> xData;
+    private ArrayList<Integer> yData;
 }

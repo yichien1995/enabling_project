@@ -25,108 +25,108 @@ import java.util.stream.Collectors;
 @Service
 public class EvaluationImpl implements EvaluationService {
 
-	private final ProjectionRepo projectionRepo;
+    private final ProjectionRepo projectionRepo;
 
-	private final InstitutionUserRepository institutionUserRepository;
+    private final InstitutionUserRepository institutionUserRepository;
 
-	private final EvaluationRepository evaluationRepository;
+    private final EvaluationRepository evaluationRepository;
 
-	public EvaluationImpl(ProjectionRepo projectionRepo, InstitutionUserRepository institutionUserRepository, EvaluationRepository evaluationRepository) {
-		this.projectionRepo = projectionRepo;
-		this.institutionUserRepository = institutionUserRepository;
-		this.evaluationRepository = evaluationRepository;
-	}
+    public EvaluationImpl(ProjectionRepo projectionRepo, InstitutionUserRepository institutionUserRepository, EvaluationRepository evaluationRepository) {
+        this.projectionRepo = projectionRepo;
+        this.institutionUserRepository = institutionUserRepository;
+        this.evaluationRepository = evaluationRepository;
+    }
 
-	@Override
-	public void renderEvaluationSettingPage(String domain, Model model) {
-		List<MemberDto> memberDTO = getMemberDto(domain);
-		List<Evaluation> evaluations = evaluationRepository.getEvaluationsByDomain(domain);
+    @Override
+    public void renderEvaluationSettingPage(String domain, Model model) {
+        List<MemberDto> memberDTO = getMemberDto(domain);
+        List<Evaluation> evaluations = evaluationRepository.getEvaluationsByDomain(domain);
 
-		model.addAttribute("memberData", memberDTO);
-		model.addAttribute("evaluations", evaluations);
-	}
+        model.addAttribute("memberData", memberDTO);
+        model.addAttribute("evaluations", evaluations);
+    }
 
-	@Override
-	public void renderEvaluationPage(String domain, Model model) {
-		List<Evaluation> unreservedEvaluations = evaluationRepository.getUnreservedEvaluations(domain);
-		List<EvaluationCalendarEvent> events = getEvaluationEvents(unreservedEvaluations);
-		List<UnreservedEvaluationOption> options = getAllUnreservedEvaluation(unreservedEvaluations);
+    @Override
+    public void renderEvaluationPage(String domain, Model model) {
+        List<Evaluation> unreservedEvaluations = evaluationRepository.getUnreservedEvaluations(domain);
+        List<EvaluationCalendarEvent> events = getEvaluationEvents(unreservedEvaluations);
+        List<UnreservedEvaluationOption> options = getAllUnreservedEvaluation(unreservedEvaluations);
 
-		model.addAttribute("events", events);
-		model.addAttribute("evaluations", unreservedEvaluations);
-		model.addAttribute("options", options);
-	}
+        model.addAttribute("events", events);
+        model.addAttribute("evaluations", unreservedEvaluations);
+        model.addAttribute("options", options);
+    }
 
-	@Override
-	public void saveNewEvaluation(String domain, NewEvaluationForm newEvaluationForm) {
-		Long institutionUserId = Long.parseLong(newEvaluationForm.getInstitutionUserId());
-		Evaluation evaluation = new Evaluation();
-		InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
+    @Override
+    public void saveNewEvaluation(String domain, NewEvaluationForm newEvaluationForm) {
+        Long institutionUserId = Long.parseLong(newEvaluationForm.getInstitutionUserId());
+        Evaluation evaluation = new Evaluation();
+        InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
 
-		evaluation.setEvaluationDate(newEvaluationForm.getEvaluationDate());
-		evaluation.setEvaluationTime(newEvaluationForm.getEvaluationTime());
-		evaluation.setInstitutionUserId(institutionUser);
-		evaluation.setReserved(0);
+        evaluation.setEvaluationDate(newEvaluationForm.getEvaluationDate());
+        evaluation.setEvaluationTime(newEvaluationForm.getEvaluationTime());
+        evaluation.setInstitutionUserId(institutionUser);
+        evaluation.setReserved(0);
 
-		evaluationRepository.save(evaluation);
+        evaluationRepository.save(evaluation);
 
-	}
+    }
 
-	@Override
-	public void reserveEvaluation(ReserveEvaluationForm reserveEvaluationForm) {
-		Evaluation evaluation = evaluationRepository.getEvaluationById(reserveEvaluationForm.getEvaluationId());
+    @Override
+    public void reserveEvaluation(ReserveEvaluationForm reserveEvaluationForm) {
+        Evaluation evaluation = evaluationRepository.getEvaluationById(reserveEvaluationForm.getEvaluationId());
 
-		evaluation.setClientName(reserveEvaluationForm.getClientName());
-		evaluation.setBirthday(reserveEvaluationForm.getBirthday());
-		evaluation.setTel(reserveEvaluationForm.getTel());
-		evaluation.setEmail(reserveEvaluationForm.getEmail());
-		evaluation.setReserved(1);
-		evaluationRepository.save(evaluation);
-	}
+        evaluation.setClientName(reserveEvaluationForm.getClientName());
+        evaluation.setBirthday(reserveEvaluationForm.getBirthday());
+        evaluation.setTel(reserveEvaluationForm.getTel());
+        evaluation.setEmail(reserveEvaluationForm.getEmail());
+        evaluation.setReserved(1);
+        evaluationRepository.save(evaluation);
+    }
 
-	@Override
-	@Transactional
-	public void deleteEvaluation(long id) {
-		evaluationRepository.deleteEvaluationById(id);
-	}
+    @Override
+    @Transactional
+    public void deleteEvaluation(long id) {
+        evaluationRepository.deleteEvaluationById(id);
+    }
 
-	private List<EvaluationCalendarEvent> getEvaluationEvents(List<Evaluation> evaluations) {
-		return evaluations.stream().map(this::mapToEvent).collect(Collectors.toList());
-	}
+    private List<EvaluationCalendarEvent> getEvaluationEvents(List<Evaluation> evaluations) {
+        return evaluations.stream().map(this::mapToEvent).collect(Collectors.toList());
+    }
 
-	private List<MemberDto> getMemberDto(String domain) {
-		return projectionRepo.getMemberDto(domain);
-	}
+    private List<MemberDto> getMemberDto(String domain) {
+        return projectionRepo.getMemberDto(domain);
+    }
 
-	private EvaluationCalendarEvent mapToEvent(Evaluation evaluation) {
-		EvaluationCalendarEvent event = new EvaluationCalendarEvent();
-		event.setTitle(evaluation.getInstitutionUserId().getUserId().getUsername());
-		event.setStart(formatLocalDateTime(evaluation.getEvaluationDate(), evaluation.getEvaluationTime()));
-		return event;
-	}
+    private EvaluationCalendarEvent mapToEvent(Evaluation evaluation) {
+        EvaluationCalendarEvent event = new EvaluationCalendarEvent();
+        event.setTitle(evaluation.getInstitutionUserId().getUserId().getUsername());
+        event.setStart(formatLocalDateTime(evaluation.getEvaluationDate(), evaluation.getEvaluationTime()));
+        return event;
+    }
 
-	private String formatLocalDateTime(LocalDate date, LocalTime time) {
-		LocalDateTime dateTime = LocalDateTime.of(date, time);
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		return dateTime.format(formatter);
-	}
+    private String formatLocalDateTime(LocalDate date, LocalTime time) {
+        LocalDateTime dateTime = LocalDateTime.of(date, time);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return dateTime.format(formatter);
+    }
 
-	private List<UnreservedEvaluationOption> getAllUnreservedEvaluation(List<Evaluation> evaluations) {
-		return evaluations.stream().map(this::mapUnreservedEvaluationOption).collect(Collectors.toList());
-	}
+    private List<UnreservedEvaluationOption> getAllUnreservedEvaluation(List<Evaluation> evaluations) {
+        return evaluations.stream().map(this::mapUnreservedEvaluationOption).collect(Collectors.toList());
+    }
 
-	private UnreservedEvaluationOption mapUnreservedEvaluationOption(Evaluation evaluation) {
-		UnreservedEvaluationOption unreservedEvaluationOption = new UnreservedEvaluationOption();
-		unreservedEvaluationOption.setId(evaluation.getId());
-		unreservedEvaluationOption.setDetail(evaluation.getEvaluationDate().toString() + " " +
-				evaluation.getEvaluationTime().toString() + " " +
-				evaluation.getInstitutionUserId().getUserId().getUsername());
-		return unreservedEvaluationOption;
-	}
+    private UnreservedEvaluationOption mapUnreservedEvaluationOption(Evaluation evaluation) {
+        UnreservedEvaluationOption unreservedEvaluationOption = new UnreservedEvaluationOption();
+        unreservedEvaluationOption.setId(evaluation.getId());
+        unreservedEvaluationOption.setDetail(evaluation.getEvaluationDate().toString() + " " +
+                evaluation.getEvaluationTime().toString() + " " +
+                evaluation.getInstitutionUserId().getUserId().getUsername());
+        return unreservedEvaluationOption;
+    }
 
-	@Data
-	private static class UnreservedEvaluationOption {
-		private long id;
-		private String detail;
-	}
+    @Data
+    private static class UnreservedEvaluationOption {
+        private long id;
+        private String detail;
+    }
 }

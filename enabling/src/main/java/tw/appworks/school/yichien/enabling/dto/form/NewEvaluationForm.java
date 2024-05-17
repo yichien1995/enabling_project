@@ -8,9 +8,9 @@ import java.time.LocalTime;
 @Data
 public class NewEvaluationForm {
 
-	private LocalDate evaluationDate;
+    private LocalDate evaluationDate;
 
-	private LocalTime evaluationTime;
+    private LocalTime evaluationTime;
 
-	private String institutionUserId;
+    private String institutionUserId;
 }

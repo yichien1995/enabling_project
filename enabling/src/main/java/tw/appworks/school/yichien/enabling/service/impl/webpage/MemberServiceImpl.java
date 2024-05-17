@@ -20,74 +20,74 @@ import java.util.List;
 @Service
 public class MemberServiceImpl implements MemberService {
 
-	private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
-	private final FileStorageService fileStorageService;
-	private final S3UploadServiceImpl s3UploadService;
-	private final MemberRepository memberRepository;
-	private final InstitutionRepository institutionRepository;
-	@Value("${prefix.image}")
-	private String imageUrlPrefix;
+    private static final Logger logger = LoggerFactory.getLogger(MemberServiceImpl.class);
+    private final FileStorageService fileStorageService;
+    private final S3UploadServiceImpl s3UploadService;
+    private final MemberRepository memberRepository;
+    private final InstitutionRepository institutionRepository;
+    @Value("${prefix.image}")
+    private String imageUrlPrefix;
 
-	public MemberServiceImpl(FileStorageService fileStorageService, S3UploadServiceImpl s3UploadService, MemberRepository memberRepository, InstitutionRepository institutionRepository) {
-		this.fileStorageService = fileStorageService;
-		this.s3UploadService = s3UploadService;
-		this.memberRepository = memberRepository;
-		this.institutionRepository = institutionRepository;
-	}
+    public MemberServiceImpl(FileStorageService fileStorageService, S3UploadServiceImpl s3UploadService, MemberRepository memberRepository, InstitutionRepository institutionRepository) {
+        this.fileStorageService = fileStorageService;
+        this.s3UploadService = s3UploadService;
+        this.memberRepository = memberRepository;
+        this.institutionRepository = institutionRepository;
+    }
 
-	@Override
-	public void saveMember(String domain, MemberForm form) {
-		Member member = new Member();
-		Institution institution = institutionRepository.getInstitution(domain);
+    @Override
+    public void saveMember(String domain, MemberForm form) {
+        Member member = new Member();
+        Institution institution = institutionRepository.getInstitution(domain);
 
-		// save image relative URL
+        // save image relative URL
 //		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
-		String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
+        String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
 
-		member.setName(form.getName());
-		member.setPhoto(uploadAndGetPath);
-		member.setTitle(form.getTitle());
-		member.setQualification(form.getQualification());
-		member.setEducation(form.getEducation());
-		member.setInstitutionDomain(institution);
+        member.setName(form.getName());
+        member.setPhoto(uploadAndGetPath);
+        member.setTitle(form.getTitle());
+        member.setQualification(form.getQualification());
+        member.setEducation(form.getEducation());
+        member.setInstitutionDomain(institution);
 
-		memberRepository.save(member);
-	}
+        memberRepository.save(member);
+    }
 
-	@Override
-	public void renderMemberPage(String domain, Model model) {
+    @Override
+    public void renderMemberPage(String domain, Model model) {
 
-		List<Member> members = memberRepository.getAllMemberByDomain(domain);
+        List<Member> members = memberRepository.getAllMemberByDomain(domain);
 
-		for (Member member : members) {
-			member.setQualification(member.getQualification().replace("\n", "<br>"));
-			member.setEducation(member.getEducation().replace("\n", "<br>"));
-			member.setPhoto(imageUrlPrefix + member.getPhoto());
-		}
-		model.addAttribute("members", members);
-	}
+        for (Member member : members) {
+            member.setQualification(member.getQualification().replace("\n", "<br>"));
+            member.setEducation(member.getEducation().replace("\n", "<br>"));
+            member.setPhoto(imageUrlPrefix + member.getPhoto());
+        }
+        model.addAttribute("members", members);
+    }
 
-	@Override
-	public void updateMember(String domain, Long id, MemberForm form) {
-		Member member = memberRepository.getMemberById(id);
-		member.setName(form.getName());
-		member.setTitle(form.getTitle());
-		member.setQualification(form.getQualification());
-		member.setEducation(form.getEducation());
+    @Override
+    public void updateMember(String domain, Long id, MemberForm form) {
+        Member member = memberRepository.getMemberById(id);
+        member.setName(form.getName());
+        member.setTitle(form.getTitle());
+        member.setQualification(form.getQualification());
+        member.setEducation(form.getEducation());
 
-		if (!form.getPhoto().isEmpty()) {
-			// save image relative URL
+        if (!form.getPhoto().isEmpty()) {
+            // save image relative URL
 //			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
-			String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
-			member.setPhoto(uploadAndGetPath);
-		}
-		memberRepository.save(member);
+            String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
+            member.setPhoto(uploadAndGetPath);
+        }
+        memberRepository.save(member);
 
-	}
+    }
 
-	@Override
-	@Transactional
-	public void deleteMemberById(Long id) {
-		memberRepository.deleteMemberById(id);
-	}
+    @Override
+    @Transactional
+    public void deleteMemberById(Long id) {
+        memberRepository.deleteMemberById(id);
+    }
 }

@@ -17,52 +17,52 @@ import tw.appworks.school.yichien.enabling.service.webpage.ServiceItemService;
 @RequestMapping("/admin/{domain}")
 public class AdminController {
 
-	private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
-	private final HomepageService homepageService;
-	private final ServiceItemService serviceItemService;
-	private final AdminService adminService;
-	private final MemberService memberService;
+    private static final Logger logger = LoggerFactory.getLogger(AdminController.class);
+    private final HomepageService homepageService;
+    private final ServiceItemService serviceItemService;
+    private final AdminService adminService;
+    private final MemberService memberService;
 
 
-	public AdminController(HomepageService homepageService, ServiceItemService serviceItemService, AdminService adminService, MemberService memberService) {
-		this.homepageService = homepageService;
-		this.serviceItemService = serviceItemService;
-		this.adminService = adminService;
-		this.memberService = memberService;
-	}
+    public AdminController(HomepageService homepageService, ServiceItemService serviceItemService, AdminService adminService, MemberService memberService) {
+        this.homepageService = homepageService;
+        this.serviceItemService = serviceItemService;
+        this.adminService = adminService;
+        this.memberService = memberService;
+    }
 
-	@GetMapping
-	public String adminMainPage(@PathVariable String domain, Model model) {
-		adminService.renderAdminSidebar(domain, model);
-		homepageService.renderHomePage(domain, model);
-		return "admin/webpage_setting/set_homepage";
+    @GetMapping
+    public String adminMainPage(@PathVariable String domain, Model model) {
+        adminService.renderAdminSidebar(domain, model);
+        homepageService.renderHomePage(domain, model);
+        return "admin/webpage_setting/set_homepage";
 //		return "main_page/admin";
-	}
+    }
 
-	@GetMapping("/setting/homepage")
-	public String setHomepage(@PathVariable String domain, @RequestParam(required = false) String action, Model model) {
+    @GetMapping("/setting/homepage")
+    public String setHomepage(@PathVariable String domain, @RequestParam(required = false) String action, Model model) {
 
-		adminService.renderAdminSidebar(domain, model);
+        adminService.renderAdminSidebar(domain, model);
 
-		if (action != null && action.equals("preview")) {
-			homepageService.renderHomepagePreview(domain, model);
-			return "webpage/homepage";
-		}
-		homepageService.renderHomePage(domain, model);
-		return "admin/webpage_setting/set_homepage";
-	}
+        if (action != null && action.equals("preview")) {
+            homepageService.renderHomepagePreview(domain, model);
+            return "webpage/homepage";
+        }
+        homepageService.renderHomePage(domain, model);
+        return "admin/webpage_setting/set_homepage";
+    }
 
-	@GetMapping("/setting/member")
-	public String setTeam(@PathVariable String domain, Model model) {
-		adminService.renderAdminSidebar(domain, model);
-		memberService.renderMemberPage(domain, model);
-		return "admin/webpage_setting/set_member";
-	}
+    @GetMapping("/setting/member")
+    public String setTeam(@PathVariable String domain, Model model) {
+        adminService.renderAdminSidebar(domain, model);
+        memberService.renderMemberPage(domain, model);
+        return "admin/webpage_setting/set_member";
+    }
 
-	@GetMapping("/setting/service")
-	public String setService(@PathVariable String domain, Model model) {
-		adminService.renderAdminSidebar(domain, model);
-		serviceItemService.renderServicePage(domain, model);
-		return "admin/webpage_setting/set_service";
-	}
+    @GetMapping("/setting/service")
+    public String setService(@PathVariable String domain, Model model) {
+        adminService.renderAdminSidebar(domain, model);
+        serviceItemService.renderServicePage(domain, model);
+        return "admin/webpage_setting/set_service";
+    }
 }

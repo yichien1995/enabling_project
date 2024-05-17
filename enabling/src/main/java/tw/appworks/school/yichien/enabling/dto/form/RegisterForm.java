@@ -8,12 +8,12 @@ import lombok.Data;
 @AllArgsConstructor
 public class RegisterForm {
 
-	@JsonProperty("name")
-	private String name;
+    @JsonProperty("name")
+    private String name;
 
-	@JsonProperty("email")
-	private String email;
+    @JsonProperty("email")
+    private String email;
 
-	@JsonProperty("password")
-	private String password;
+    @JsonProperty("password")
+    private String password;
 }

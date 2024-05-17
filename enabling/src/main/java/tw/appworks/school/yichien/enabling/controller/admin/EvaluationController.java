@@ -14,43 +14,43 @@ import tw.appworks.school.yichien.enabling.service.webpage.EvaluationService;
 @RequestMapping("/admin/{domain}/setting/evaluation")
 public class EvaluationController {
 
-	private final EvaluationService evaluationService;
+    private final EvaluationService evaluationService;
 
-	private final AdminService adminService;
+    private final AdminService adminService;
 
-	@Value("${prefix.domain}")
-	private String domainPrefix;
+    @Value("${prefix.domain}")
+    private String domainPrefix;
 
-	public EvaluationController(EvaluationService evaluationService, AdminService adminService) {
-		this.evaluationService = evaluationService;
-		this.adminService = adminService;
-	}
+    public EvaluationController(EvaluationService evaluationService, AdminService adminService) {
+        this.evaluationService = evaluationService;
+        this.adminService = adminService;
+    }
 
-	@GetMapping
-	public String setEvaluation(@PathVariable String domain, Model model) {
-		evaluationService.renderEvaluationSettingPage(domain, model);
-		adminService.renderAdminSidebar(domain, model);
-		return "admin/webpage_setting/set_evaluation";
-	}
+    @GetMapping
+    public String setEvaluation(@PathVariable String domain, Model model) {
+        evaluationService.renderEvaluationSettingPage(domain, model);
+        adminService.renderAdminSidebar(domain, model);
+        return "admin/webpage_setting/set_evaluation";
+    }
 
-	@PostMapping("/create")
-	public String evaluation(@PathVariable String domain, @ModelAttribute NewEvaluationForm newEvaluationForm) {
-		evaluationService.saveNewEvaluation(domain, newEvaluationForm);
-		return "redirect:" + domainPrefix + "admin/" + domain + "/setting/evaluation";
-	}
+    @PostMapping("/create")
+    public String evaluation(@PathVariable String domain, @ModelAttribute NewEvaluationForm newEvaluationForm) {
+        evaluationService.saveNewEvaluation(domain, newEvaluationForm);
+        return "redirect:" + domainPrefix + "admin/" + domain + "/setting/evaluation";
+    }
 
-	@PostMapping("/reserve")
-	public String reserveEvaluation(@PathVariable String domain, @ModelAttribute ReserveEvaluationForm reserveEvaluationForm) {
-		evaluationService.reserveEvaluation(reserveEvaluationForm);
-		return "redirect:" + domainPrefix + domain + "/evaluation.html";
-	}
+    @PostMapping("/reserve")
+    public String reserveEvaluation(@PathVariable String domain, @ModelAttribute ReserveEvaluationForm reserveEvaluationForm) {
+        evaluationService.reserveEvaluation(reserveEvaluationForm);
+        return "redirect:" + domainPrefix + domain + "/evaluation.html";
+    }
 
-	@DeleteMapping("/{id}")
-	@ResponseBody
-	public ResponseEntity<?> deleteEvaluation(
-			@PathVariable String id, @PathVariable String domain) {
-		long idValue = Long.parseLong(id);
-		evaluationService.deleteEvaluation(idValue);
-		return ResponseEntity.ok("Delete evaluation id: " + id);
-	}
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteEvaluation(
+            @PathVariable String id, @PathVariable String domain) {
+        long idValue = Long.parseLong(id);
+        evaluationService.deleteEvaluation(idValue);
+        return ResponseEntity.ok("Delete evaluation id: " + id);
+    }
 }

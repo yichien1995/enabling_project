@@ -4,5 +4,5 @@ import org.springframework.ui.Model;
 
 public interface ReportService {
 
-	void renderReportPage(String domain, Model model);
+    void renderReportPage(String domain, Model model);
 }

@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InstitutionDto {
 
-	private String domainName;
+    private String domainName;
 
-	private String institutionName;
+    private String institutionName;
 
-	private String address;
+    private String address;
 
-	private String tel;
+    private String tel;
 
-	private String businessHour;
+    private String businessHour;
 
-	private Integer webpageAvailable;
+    private Integer webpageAvailable;
 }

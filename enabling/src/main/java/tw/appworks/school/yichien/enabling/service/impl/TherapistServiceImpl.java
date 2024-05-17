@@ -8,17 +8,17 @@ import tw.appworks.school.yichien.enabling.service.TherapistService;
 @Service
 public class TherapistServiceImpl implements TherapistService {
 
-	private final InstitutionRepository institutionRepository;
+    private final InstitutionRepository institutionRepository;
 
-	public TherapistServiceImpl(InstitutionRepository institutionRepository) {
-		this.institutionRepository = institutionRepository;
-	}
+    public TherapistServiceImpl(InstitutionRepository institutionRepository) {
+        this.institutionRepository = institutionRepository;
+    }
 
-	@Override
-	public void renderAdminSidebar(String domain, Model model) {
-		String institutionName = institutionRepository.getInstitutionNameByDomain(domain);
+    @Override
+    public void renderAdminSidebar(String domain, Model model) {
+        String institutionName = institutionRepository.getInstitutionNameByDomain(domain);
 
-		model.addAttribute("institutionName", institutionName);
-		model.addAttribute("domain", domain);
-	}
+        model.addAttribute("institutionName", institutionName);
+        model.addAttribute("domain", domain);
+    }
 }

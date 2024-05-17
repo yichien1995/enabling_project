@@ -22,48 +22,48 @@ import java.util.regex.Pattern;
 @Component
 public class AdminFilter extends OncePerRequestFilter {
 
-	private static final Logger logger = LoggerFactory.getLogger(AdminFilter.class);
-	@Autowired
-	private AuthenticationServiceImpl authenticationService;
-	@Autowired
-	private SessionServiceImpl sessionService;
+    private static final Logger logger = LoggerFactory.getLogger(AdminFilter.class);
+    @Autowired
+    private AuthenticationServiceImpl authenticationService;
+    @Autowired
+    private SessionServiceImpl sessionService;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		String requestUrl = request.getRequestURI();
-		String domain = null;
-		if (extractDomain(requestUrl) != null) {
-			domain = extractDomain(requestUrl);
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        String requestUrl = request.getRequestURI();
+        String domain = null;
+        if (extractDomain(requestUrl) != null) {
+            domain = extractDomain(requestUrl);
 
-			Cookie[] cookies = request.getCookies();
-			if (cookies != null) {
-				for (Cookie cookie : cookies) {
-					if (cookie.getName().equals("enabling")) {
-						String sessionId = cookie.getValue();
-						List<InstitutionUserDto> institutionUserDtos =
-								sessionService.getInstitutionUserDTOFromSession(sessionId);
-						for (InstitutionUserDto data : institutionUserDtos) {
-							if (data.getInstitutionDomain().equals(domain) && data.getRoleId() == 1) {
-								authenticationService.authenticateWithRole("admin");
-								logger.info("get authenticated");
-							}
-						}
-					}
-				}
-			}
-		}
-		filterChain.doFilter(request, response);
-	}
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (cookie.getName().equals("enabling")) {
+                        String sessionId = cookie.getValue();
+                        List<InstitutionUserDto> institutionUserDtos =
+                                sessionService.getInstitutionUserDTOFromSession(sessionId);
+                        for (InstitutionUserDto data : institutionUserDtos) {
+                            if (data.getInstitutionDomain().equals(domain) && data.getRoleId() == 1) {
+                                authenticationService.authenticateWithRole("admin");
+                                logger.info("get authenticated");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
 
-	private String extractDomain(String requestURI) {
-		Pattern pattern = Pattern.compile("^/admin/([^/]+)/?");
-		Matcher matcher = pattern.matcher(requestURI);
+    private String extractDomain(String requestURI) {
+        Pattern pattern = Pattern.compile("^/admin/([^/]+)/?");
+        Matcher matcher = pattern.matcher(requestURI);
 
-		if (matcher.find()) {
-			return matcher.group(1);
-		} else {
-			return null;
-		}
-	}
+        if (matcher.find()) {
+            return matcher.group(1);
+        } else {
+            return null;
+        }
+    }
 }

@@ -13,17 +13,17 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ClientReport {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "class_date")
-	private LocalDate date;
+    @Column(name = "class_date")
+    private LocalDate date;
 
-	@Column(name = "total_attendance")
-	private Integer totalAttendance;
+    @Column(name = "total_attendance")
+    private Integer totalAttendance;
 
-	@JoinColumn(name = "institution_user_id", referencedColumnName = "id", nullable = false)
-	@ManyToOne
-	private InstitutionUser institutionUserId;
+    @JoinColumn(name = "institution_user_id", referencedColumnName = "id", nullable = false)
+    @ManyToOne
+    private InstitutionUser institutionUserId;
 }

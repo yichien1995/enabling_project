@@ -10,13 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
 @NoArgsConstructor
 public class MemberForm {
 
-	private String name;
+    private String name;
 
-	private MultipartFile photo;
+    private MultipartFile photo;
 
-	private String title;
+    private String title;
 
-	private String qualification;
+    private String qualification;
 
-	private String education;
+    private String education;
 }

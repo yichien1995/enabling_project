@@ -15,17 +15,17 @@ import tw.appworks.school.yichien.enabling.service.impl.SessionServiceImpl;
 @RequestMapping("/therapist/{domain}")
 public class TherapistController {
 
-	private final ClientService clientService;
+    private final ClientService clientService;
 
-	private final SessionServiceImpl sessionService;
+    private final SessionServiceImpl sessionService;
 
-	private final TherapistService therapistService;
+    private final TherapistService therapistService;
 
-	public TherapistController(ClientService clientService, SessionServiceImpl sessionService, TherapistService therapistService) {
-		this.clientService = clientService;
-		this.sessionService = sessionService;
-		this.therapistService = therapistService;
-	}
+    public TherapistController(ClientService clientService, SessionServiceImpl sessionService, TherapistService therapistService) {
+        this.clientService = clientService;
+        this.sessionService = sessionService;
+        this.therapistService = therapistService;
+    }
 
 //	@GetMapping
 //	public String therapistMainPage(@PathVariable String domain, Model model) {
@@ -33,35 +33,35 @@ public class TherapistController {
 //		return "therapist/therapist";
 //	}
 
-	@GetMapping
-	public String therapistMainPage(@PathVariable String domain, Model model,
-	                                @CookieValue(value = "enabling", required = false) String sessionID)
-			throws JsonProcessingException {
-		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
-		model.addAttribute("domain", domain);
-		therapistService.renderAdminSidebar(domain, model);
-		clientService.renderClientListPage(institutionUserId, domain, model);
-		return "therapist/client_list";
-	}
+    @GetMapping
+    public String therapistMainPage(@PathVariable String domain, Model model,
+                                    @CookieValue(value = "enabling", required = false) String sessionID)
+            throws JsonProcessingException {
+        Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
+        model.addAttribute("domain", domain);
+        therapistService.renderAdminSidebar(domain, model);
+        clientService.renderClientListPage(institutionUserId, domain, model);
+        return "therapist/client_list";
+    }
 
-	@GetMapping("/client/report")
-	public String clientReportPage(@PathVariable String domain, Model model,
-	                               @CookieValue(value = "enabling", required = false) String sessionID)
-			throws JsonProcessingException {
-		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
-		therapistService.renderAdminSidebar(domain, model);
-		clientService.renderClientReportPage(institutionUserId, model);
-		return "therapist/client_report";
-	}
+    @GetMapping("/client/report")
+    public String clientReportPage(@PathVariable String domain, Model model,
+                                   @CookieValue(value = "enabling", required = false) String sessionID)
+            throws JsonProcessingException {
+        Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
+        therapistService.renderAdminSidebar(domain, model);
+        clientService.renderClientReportPage(institutionUserId, model);
+        return "therapist/client_report";
+    }
 
-	@GetMapping("/client/list")
-	public String clientListPage(@PathVariable String domain, Model model,
-	                             @CookieValue(value = "enabling", required = false) String sessionID)
-			throws JsonProcessingException {
+    @GetMapping("/client/list")
+    public String clientListPage(@PathVariable String domain, Model model,
+                                 @CookieValue(value = "enabling", required = false) String sessionID)
+            throws JsonProcessingException {
 
-		Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
-		therapistService.renderAdminSidebar(domain, model);
-		clientService.renderClientListPage(institutionUserId, domain, model);
-		return "therapist/client_list";
-	}
+        Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
+        therapistService.renderAdminSidebar(domain, model);
+        clientService.renderClientListPage(institutionUserId, domain, model);
+        return "therapist/client_list";
+    }
 }

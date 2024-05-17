@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Role {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Column(name = "role", columnDefinition = "varchar(20)", nullable = false)
-	private String role;
+    @Column(name = "role", columnDefinition = "varchar(20)", nullable = false)
+    private String role;
 
-	@Column(name = "name", columnDefinition = "varchar(20)")
-	private String name;
+    @Column(name = "name", columnDefinition = "varchar(20)")
+    private String name;
 }

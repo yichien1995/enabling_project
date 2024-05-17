@@ -5,11 +5,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class HomepagePreviewDto {
-	private MultipartFile logo;
-	private MultipartFile mainImage;
-	private String imageDescription;
-	private String institutionIntro;
-	private String backgroundColor;
-	private String headingColor;
+    private MultipartFile logo;
+    private MultipartFile mainImage;
+    private String imageDescription;
+    private String institutionIntro;
+    private String backgroundColor;
+    private String headingColor;
 
 }

@@ -23,88 +23,88 @@ import java.util.List;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-	private final InstitutionUserRepository institutionUserRepository;
+    private final InstitutionUserRepository institutionUserRepository;
 
-	private final ClientReportRepository clientReportRepository;
+    private final ClientReportRepository clientReportRepository;
 
-	private final MedicalRecordRepository medicalRecordRepository;
+    private final MedicalRecordRepository medicalRecordRepository;
 
-	private final InterventionRepository interventionRepository;
+    private final InterventionRepository interventionRepository;
 
-	private final ProjectionRepo projectionRepo;
+    private final ProjectionRepo projectionRepo;
 
-	public ClientServiceImpl(InstitutionUserRepository institutionUserRepository,
-	                         ClientReportRepository clientReportRepository,
-	                         MedicalRecordRepository medicalRecordRepository,
-	                         InterventionRepository interventionRepository,
-	                         ProjectionRepo projectionRepo) {
-		this.institutionUserRepository = institutionUserRepository;
-		this.clientReportRepository = clientReportRepository;
-		this.medicalRecordRepository = medicalRecordRepository;
-		this.interventionRepository = interventionRepository;
-		this.projectionRepo = projectionRepo;
-	}
+    public ClientServiceImpl(InstitutionUserRepository institutionUserRepository,
+                             ClientReportRepository clientReportRepository,
+                             MedicalRecordRepository medicalRecordRepository,
+                             InterventionRepository interventionRepository,
+                             ProjectionRepo projectionRepo) {
+        this.institutionUserRepository = institutionUserRepository;
+        this.clientReportRepository = clientReportRepository;
+        this.medicalRecordRepository = medicalRecordRepository;
+        this.interventionRepository = interventionRepository;
+        this.projectionRepo = projectionRepo;
+    }
 
-	@Override
-	public void renderClientListPage(Long institutionUserId, String domain, Model model) {
-		List<MedicalRecordDto> medicalRecords = getMedicalRecordDto(domain);
-		List<InterventionDto> interventions = projectionRepo.getInterventionDto(institutionUserId);
-		model.addAttribute("medicalRecords", medicalRecords);
-		model.addAttribute("interventionDto", interventions);
-	}
+    @Override
+    public void renderClientListPage(Long institutionUserId, String domain, Model model) {
+        List<MedicalRecordDto> medicalRecords = getMedicalRecordDto(domain);
+        List<InterventionDto> interventions = projectionRepo.getInterventionDto(institutionUserId);
+        model.addAttribute("medicalRecords", medicalRecords);
+        model.addAttribute("interventionDto", interventions);
+    }
 
-	@Override
-	public void renderClientReportPage(Long institutionUserId, Model model) {
-		List<ClientReportDto> clientReports = projectionRepo.getClientReportDto(institutionUserId);
-		model.addAttribute("clientReports", clientReports);
-	}
+    @Override
+    public void renderClientReportPage(Long institutionUserId, Model model) {
+        List<ClientReportDto> clientReports = projectionRepo.getClientReportDto(institutionUserId);
+        model.addAttribute("clientReports", clientReports);
+    }
 
-	@Override
-	public void saveClientReport(Long institutionUserId, ClientReportForm form) {
-		ClientReport clientReport = new ClientReport();
-		InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
+    @Override
+    public void saveClientReport(Long institutionUserId, ClientReportForm form) {
+        ClientReport clientReport = new ClientReport();
+        InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
 
-		clientReport.setDate(form.getDate());
-		clientReport.setTotalAttendance(form.getTotalAttendance());
-		clientReport.setInstitutionUserId(institutionUser);
+        clientReport.setDate(form.getDate());
+        clientReport.setTotalAttendance(form.getTotalAttendance());
+        clientReport.setInstitutionUserId(institutionUser);
 
-		clientReportRepository.save(clientReport);
-	}
+        clientReportRepository.save(clientReport);
+    }
 
-	@Override
-	public void updateClientReportById(Long id, ClientReportForm form) {
-		ClientReport clientReport = clientReportRepository.findClientReportById(id);
-		clientReport.setDate(form.getDate());
-		clientReport.setTotalAttendance(form.getTotalAttendance());
-		clientReportRepository.save(clientReport);
-	}
+    @Override
+    public void updateClientReportById(Long id, ClientReportForm form) {
+        ClientReport clientReport = clientReportRepository.findClientReportById(id);
+        clientReport.setDate(form.getDate());
+        clientReport.setTotalAttendance(form.getTotalAttendance());
+        clientReportRepository.save(clientReport);
+    }
 
-	@Override
-	@Transactional
-	public void deleteClientReportById(Long id) {
-		clientReportRepository.deleteClientReportById(id);
-	}
+    @Override
+    @Transactional
+    public void deleteClientReportById(Long id) {
+        clientReportRepository.deleteClientReportById(id);
+    }
 
-	@Override
-	public void saveIntervention(Long medicalRecordId, Long institutionUserId) {
-		Intervention intervention = new Intervention();
-		MedicalRecord medicalRecord = medicalRecordRepository.findMedicalRecordById(medicalRecordId);
-		InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
+    @Override
+    public void saveIntervention(Long medicalRecordId, Long institutionUserId) {
+        Intervention intervention = new Intervention();
+        MedicalRecord medicalRecord = medicalRecordRepository.findMedicalRecordById(medicalRecordId);
+        InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
 
-		intervention.setMedicalRecordId(medicalRecord);
-		intervention.setInstitutionUserId(institutionUser);
+        intervention.setMedicalRecordId(medicalRecord);
+        intervention.setInstitutionUserId(institutionUser);
 
-		interventionRepository.save(intervention);
-	}
+        interventionRepository.save(intervention);
+    }
 
 
-	@Override
-	@Transactional
-	public void deleteInterventionById(Long id) {
-		interventionRepository.deleteInterventionById(id);
-	}
+    @Override
+    @Transactional
+    public void deleteInterventionById(Long id) {
+        interventionRepository.deleteInterventionById(id);
+    }
 
-	private List<MedicalRecordDto> getMedicalRecordDto(String domain) {
-		return projectionRepo.getMedicalRecordDto(domain);
-	}
+    private List<MedicalRecordDto> getMedicalRecordDto(String domain) {
+        return projectionRepo.getMedicalRecordDto(domain);
+    }
 }

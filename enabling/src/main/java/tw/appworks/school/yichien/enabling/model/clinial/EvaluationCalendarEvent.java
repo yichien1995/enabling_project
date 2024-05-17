@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class EvaluationCalendarEvent {
-	String title;
-	String start;
+    String title;
+    String start;
 }

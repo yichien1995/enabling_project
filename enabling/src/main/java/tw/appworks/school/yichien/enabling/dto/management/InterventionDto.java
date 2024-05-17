@@ -11,15 +11,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class InterventionDto {
 
-	private Long interventionId;
+    private Long interventionId;
 
-	private Integer medicalRecordNumber;
+    private Integer medicalRecordNumber;
 
-	private String name;
+    private String name;
 
-	private LocalDate birthday;
+    private LocalDate birthday;
 
-	private String tel;
+    private String tel;
 
-	private String email;
+    private String email;
 }

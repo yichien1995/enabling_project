@@ -7,5 +7,5 @@ import tw.appworks.school.yichien.enabling.model.webpage.ThemeColor;
 @Repository
 public interface ThemeColorRepository extends JpaRepository<ThemeColor, Integer> {
 
-	ThemeColor findById(int id);
+    ThemeColor findById(int id);
 }

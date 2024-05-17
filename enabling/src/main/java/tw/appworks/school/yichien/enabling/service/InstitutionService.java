@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface InstitutionService {
 
-	Map<String, Object> domainErrorMsg(String domain);
+    Map<String, Object> domainErrorMsg(String domain);
 
-	void createNewInstitution(Long userId, NewInstitutionForm form);
+    void createNewInstitution(Long userId, NewInstitutionForm form);
 }

@@ -11,10 +11,10 @@ import java.util.List;
 @Repository
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, Long> {
 
-	@Query(value = "SELECT * FROM medical_record WHERE institution_domain = :domain ORDER BY medical_record_number", nativeQuery = true)
-	List<MedicalRecord> getAllMedicalRecordByDomain(@Param("domain") String domain);
+    @Query(value = "SELECT * FROM medical_record WHERE institution_domain = :domain ORDER BY medical_record_number", nativeQuery = true)
+    List<MedicalRecord> getAllMedicalRecordByDomain(@Param("domain") String domain);
 
-	MedicalRecord findMedicalRecordById(Long id);
+    MedicalRecord findMedicalRecordById(Long id);
 
-	void deleteMedicalRecordById(Long id);
+    void deleteMedicalRecordById(Long id);
 }

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientReportDto {
-	private Long id;
-	private LocalDate date;
-	private Integer totalAttendance;
+    private Long id;
+    private LocalDate date;
+    private Integer totalAttendance;
 }

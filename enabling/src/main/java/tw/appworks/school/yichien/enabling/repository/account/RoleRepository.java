@@ -7,5 +7,5 @@ import tw.appworks.school.yichien.enabling.model.account.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 
-	Role findRoleById(Integer id);
+    Role findRoleById(Integer id);
 }

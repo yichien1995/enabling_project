@@ -12,21 +12,21 @@ import java.util.List;
 @Service
 public class MainPageServiceImpl implements MainPageService {
 
-	private final InstitutionUserRepository institutionUserRepository;
+    private final InstitutionUserRepository institutionUserRepository;
 
-	private final ProjectionRepo projectionRepo;
+    private final ProjectionRepo projectionRepo;
 
-	public MainPageServiceImpl(InstitutionUserRepository institutionUserRepository, ProjectionRepo projectionRepo) {
-		this.institutionUserRepository = institutionUserRepository;
-		this.projectionRepo = projectionRepo;
-	}
+    public MainPageServiceImpl(InstitutionUserRepository institutionUserRepository, ProjectionRepo projectionRepo) {
+        this.institutionUserRepository = institutionUserRepository;
+        this.projectionRepo = projectionRepo;
+    }
 
-	@Override
-	public void renderMyInstitutionPage(Model model, Long id) {
-		List<MyInstitutionDto> myInstitutions = projectionRepo.getMyInstitutionDTO(id);
-		for (MyInstitutionDto data : myInstitutions) {
-			data.setBusinessHour(data.getBusinessHour().replace("\n", "<br>"));
-		}
-		model.addAttribute("myInstitutions", myInstitutions);
-	}
+    @Override
+    public void renderMyInstitutionPage(Model model, Long id) {
+        List<MyInstitutionDto> myInstitutions = projectionRepo.getMyInstitutionDTO(id);
+        for (MyInstitutionDto data : myInstitutions) {
+            data.setBusinessHour(data.getBusinessHour().replace("\n", "<br>"));
+        }
+        model.addAttribute("myInstitutions", myInstitutions);
+    }
 }

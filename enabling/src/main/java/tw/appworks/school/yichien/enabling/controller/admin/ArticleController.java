@@ -15,83 +15,82 @@ import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 @RequestMapping("/admin/{domain}/setting/articles")
 public class ArticleController {
 
-	private final ArticleService articleService;
+    private final ArticleService articleService;
 
-	private final AdminService adminService;
+    private final AdminService adminService;
 
-	private final HomepageService homepageService;
+    private final HomepageService homepageService;
 
-	@Value("${prefix.domain}")
-	private String domainPrefix;
+    @Value("${prefix.domain}")
+    private String domainPrefix;
 
-	public ArticleController(ArticleService articleService, AdminService adminService, HomepageService homepageService) {
-		this.articleService = articleService;
-		this.adminService = adminService;
-		this.homepageService = homepageService;
-	}
+    public ArticleController(ArticleService articleService, AdminService adminService, HomepageService homepageService) {
+        this.articleService = articleService;
+        this.adminService = adminService;
+        this.homepageService = homepageService;
+    }
 
-	@GetMapping
-	public String setArticle(@PathVariable String domain, Model model) {
-		articleService.renderArticleList(domain, model);
-		adminService.renderAdminSidebar(domain, model);
-		return "admin/webpage_setting/set_article";
-	}
+    @GetMapping
+    public String setArticle(@PathVariable String domain, Model model) {
+        articleService.renderArticleList(domain, model);
+        adminService.renderAdminSidebar(domain, model);
+        return "admin/webpage_setting/set_article";
+    }
 
-	@PostMapping("/save")
-	public String saveArticle(@PathVariable String domain,
-	                          @RequestParam(required = false, defaultValue = "1") String draft,
-	                          @RequestParam String action,
-	                          @RequestParam(required = false) String id
-			, @ModelAttribute ArticleForm articleForm) {
-		int previewStatus = action.equals("preview") ? 1 : 0;
-		int draftValue = action.equals("release") ? 0 : Integer.parseInt(draft);
+    @PostMapping("/save")
+    public String saveArticle(@PathVariable String domain,
+                              @RequestParam(required = false, defaultValue = "1") String draft,
+                              @RequestParam String action,
+                              @RequestParam(required = false) String id
+            , @ModelAttribute ArticleForm articleForm) {
+        int previewStatus = action.equals("preview") ? 1 : 0;
+        int draftValue = action.equals("release") ? 0 : Integer.parseInt(draft);
 
-		if (action.equals("preview")) {
-			if (id == null) {
-				System.out.println("here");
-				articleService.savePreviewArticlePage(domain, draftValue, previewStatus, articleForm);
-			} else {
-				int idValue = Integer.parseInt(id);
-				articleService.previewExistArticle(idValue, domain, draftValue, previewStatus, articleForm);
-			}
-			return "redirect:" + domainPrefix + "admin/" + domain + "/setting/articles";
-		}
+        if (action.equals("preview")) {
+            if (id == null) {
+                articleService.savePreviewArticlePage(domain, draftValue, previewStatus, articleForm);
+            } else {
+                int idValue = Integer.parseInt(id);
+                articleService.previewExistArticle(idValue, domain, draftValue, previewStatus, articleForm);
+            }
+            return "redirect:" + domainPrefix + "admin/" + domain + "/setting/articles";
+        }
 
-		if (id != null) {
-			int idValue = Integer.parseInt(id);
-			articleService.updateArticle(idValue, draftValue, previewStatus, articleForm);
-		} else {
-			articleService.saveNewArticle(domain, draftValue, previewStatus, articleForm);
-		}
+        if (id != null) {
+            int idValue = Integer.parseInt(id);
+            articleService.updateArticle(idValue, draftValue, previewStatus, articleForm);
+        } else {
+            articleService.saveNewArticle(domain, draftValue, previewStatus, articleForm);
+        }
 
-		return "redirect:" + domainPrefix + "admin/" + domain + "/setting/articles";
-	}
+        return "redirect:" + domainPrefix + "admin/" + domain + "/setting/articles";
+    }
 
-	@GetMapping("/{id}")
-	public String getArticle(@PathVariable String domain, @PathVariable String id,
-	                         @RequestParam(required = false) int draft, Model model) {
-		if (draft == 0) {
-			model.addAttribute("released", "released");
-		}
-		articleService.renderPageByArticleId(id, model);
-		articleService.renderArticleList(domain, model);
-		adminService.renderAdminSidebar(domain, model);
-		return "admin/webpage_setting/set_article";
-	}
+    @GetMapping("/{id}")
+    public String getArticle(@PathVariable String domain, @PathVariable String id,
+                             @RequestParam(required = false) int draft, Model model) {
+        if (draft == 0) {
+            model.addAttribute("released", "released");
+        }
+        articleService.renderPageByArticleId(id, model);
+        articleService.renderArticleList(domain, model);
+        adminService.renderAdminSidebar(domain, model);
+        return "admin/webpage_setting/set_article";
+    }
 
-	@GetMapping("/preview")
-	public String previewArticle(@PathVariable String domain, Model model) {
-		homepageService.renderHeaderAndFooter(domain, model);
-		articleService.renderArticlePreviewPage(domain, model);
-		return "admin/webpage_setting/preview_article";
-	}
+    @GetMapping("/preview")
+    public String previewArticle(@PathVariable String domain, Model model) {
+        homepageService.renderHeaderAndFooter(domain, model);
+        articleService.renderArticlePreviewPage(domain, model);
+        return "admin/webpage_setting/preview_article";
+    }
 
-	@DeleteMapping("/delete")
-	@ResponseBody
-	public ResponseEntity<?> deleteArticle(
-			@RequestParam(required = true) String id, @PathVariable String domain) {
-		int idValue = Integer.parseInt(id);
-		articleService.deleteArticle(idValue);
-		return ResponseEntity.ok("Delete article id: " + id);
-	}
+    @DeleteMapping("/delete")
+    @ResponseBody
+    public ResponseEntity<?> deleteArticle(
+            @RequestParam(required = true) String id, @PathVariable String domain) {
+        int idValue = Integer.parseInt(id);
+        articleService.deleteArticle(idValue);
+        return ResponseEntity.ok("Delete article id: " + id);
+    }
 }

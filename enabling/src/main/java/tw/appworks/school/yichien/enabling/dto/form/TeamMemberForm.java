@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TeamMemberForm {
 
-	private Integer employeeId;
+    private Integer employeeId;
 
-	private String email;
+    private String email;
 
-	private Integer roleId;
+    private Integer roleId;
 }

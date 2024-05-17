@@ -14,27 +14,27 @@ import java.util.Map;
 @RequestMapping("api/1.0/admin/{domain}/setting/homepage")
 public class HomepageApiController {
 
-	private final HomepageService homepageService;
+    private final HomepageService homepageService;
 
-	public HomepageApiController(HomepageService homepageService) {
-		this.homepageService = homepageService;
-	}
+    public HomepageApiController(HomepageService homepageService) {
+        this.homepageService = homepageService;
+    }
 
-	@PostMapping(value = "/preview", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<?> savePreviewData(@PathVariable String domain,
-	                                         @ModelAttribute HomepageForm homepageForm) {
-		homepageService.saveHomepageDraft(domain, homepageForm);
-		Map<String, Object> result = new HashMap<>();
-		result.put("success", "Save preview data successfully.");
-		return ResponseEntity.status(HttpStatus.OK).body(result);
-	}
+    @PostMapping(value = "/preview", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> savePreviewData(@PathVariable String domain,
+                                             @ModelAttribute HomepageForm homepageForm) {
+        homepageService.saveHomepageDraft(domain, homepageForm);
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", "Save preview data successfully.");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
-	@PostMapping(value = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-	public ResponseEntity<?> updateHomepageData(@PathVariable String domain,
-	                                            @ModelAttribute HomepageForm homepageForm) {
-		homepageService.saveHomepage(domain, homepageForm);
-		Map<String, Object> result = new HashMap<>();
-		result.put("success", "Update homepage data successfully.");
-		return ResponseEntity.status(HttpStatus.OK).body(result);
-	}
+    @PostMapping(value = "/update", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<?> updateHomepageData(@PathVariable String domain,
+                                                @ModelAttribute HomepageForm homepageForm) {
+        homepageService.saveHomepage(domain, homepageForm);
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", "Update homepage data successfully.");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }

@@ -17,38 +17,38 @@ import java.util.Map;
 @RequestMapping("api/1.0/admin/institution")
 public class InstitutionController {
 
-	private final InstitutionService institutionService;
+    private final InstitutionService institutionService;
 
-	private final SessionServiceImpl sessionService;
+    private final SessionServiceImpl sessionService;
 
-	public InstitutionController(InstitutionService institutionService, SessionServiceImpl sessionService) {
-		this.institutionService = institutionService;
-		this.sessionService = sessionService;
-	}
+    public InstitutionController(InstitutionService institutionService, SessionServiceImpl sessionService) {
+        this.institutionService = institutionService;
+        this.sessionService = sessionService;
+    }
 
-	@PostMapping("/create")
-	public ResponseEntity<?> createNewInstitution(@ModelAttribute NewInstitutionForm form,
-	                                              HttpServletResponse response,
-	                                              @CookieValue(value = "enabling") String sessionID) throws JsonProcessingException {
-		Map<String, Object> domainErrorMsg = institutionService.domainErrorMsg(form.getInstitutionDomain());
-		if (domainErrorMsg != null) {
-			return ResponseEntity.badRequest().body(domainErrorMsg);
-		}
-		// get userinfo from session
-		long userId = sessionService.getUserInfoDTOFromSession(sessionID).getUserId();
-		String email = sessionService.getUserInfoDTOFromSession(sessionID).getUserEmail();
+    @PostMapping("/create")
+    public ResponseEntity<?> createNewInstitution(@ModelAttribute NewInstitutionForm form,
+                                                  HttpServletResponse response,
+                                                  @CookieValue(value = "enabling") String sessionID) throws JsonProcessingException {
+        Map<String, Object> domainErrorMsg = institutionService.domainErrorMsg(form.getInstitutionDomain());
+        if (domainErrorMsg != null) {
+            return ResponseEntity.badRequest().body(domainErrorMsg);
+        }
+        // get userinfo from session
+        long userId = sessionService.getUserInfoDTOFromSession(sessionID).getUserId();
+        String email = sessionService.getUserInfoDTOFromSession(sessionID).getUserEmail();
 
-		institutionService.createNewInstitution(userId, form);
+        institutionService.createNewInstitution(userId, form);
 
-		// reset cookie
-		Cookie cookie = new Cookie("enabling", null);
-		cookie.setMaxAge(0);
-		cookie.setPath("/");
-		response.addCookie(cookie);
-		sessionService.setCookieAndStoreSession(email, response);
+        // reset cookie
+        Cookie cookie = new Cookie("enabling", null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+        sessionService.setCookieAndStoreSession(email, response);
 
-		Map<String, Object> result = new HashMap<>();
-		result.put("success", "Create institution successfully.");
-		return ResponseEntity.status(HttpStatus.OK).body(result);
-	}
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", "Create institution successfully.");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 }

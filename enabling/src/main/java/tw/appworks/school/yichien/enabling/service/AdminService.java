@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 
 public interface AdminService {
 
-	boolean checkDomain(String domain);
+    boolean checkDomain(String domain);
 
-	void renderAdminSidebar(String domain, Model model);
+    void renderAdminSidebar(String domain, Model model);
 }
