@@ -37,21 +37,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void saveMember(String domain, MemberForm form) {
-        Member member = new Member();
         Institution institution = institutionRepository.getInstitution(domain);
-
         // save image relative URL
-//		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
+//        String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
         String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
-
-        member.setName(form.getName());
-        member.setPhoto(uploadAndGetPath);
-        member.setTitle(form.getTitle());
-        member.setQualification(form.getQualification());
-        member.setEducation(form.getEducation());
-        member.setInstitutionDomain(institution);
-
-        memberRepository.save(member);
+        memberRepository.save(Member.convertNewForm(form, institution, uploadAndGetPath));
     }
 
     @Override
@@ -70,19 +60,13 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void updateMember(String domain, Long id, MemberForm form) {
         Member member = memberRepository.getMemberById(id);
-        member.setName(form.getName());
-        member.setTitle(form.getTitle());
-        member.setQualification(form.getQualification());
-        member.setEducation(form.getEducation());
-
         if (!form.getPhoto().isEmpty()) {
             // save image relative URL
 //			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
             String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
             member.setPhoto(uploadAndGetPath);
         }
-        memberRepository.save(member);
-
+        memberRepository.save(Member.convertUpdateForm(form, member));
     }
 
     @Override

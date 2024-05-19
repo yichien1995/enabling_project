@@ -3,6 +3,7 @@ package tw.appworks.school.yichien.enabling.model.webpage;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
 @Entity
@@ -38,13 +39,15 @@ public class Homepage {
     @Column(name = "status", columnDefinition = "tinyint default 0")
     private Integer status;
 
-    public Homepage(ThemeColor themeColorId, String mainImage, String imageDescription, String logo, String institutionIntro, Institution institutionDomain) {
-        this.themeColorId = themeColorId;
-        this.mainImage = mainImage;
-        this.imageDescription = imageDescription;
-        this.logo = logo;
-        this.institutionIntro = institutionIntro;
-        this.institutionDomain = institutionDomain;
-    }
+    public static Homepage convertForm(HomepageForm form, Homepage h) {
+        h.setImageDescription(form.getImageDescription());
+        h.setInstitutionIntro(form.getInstitutionIntro());
 
+        // set theme color
+        ThemeColor color = new ThemeColor();
+        color.setId(form.getColor());
+        h.setThemeColorId(color);
+
+        return h;
+    }
 }

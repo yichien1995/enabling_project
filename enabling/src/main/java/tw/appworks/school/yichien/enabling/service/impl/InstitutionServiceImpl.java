@@ -1,5 +1,6 @@
 package tw.appworks.school.yichien.enabling.service.impl;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tw.appworks.school.yichien.enabling.dto.form.NewInstitutionForm;
@@ -35,8 +36,18 @@ public class InstitutionServiceImpl implements InstitutionService {
 
     private final HomepageRepository homepageRepository;
 
+    @Value("${default.logo.relative.path}")
+    private String DEFAULT_LOGO_PATH;
 
-    public InstitutionServiceImpl(InstitutionRepository institutionRepository, InstitutionUserRepository institutionUserRepository, UsersRepository usersRepository, RoleRepository roleRepository, ThemeColorRepository themeColorRepository, HomepageRepository homepageRepository) {
+    @Value("${default.main_image.relative.path}")
+    private String DEFAULT_MAIN_IMAGE_PATH;
+
+
+    public InstitutionServiceImpl(InstitutionRepository institutionRepository,
+                                  InstitutionUserRepository institutionUserRepository,
+                                  UsersRepository usersRepository, RoleRepository roleRepository,
+                                  ThemeColorRepository themeColorRepository,
+                                  HomepageRepository homepageRepository) {
         this.institutionRepository = institutionRepository;
         this.institutionUserRepository = institutionUserRepository;
         this.usersRepository = usersRepository;
@@ -94,9 +105,8 @@ public class InstitutionServiceImpl implements InstitutionService {
         ThemeColor themeColor = themeColorRepository.findById(1);
 
         homepage.setThemeColorId(themeColor);
-        // TODO: set preview image URL
-        homepage.setLogo("enabling/default/logo_public.png");
-        homepage.setMainImage("enabling/default/main_public.jpg");
+        homepage.setLogo(DEFAULT_LOGO_PATH);
+        homepage.setMainImage(DEFAULT_MAIN_IMAGE_PATH);
         homepage.setImageDescription("輸入主要圖片敘述");
         homepage.setInstitutionIntro("輸入關於我們敘述");
         homepage.setInstitutionDomain(institution);
@@ -109,8 +119,6 @@ public class InstitutionServiceImpl implements InstitutionService {
     public Map<String, Object> domainErrorMsg(String domain) {
         Map<String, Object> errorMsg = new HashMap<>();
         if (!checkDomainValidation(domain)) {
-//			errorMsg.put("error", "不得包含 < > \" ' # % { } | \\ ^ ~ [ ] ` ( ) ; " +
-//					"? : @ & = + $ , / ! * 等符號");
             errorMsg.put("error", "請輸入20字內大小寫英文字母與數字組合");
             return errorMsg;
         }
@@ -121,15 +129,6 @@ public class InstitutionServiceImpl implements InstitutionService {
         }
         return null;
     }
-
-//	private boolean checkDomainValidation(String domain) {
-//		String regex = "[<>\"'#%{}|\\\\^~\\[\\]`();?:@&=+$,\\/!\\s*]";
-//
-//		Pattern pattern = Pattern.compile(regex);
-//		Matcher matcher = pattern.matcher(domain);
-//
-//		return !matcher.find();
-//	}
 
     private boolean checkDomainValidation(String domain) {
         if (domain.length() > 20)

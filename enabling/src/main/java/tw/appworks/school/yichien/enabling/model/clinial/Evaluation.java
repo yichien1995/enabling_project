@@ -3,6 +3,8 @@ package tw.appworks.school.yichien.enabling.model.clinial;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tw.appworks.school.yichien.enabling.dto.form.NewEvaluationForm;
+import tw.appworks.school.yichien.enabling.dto.form.ReserveEvaluationForm;
 import tw.appworks.school.yichien.enabling.model.account.InstitutionUser;
 
 import java.time.LocalDate;
@@ -42,4 +44,23 @@ public class Evaluation {
 
     @Column(name = "email")
     private String email;
+
+    public static Evaluation convertNewEvaluationForm(NewEvaluationForm form,
+                                                      InstitutionUser institutionUser) {
+        Evaluation e = new Evaluation();
+        e.setEvaluationDate(form.getEvaluationDate());
+        e.setEvaluationTime(form.getEvaluationTime());
+        e.setInstitutionUserId(institutionUser);
+        e.setReserved(0);
+        return e;
+    }
+
+    public static Evaluation convertReserveEvaluationForm(ReserveEvaluationForm form, Evaluation e) {
+        e.setClientName(form.getClientName());
+        e.setBirthday(form.getBirthday());
+        e.setTel(form.getTel());
+        e.setEmail(form.getEmail());
+        e.setReserved(1);
+        return e;
+    }
 }

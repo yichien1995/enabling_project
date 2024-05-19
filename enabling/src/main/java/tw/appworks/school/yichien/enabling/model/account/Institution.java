@@ -42,4 +42,12 @@ public class Institution {
         this.businessHour = businessHour;
         this.webpageAvailable = webpageAvailable;
     }
+
+    public static Institution convertUpdateForm(Institution form, Institution i) {
+        i.setInstitutionName(form.getInstitutionName());
+        i.setAddress(form.getAddress());
+        i.setTel(form.getTel());
+        i.setBusinessHour(form.getBusinessHour());
+        return i;
+    }
 }

@@ -19,25 +19,16 @@ public class ClientManagementServiceImpl implements ClientManagementService {
 
     private final InstitutionRepository institutionRepository;
 
-    public ClientManagementServiceImpl(MedicalRecordRepository medicalRecordRepository, InstitutionRepository institutionRepository) {
+    public ClientManagementServiceImpl(MedicalRecordRepository medicalRecordRepository,
+                                       InstitutionRepository institutionRepository) {
         this.medicalRecordRepository = medicalRecordRepository;
         this.institutionRepository = institutionRepository;
     }
 
     @Override
     public void saveMedicalRecord(String domain, MedicalRecordForm form) {
-        MedicalRecord medicalRecord = new MedicalRecord();
         Institution institution = institutionRepository.getInstitution(domain);
-
-        medicalRecord.setMedicalRecordNumber(form.getMedicalRecordNumber());
-        medicalRecord.setNationalIdNumber(form.getNationalIdNumber());
-        medicalRecord.setName(form.getName());
-        medicalRecord.setBirthday(form.getBirthday());
-        medicalRecord.setTel(form.getTel());
-        medicalRecord.setEmail(form.getEmail());
-        medicalRecord.setInstitutionDomain(institution);
-
-        medicalRecordRepository.save(medicalRecord);
+        medicalRecordRepository.save(MedicalRecord.convertNewForm(form, institution));
     }
 
     @Override
@@ -49,14 +40,7 @@ public class ClientManagementServiceImpl implements ClientManagementService {
     @Override
     public void updateMedicalRecord(Long id, MedicalRecordForm form) {
         MedicalRecord medicalRecord = medicalRecordRepository.findMedicalRecordById(id);
-        medicalRecord.setMedicalRecordNumber(form.getMedicalRecordNumber());
-        medicalRecord.setNationalIdNumber(form.getNationalIdNumber());
-        medicalRecord.setName(form.getName());
-        medicalRecord.setBirthday(form.getBirthday());
-        medicalRecord.setTel(form.getTel());
-        medicalRecord.setEmail(form.getEmail());
-
-        medicalRecordRepository.save(medicalRecord);
+        medicalRecordRepository.save(MedicalRecord.convertUpdateForm(form, medicalRecord));
     }
 
     @Override

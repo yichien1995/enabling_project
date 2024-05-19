@@ -39,6 +39,7 @@ public class EvaluationController {
         return "redirect:" + domainPrefix + "admin/" + domain + "/setting/evaluation";
     }
 
+    // TODO: "reserve" move to endpoint without /admin/
     @PostMapping("/reserve")
     public String reserveEvaluation(@PathVariable String domain, @ModelAttribute ReserveEvaluationForm reserveEvaluationForm) {
         evaluationService.reserveEvaluation(reserveEvaluationForm);

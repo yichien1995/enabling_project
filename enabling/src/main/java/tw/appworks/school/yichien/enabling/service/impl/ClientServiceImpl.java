@@ -61,22 +61,14 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void saveClientReport(Long institutionUserId, ClientReportForm form) {
-        ClientReport clientReport = new ClientReport();
         InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
-
-        clientReport.setDate(form.getDate());
-        clientReport.setTotalAttendance(form.getTotalAttendance());
-        clientReport.setInstitutionUserId(institutionUser);
-
-        clientReportRepository.save(clientReport);
+        clientReportRepository.save(ClientReport.convertNewForm(form, institutionUser));
     }
-
+    
     @Override
     public void updateClientReportById(Long id, ClientReportForm form) {
         ClientReport clientReport = clientReportRepository.findClientReportById(id);
-        clientReport.setDate(form.getDate());
-        clientReport.setTotalAttendance(form.getTotalAttendance());
-        clientReportRepository.save(clientReport);
+        clientReportRepository.save(ClientReport.convertUpdateForm(form, clientReport));
     }
 
     @Override

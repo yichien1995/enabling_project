@@ -3,6 +3,7 @@ package tw.appworks.school.yichien.enabling.model.webpage;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tw.appworks.school.yichien.enabling.dto.form.ServicesForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
 @Entity
@@ -27,4 +28,17 @@ public class ServiceItem {
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
     private Institution institutionDomain;
+
+    public static ServiceItem convertNewForm(ServicesForm form, Institution institution, String imagePath) {
+        ServiceItem s = new ServiceItem();
+        s.setInstitutionDomain(institution);
+        s.setImage(imagePath);
+        return convertUpdateForm(form, s);
+    }
+
+    public static ServiceItem convertUpdateForm(ServicesForm form, ServiceItem s) {
+        s.setTitle(form.getTitle());
+        s.setPrice(form.getPrice());
+        return s;
+    }
 }

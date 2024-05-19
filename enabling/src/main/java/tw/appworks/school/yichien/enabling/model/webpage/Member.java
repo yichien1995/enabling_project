@@ -4,6 +4,7 @@ package tw.appworks.school.yichien.enabling.model.webpage;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tw.appworks.school.yichien.enabling.dto.form.MemberForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
 @Entity
@@ -34,4 +35,19 @@ public class Member {
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
     private Institution institutionDomain;
+
+    public static Member convertNewForm(MemberForm form, Institution institution, String imagePath) {
+        Member m = new Member();
+        m.setInstitutionDomain(institution);
+        m.setPhoto(imagePath);
+        return convertUpdateForm(form, m);
+    }
+
+    public static Member convertUpdateForm(MemberForm form, Member m) {
+        m.setName(form.getName());
+        m.setTitle(form.getTitle());
+        m.setQualification(form.getQualification());
+        m.setEducation(form.getEducation());
+        return m;
+    }
 }

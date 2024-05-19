@@ -34,21 +34,15 @@ public class ServiceItemServiceImpl implements ServiceItemService {
         this.serviceItemRepository = serviceItemRepository;
         this.institutionRepository = institutionRepository;
     }
-
+    
     public void saveService(String domain, ServicesForm form) {
-        ServiceItem serviceItem = new ServiceItem();
         Institution institution = institutionRepository.getInstitution(domain);
 
         // save image relative URL
-//		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
-        String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
-        serviceItem.setImage(uploadAndGetPath);
+        String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+//        String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
 
-        serviceItem.setTitle(form.getTitle());
-        serviceItem.setPrice(form.getPrice());
-        serviceItem.setInstitutionDomain(institution);
-
-        serviceItemRepository.save(serviceItem);
+        serviceItemRepository.save(ServiceItem.convertNewForm(form, institution, uploadAndGetPath));
     }
 
     @Override
@@ -64,16 +58,14 @@ public class ServiceItemServiceImpl implements ServiceItemService {
     @Override
     public void updateService(String domain, Long id, ServicesForm form) {
         ServiceItem serviceItem = serviceItemRepository.getServiceItemById(id);
-        serviceItem.setTitle(form.getTitle());
-        serviceItem.setPrice(form.getPrice());
 
         if (!form.getImage().isEmpty()) {
-//			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
-            String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
+            String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+//            String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
             serviceItem.setImage(uploadAndGetPath);
         }
 
-        serviceItemRepository.save(serviceItem);
+        serviceItemRepository.save(ServiceItem.convertUpdateForm(form, serviceItem));
     }
 
     @Override

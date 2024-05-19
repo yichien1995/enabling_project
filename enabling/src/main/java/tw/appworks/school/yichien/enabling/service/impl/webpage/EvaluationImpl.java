@@ -58,30 +58,17 @@ public class EvaluationImpl implements EvaluationService {
     }
 
     @Override
-    public void saveNewEvaluation(String domain, NewEvaluationForm newEvaluationForm) {
-        Long institutionUserId = Long.parseLong(newEvaluationForm.getInstitutionUserId());
-        Evaluation evaluation = new Evaluation();
+    public void saveNewEvaluation(String domain, NewEvaluationForm form) {
+        Long institutionUserId = Long.parseLong(form.getInstitutionUserId());
         InstitutionUser institutionUser = institutionUserRepository.findInstitutionUserById(institutionUserId);
-
-        evaluation.setEvaluationDate(newEvaluationForm.getEvaluationDate());
-        evaluation.setEvaluationTime(newEvaluationForm.getEvaluationTime());
-        evaluation.setInstitutionUserId(institutionUser);
-        evaluation.setReserved(0);
-
-        evaluationRepository.save(evaluation);
+        evaluationRepository.save(Evaluation.convertNewEvaluationForm(form, institutionUser));
 
     }
 
     @Override
-    public void reserveEvaluation(ReserveEvaluationForm reserveEvaluationForm) {
-        Evaluation evaluation = evaluationRepository.getEvaluationById(reserveEvaluationForm.getEvaluationId());
-
-        evaluation.setClientName(reserveEvaluationForm.getClientName());
-        evaluation.setBirthday(reserveEvaluationForm.getBirthday());
-        evaluation.setTel(reserveEvaluationForm.getTel());
-        evaluation.setEmail(reserveEvaluationForm.getEmail());
-        evaluation.setReserved(1);
-        evaluationRepository.save(evaluation);
+    public void reserveEvaluation(ReserveEvaluationForm form) {
+        Evaluation evaluation = evaluationRepository.getEvaluationById(form.getEvaluationId());
+        evaluationRepository.save(Evaluation.convertReserveEvaluationForm(form, evaluation));
     }
 
     @Override

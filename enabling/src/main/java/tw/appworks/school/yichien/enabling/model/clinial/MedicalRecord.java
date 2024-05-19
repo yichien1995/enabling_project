@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tw.appworks.school.yichien.enabling.dto.form.MedicalRecordForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
 import java.time.LocalDate;
@@ -40,4 +41,20 @@ public class MedicalRecord {
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
     private Institution institutionDomain;
+
+    public static MedicalRecord convertNewForm(MedicalRecordForm form, Institution institution) {
+        MedicalRecord m = new MedicalRecord();
+        m.setInstitutionDomain(institution);
+        return convertUpdateForm(form, m);
+    }
+
+    public static MedicalRecord convertUpdateForm(MedicalRecordForm form, MedicalRecord m) {
+        m.setMedicalRecordNumber(form.getMedicalRecordNumber());
+        m.setNationalIdNumber(form.getNationalIdNumber());
+        m.setName(form.getName());
+        m.setBirthday(form.getBirthday());
+        m.setTel(form.getTel());
+        m.setEmail(form.getEmail());
+        return m;
+    }
 }

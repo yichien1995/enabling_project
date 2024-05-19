@@ -3,7 +3,6 @@ package tw.appworks.school.yichien.enabling.service.webpage;
 import org.springframework.ui.Model;
 import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
-import tw.appworks.school.yichien.enabling.model.webpage.Homepage;
 
 public interface HomepageService {
 
@@ -20,7 +19,5 @@ public interface HomepageService {
     void saveHomepage(String domain, HomepageForm homepageForm);
 
     void saveHomepageDraft(String domain, HomepageForm hf);
-
-    Homepage getHomepageDetail(String domain);
 
 }
