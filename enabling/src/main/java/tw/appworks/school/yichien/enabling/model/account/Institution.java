@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tw.appworks.school.yichien.enabling.dto.form.NewInstitutionForm;
 
 @Entity
 @Table(name = "institution")
@@ -41,6 +42,26 @@ public class Institution {
         this.tel = tel;
         this.businessHour = businessHour;
         this.webpageAvailable = webpageAvailable;
+    }
+
+    public static Institution convertNewForm(NewInstitutionForm form) {
+        Institution i = new Institution();
+        i.setDomainName(form.getInstitutionDomain());
+        String institutionName =
+                (form.getInstitutionName() == null || form.getInstitutionName().isEmpty()) ? "我的新機構" : form.getInstitutionName();
+        String tel =
+                (form.getTel() == null || form.getTel().isEmpty()) ? "輸入機構電話" : form.getTel();
+        String address =
+                (form.getAddress() == null || form.getAddress().isEmpty()) ? "輸入機構地址" : form.getAddress();
+        String businessHour =
+                (form.getBusinessHour() == null || form.getBusinessHour().isEmpty()) ? "輸入營業時間" : form.getBusinessHour();
+
+        i.setInstitutionName(institutionName);
+        i.setTel(tel);
+        i.setAddress(address);
+        i.setBusinessHour(businessHour);
+        i.setWebpageAvailable(0);
+        return i;
     }
 
     public static Institution convertUpdateForm(Institution form, Institution i) {

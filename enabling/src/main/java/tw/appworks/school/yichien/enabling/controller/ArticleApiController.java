@@ -1,8 +1,7 @@
-package tw.appworks.school.yichien.enabling.controller.admin;
+package tw.appworks.school.yichien.enabling.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.ArticleForm;
 import tw.appworks.school.yichien.enabling.service.webpage.ArticleService;
@@ -10,22 +9,19 @@ import tw.appworks.school.yichien.enabling.service.webpage.ArticleService;
 import java.util.HashMap;
 import java.util.Map;
 
+public abstract class ArticleApiController {
 
-@Controller
-@RequestMapping("/api/1.0/admin/{domain}/webpage/article")
-public class ArticleController {
+    protected final ArticleService articleService;
 
-    private final ArticleService articleService;
-
-    public ArticleController(ArticleService articleService) {
+    protected ArticleApiController(ArticleService articleService) {
         this.articleService = articleService;
     }
 
     @PostMapping
     public ResponseEntity<?> saveArticle(@PathVariable String domain,
                                          @RequestParam(required = false, defaultValue = "1") String draft,
-                                         @RequestParam(required = false) String id
-            , @ModelAttribute ArticleForm articleForm) {
+                                         @RequestParam(required = false) String id,
+                                         @ModelAttribute ArticleForm articleForm) {
         int draftValue = Integer.parseInt(draft);
 
         if (id != null) {

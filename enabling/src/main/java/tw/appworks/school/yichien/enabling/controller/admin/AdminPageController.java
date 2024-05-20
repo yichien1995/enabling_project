@@ -23,7 +23,6 @@ public class AdminPageController {
     private final ServiceItemService serviceItemService;
     private final AdminService adminService;
     private final MemberService memberService;
-
     private final ArticleService articleService;
     private final EvaluationService evaluationService;
     private final TeamManagementService teamManagementService;

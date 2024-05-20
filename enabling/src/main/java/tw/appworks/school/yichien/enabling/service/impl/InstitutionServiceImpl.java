@@ -65,23 +65,7 @@ public class InstitutionServiceImpl implements InstitutionService {
     }
 
     private void saveInstitution(NewInstitutionForm form) {
-        Institution institution = new Institution();
-        institution.setDomainName(form.getInstitutionDomain());
-        String institutionName =
-                (form.getInstitutionName() == null || form.getInstitutionName().isEmpty()) ? "我的新機構" : form.getInstitutionName();
-        String tel =
-                (form.getTel() == null || form.getTel().isEmpty()) ? "輸入機構電話" : form.getTel();
-        String address =
-                (form.getAddress() == null || form.getAddress().isEmpty()) ? "輸入機構地址" : form.getAddress();
-        String businessHour =
-                (form.getBusinessHour() == null || form.getBusinessHour().isEmpty()) ? "輸入營業時間" : form.getBusinessHour();
-
-        institution.setInstitutionName(institutionName);
-        institution.setTel(tel);
-        institution.setAddress(address);
-        institution.setBusinessHour(businessHour);
-        institution.setWebpageAvailable(0);
-        institutionRepository.save(institution);
+        institutionRepository.save(Institution.convertNewForm(form));
     }
 
     private void saveInstitutionUser(Long userId, String domain) {

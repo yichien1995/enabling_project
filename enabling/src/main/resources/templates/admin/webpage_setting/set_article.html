@@ -98,7 +98,7 @@
         if (articleId == null) {
             endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/webpage/article?draft=${draftValue}`;
         } else {
-            endpoint = `${RELATIVE_PATH}/api/1.0/${domain}/webpage/article?draft=${draftValue}&id=${articleId}`;
+            endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/webpage/article?draft=${draftValue}&id=${articleId}`;
         }
         try {
             (async function postData() {
