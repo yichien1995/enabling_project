@@ -1,4 +1,4 @@
-package tw.appworks.school.yichien.enabling.controller.api;
+package tw.appworks.school.yichien.enabling.controller.mainpage.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.Cookie;

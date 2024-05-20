@@ -80,7 +80,7 @@
         }
         event.preventDefault();
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/admin/${domain}/setting/evaluation/reserve`;
+        let endpoint = `${RELATIVE_PATH}/api/1.0/${domain}/evaluation`;
         try {
             (async function postData() {
                 let response = await fetch(endpoint, {

@@ -1,10 +1,8 @@
 package tw.appworks.school.yichien.enabling.service.impl.webpage;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.stereotype.Service;
@@ -32,9 +30,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Value("${prefix.image}")
     private String imageUrlPrefix;
 
-    @Autowired
-    private EntityManager entityManager;
-
     public ArticleServiceImpl(InstitutionRepository institutionRepository,
                               ArticleRepository articleRepository,
                               FileStorageService fileStorageService,
@@ -46,91 +41,64 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void updateArticle(int articleId, int draft, int preview, ArticleForm articleForm) {
+    public void updateArticle(int articleId, int draft, int preview, ArticleForm form) {
         Article existArticle = articleRepository.findArticleById(articleId);
 
-        if (!articleForm.getCover().isEmpty()) {
-//			String uploadAndGetPath = fileStorageService.uploadFile(existArticle.getInstitutionDomain().getDomainName(), articleForm.getTitle(), articleForm.getCover());
-            String uploadAndGetPath = s3UploadService.uploadFileToS3(existArticle.getInstitutionDomain().getDomainName(),
-                    articleForm.getCover().getOriginalFilename(), articleForm.getCover());
+        if (!form.getCover().isEmpty()) {
+            String uploadAndGetPath = fileStorageService.uploadFile(existArticle.getInstitutionDomain().getDomainName(), form.getTitle(), form.getCover());
+//            String uploadAndGetPath = s3UploadService.uploadFileToS3(existArticle.getInstitutionDomain().getDomainName(),
+//                    form.getCover().getOriginalFilename(), form.getCover());
             existArticle.setCover(uploadAndGetPath);
         }
-        existArticle.setTitle(articleForm.getTitle());
-        existArticle.setContent(articleForm.getContent());
-        existArticle.setDraft(draft);
-        existArticle.setPreview(preview);
-        articleRepository.save(existArticle);
+        articleRepository.save(Article.convertUpdateForm(form, existArticle, draft, preview));
     }
 
-
     @Override
-    public void saveNewArticle(String domain, int draft, int preview, ArticleForm articleForm) {
-        Article article = new Article();
+    public void saveNewArticle(String domain, int draft, int preview, ArticleForm form) {
         Institution institution = institutionRepository.getInstitution(domain);
 
-        article.setTitle(articleForm.getTitle());
-        article.setContent(articleForm.getContent());
-
-        article.setDraft(draft);
-        article.setPreview(preview);
-
         // save image relative URL
-//		String uploadAndGetPath = fileStorageService.uploadFile(institution.getDomainName(), articleForm.getTitle(), articleForm.getCover());
-        String uploadAndGetPath = s3UploadService.uploadFileToS3(institution.getDomainName(),
-                articleForm.getCover().getOriginalFilename(), articleForm.getCover());
+        String uploadAndGetPath = fileStorageService.uploadFile(institution.getDomainName(), form.getTitle(), form.getCover());
+//        String uploadAndGetPath = s3UploadService.uploadFileToS3(institution.getDomainName(),
+//                form.getCover().getOriginalFilename(), form.getCover());
 
-        article.setCover(uploadAndGetPath);
-
-        article.setInstitutionDomain(institution);
-
-        articleRepository.save(article);
+        articleRepository.save(Article.convertNewForm(form, draft, preview, uploadAndGetPath, institution));
     }
 
     @Override
-    public void savePreviewArticlePage(String domain, int draft, int preview, ArticleForm articleForm) {
-        try {
-            Article existPreviewArticle = articleRepository.getPreviewArticle(domain);
-            if (existPreviewArticle == null) {
-                saveNewArticle(domain, draft, preview, articleForm);
-            } else {
-                existPreviewArticle.setTitle(articleForm.getTitle());
-                existPreviewArticle.setContent(articleForm.getContent());
-                // save image relative URL
-
-//				String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", articleForm.getCover());
-                String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, articleForm.getCover().getOriginalFilename(), articleForm.getCover());
-                existPreviewArticle.setCover(uploadAndGetPath);
-                articleRepository.save(existPreviewArticle);
-            }
-        } catch (IncorrectResultSizeDataAccessException e) {
-            logger.error("Error in savePreviewArticlePage: {}", e.getMessage());
-        }
+    public void savePreviewArticlePage(String domain, int draft, int preview, ArticleForm form) {
+        handlePreviewArticle(domain, draft, preview, form, null);
     }
 
     @Override
-    public void previewExistArticle(int articleId, String domain, int draft, int preview, ArticleForm articleForm) {
+    public void previewExistArticle(int articleId, String domain, int draft, int preview, ArticleForm form) {
         Article existArticle = articleRepository.findArticleById(articleId);
+        handlePreviewArticle(domain, draft, preview, form, existArticle);
+    }
+
+    private void handlePreviewArticle(String domain, int draft, int preview, ArticleForm form, Article existArticle) {
         try {
             Article existPreviewArticle = articleRepository.getPreviewArticle(domain);
             if (existPreviewArticle == null) {
-                saveNewArticle(domain, draft, preview, articleForm);
+                saveNewArticle(domain, draft, preview, form);
             } else {
-                existPreviewArticle.setTitle(articleForm.getTitle());
-                existPreviewArticle.setContent(articleForm.getContent());
-//				// save image relative URL
-                if (!articleForm.getCover().isEmpty()) {
-
-//					String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", articleForm.getCover());
-                    String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, articleForm.getCover().getOriginalFilename(), articleForm.getCover());
-                    existPreviewArticle.setCover(uploadAndGetPath);
-                } else {
+                if (existArticle != null && form.getCover().isEmpty()) {
                     existPreviewArticle.setCover(existArticle.getCover());
+                } else {
+                    String uploadAndGetPath = fileStorageService.uploadFile(domain, "preview", form.getCover());
+                    existPreviewArticle.setCover(uploadAndGetPath);
                 }
-                articleRepository.save(existPreviewArticle);
+                articleRepository.save(Article.convertUpdateForm(form, existPreviewArticle, draft, preview));
             }
         } catch (IncorrectResultSizeDataAccessException e) {
-            logger.error("Error in savePreviewArticlePage: {}", e.getMessage());
+            logger.error("Error in handlePreviewArticle: {}", e.getMessage());
         }
+    }
+
+    @Override
+    @Transactional
+    public void deleteArticle(int id) {
+        articleRepository.deleteArticleById(id);
     }
 
     @Override
@@ -146,12 +114,6 @@ public class ArticleServiceImpl implements ArticleService {
         Article previewArticle = articleRepository.getPreviewArticle(domain);
         previewArticle.setCover(imageUrlPrefix + previewArticle.getCover());
         model.addAttribute("article", previewArticle);
-    }
-
-    @Override
-    @Transactional
-    public void deleteArticle(int id) {
-        articleRepository.deleteArticleById(id);
     }
 
     public void renderArticleList(String domain, Model model) {

@@ -142,7 +142,7 @@
         }
         event.preventDefault();
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/member`;
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/webpage/member`;
         try {
             (async function postData() {
                 let response = await fetch(endpoint, {
@@ -152,7 +152,7 @@
                 if (response.ok) {
                     // alert("成功新增成員介紹")
                     setTimeout(function () {
-                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/member`;
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/webpage/member`;
                     }, 0);
                 }
             })()
@@ -164,14 +164,14 @@
 
     function deleteMember(id) {
         if (confirm("確定刪除?")) {
-            let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/member/` + id;
+            let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/webpage/member/` + id;
             (async function deleteData() {
                 try {
                     let response = await fetch(endpoint, {
                         method: 'DELETE'
                     })
                     if (response.ok) {
-                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/member`
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/webpage/member`
                     } else {
                         throw new Error('Network response was not ok');
                     }
@@ -216,7 +216,7 @@
         }
 
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/member/` + id;
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/webpage/member/` + id;
         (async function updateData() {
             try {
                 let response = await fetch(endpoint, {
@@ -226,7 +226,7 @@
                 if (response.ok) {
                     // alert("成功更新成員資訊")
                     setTimeout(function () {
-                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/member`;
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/webpage/member`;
                     }, 0);
                 }
             } catch (e) {

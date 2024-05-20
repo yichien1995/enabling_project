@@ -1,4 +1,4 @@
-package tw.appworks.school.yichien.enabling.controller.api;
+package tw.appworks.school.yichien.enabling.controller.admin.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/1.0/admin/{domain}/management/client")
-public class ClientManagementController {
+@RequestMapping("api/1.0/admin/{domain}/client")
+public class AdminClientApiController {
 
     private final ClientManagementService clientManagementService;
 
-    public ClientManagementController(ClientManagementService clientManagementService) {
+    public AdminClientApiController(ClientManagementService clientManagementService) {
         this.clientManagementService = clientManagementService;
     }
 
@@ -30,9 +30,9 @@ public class ClientManagementController {
     }
 
     @PatchMapping(path = "/{id}")
-    public ResponseEntity<?> updateMember(@PathVariable String id,
-                                          @PathVariable String domain,
-                                          @ModelAttribute MedicalRecordForm medicalRecordForm) {
+    public ResponseEntity<?> updateMedicalRecord(@PathVariable String id,
+                                                 @PathVariable String domain,
+                                                 @ModelAttribute MedicalRecordForm medicalRecordForm) {
         long idValue = Long.parseLong(id);
         clientManagementService.updateMedicalRecord(idValue, medicalRecordForm);
         Map<String, Object> result = new HashMap<>();

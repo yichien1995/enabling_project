@@ -3,6 +3,7 @@ package tw.appworks.school.yichien.enabling.model.webpage;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tw.appworks.school.yichien.enabling.dto.form.ArticleForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
 @Entity
@@ -33,4 +34,20 @@ public class Article {
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
     private Institution institutionDomain;
+
+    public static Article convertNewForm(ArticleForm form, int draft, int preview,
+                                         String coverUrl, Institution institution) {
+        Article a = new Article();
+        a.setCover(coverUrl);
+        a.setInstitutionDomain(institution);
+        return convertUpdateForm(form, a, draft, preview);
+    }
+
+    public static Article convertUpdateForm(ArticleForm form, Article a, int draft, int preview) {
+        a.setTitle(form.getTitle());
+        a.setContent(form.getContent());
+        a.setDraft(draft);
+        a.setPreview(preview);
+        return a;
+    }
 }

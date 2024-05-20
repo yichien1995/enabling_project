@@ -1,4 +1,4 @@
-package tw.appworks.school.yichien.enabling.controller.api;
+package tw.appworks.school.yichien.enabling.controller.therapist.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.Logger;
@@ -16,15 +16,15 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("api/1.0/therapist/{domain}/client")
-public class ClientApiController {
+public class TherapistClientApiController {
 
-    public static final Logger logger = LoggerFactory.getLogger(ClientApiController.class);
+    public static final Logger logger = LoggerFactory.getLogger(TherapistClientApiController.class);
     @Autowired
     private final SessionServiceImpl sessionService;
     private final ClientService clientService;
 
 
-    public ClientApiController(SessionServiceImpl sessionService, ClientService clientService) {
+    public TherapistClientApiController(SessionServiceImpl sessionService, ClientService clientService) {
         this.sessionService = sessionService;
         this.clientService = clientService;
     }

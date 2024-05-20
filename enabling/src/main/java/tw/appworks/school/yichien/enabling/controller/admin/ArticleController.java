@@ -1,94 +1,64 @@
 package tw.appworks.school.yichien.enabling.controller.admin;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.ArticleForm;
-import tw.appworks.school.yichien.enabling.service.AdminService;
 import tw.appworks.school.yichien.enabling.service.webpage.ArticleService;
-import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Controller
-@RequestMapping("/admin/{domain}/setting/articles")
+@RequestMapping("/api/1.0/admin/{domain}/webpage/article")
 public class ArticleController {
 
     private final ArticleService articleService;
 
-    private final AdminService adminService;
-
-    private final HomepageService homepageService;
-
-    @Value("${prefix.domain}")
-    private String domainPrefix;
-
-    public ArticleController(ArticleService articleService, AdminService adminService, HomepageService homepageService) {
+    public ArticleController(ArticleService articleService) {
         this.articleService = articleService;
-        this.adminService = adminService;
-        this.homepageService = homepageService;
     }
 
-    @GetMapping
-    public String setArticle(@PathVariable String domain, Model model) {
-        articleService.renderArticleList(domain, model);
-        adminService.renderAdminSidebar(domain, model);
-        return "admin/webpage_setting/set_article";
-    }
-
-    @PostMapping("/save")
-    public String saveArticle(@PathVariable String domain,
-                              @RequestParam(required = false, defaultValue = "1") String draft,
-                              @RequestParam String action,
-                              @RequestParam(required = false) String id
+    @PostMapping
+    public ResponseEntity<?> saveArticle(@PathVariable String domain,
+                                         @RequestParam(required = false, defaultValue = "1") String draft,
+                                         @RequestParam(required = false) String id
             , @ModelAttribute ArticleForm articleForm) {
-        int previewStatus = action.equals("preview") ? 1 : 0;
-        int draftValue = action.equals("release") ? 0 : Integer.parseInt(draft);
-
-        if (action.equals("preview")) {
-            if (id == null) {
-                articleService.savePreviewArticlePage(domain, draftValue, previewStatus, articleForm);
-            } else {
-                int idValue = Integer.parseInt(id);
-                articleService.previewExistArticle(idValue, domain, draftValue, previewStatus, articleForm);
-            }
-            return "redirect:" + domainPrefix + "admin/" + domain + "/setting/articles";
-        }
+        int draftValue = Integer.parseInt(draft);
 
         if (id != null) {
             int idValue = Integer.parseInt(id);
-            articleService.updateArticle(idValue, draftValue, previewStatus, articleForm);
+            articleService.updateArticle(idValue, draftValue, 0, articleForm);
         } else {
-            articleService.saveNewArticle(domain, draftValue, previewStatus, articleForm);
+            articleService.saveNewArticle(domain, draftValue, 0, articleForm);
         }
 
-        return "redirect:" + domainPrefix + "admin/" + domain + "/setting/articles";
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", "Save article successfully.");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/{id}")
-    public String getArticle(@PathVariable String domain, @PathVariable String id,
-                             @RequestParam(required = false) int draft, Model model) {
-        if (draft == 0) {
-            model.addAttribute("released", "released");
+    @PostMapping("/preview")
+    public ResponseEntity<?> savePreviewArticle(@PathVariable String domain,
+                                                @RequestParam(required = false) String id,
+                                                @ModelAttribute ArticleForm articleForm) {
+        if (id == null) {
+            articleService.savePreviewArticlePage(domain, 1, 1, articleForm);
+        } else {
+            int idValue = Integer.parseInt(id);
+            articleService.previewExistArticle(idValue, domain, 1, 1, articleForm);
         }
-        articleService.renderPageByArticleId(id, model);
-        articleService.renderArticleList(domain, model);
-        adminService.renderAdminSidebar(domain, model);
-        return "admin/webpage_setting/set_article";
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", "Save preview article successfully.");
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/preview")
-    public String previewArticle(@PathVariable String domain, Model model) {
-        homepageService.renderHeaderAndFooter(domain, model);
-        articleService.renderArticlePreviewPage(domain, model);
-        return "admin/webpage_setting/preview_article";
-    }
-
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<?> deleteArticle(
-            @RequestParam(required = true) String id, @PathVariable String domain) {
+            @PathVariable String id, @PathVariable String domain) {
         int idValue = Integer.parseInt(id);
         articleService.deleteArticle(idValue);
         return ResponseEntity.ok("Delete article id: " + id);

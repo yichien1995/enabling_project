@@ -89,7 +89,7 @@
         event.preventDefault();
 
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/homepage/preview`;
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/webpage/homepage/preview`;
         try {
             (async function postData() {
                 let response = await fetch(endpoint, {
@@ -143,7 +143,7 @@
         event.preventDefault();
 
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/setting/homepage/update`;
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/webpage/homepage/update`;
         try {
             (async function postData() {
                 let response = await fetch(endpoint, {
@@ -152,7 +152,7 @@
                 })
                 if (response.ok) {
                     setTimeout(function () {
-                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/homepage`;
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/webpage/homepage`;
                     }, 0);
                 }
             })()
@@ -163,7 +163,7 @@
 
     $("#btn-preview-homepage").click(function (event) {
         event.preventDefault();
-        let previewUrl = `${RELATIVE_PATH}/admin/${domain}/setting/homepage?action=preview`;
+        let previewUrl = `${RELATIVE_PATH}/admin/${domain}/webpage/homepage?action=preview`;
         window.open(previewUrl, '_blank', 'width=1200,height=600');
         $("#btn-preview-homepage").hide();
 
@@ -171,7 +171,7 @@
 
     $('#btn-cancel-style').click(function (event) {
         event.preventDefault();
-        window.location.href = `${RELATIVE_PATH}/admin/${domain}/setting/homepage`;
+        window.location.href = `${RELATIVE_PATH}/admin/${domain}/webpage/homepage`;
     });
 
 

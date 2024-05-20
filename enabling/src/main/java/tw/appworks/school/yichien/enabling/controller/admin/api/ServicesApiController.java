@@ -1,4 +1,4 @@
-package tw.appworks.school.yichien.enabling.controller.api;
+package tw.appworks.school.yichien.enabling.controller.admin.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/1.0/admin/{domain}/setting/service")
+@RequestMapping("api/1.0/admin/{domain}/webpage/service")
 public class ServicesApiController {
 
     private final ServiceItemService serviceItemService;

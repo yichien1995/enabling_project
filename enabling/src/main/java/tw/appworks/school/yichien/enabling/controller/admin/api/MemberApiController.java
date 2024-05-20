@@ -1,4 +1,4 @@
-package tw.appworks.school.yichien.enabling.controller.api;
+package tw.appworks.school.yichien.enabling.controller.admin.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/1.0/admin/{domain}/setting/member")
+@RequestMapping("api/1.0/admin/{domain}/webpage/member")
 public class MemberApiController {
 
     private final MemberService memberService;
@@ -21,8 +21,8 @@ public class MemberApiController {
     }
 
     @PostMapping(consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<?> createServices(@PathVariable String domain,
-                                            @ModelAttribute MemberForm memberForm) {
+    public ResponseEntity<?> createMembers(@PathVariable String domain,
+                                           @ModelAttribute MemberForm memberForm) {
         memberService.saveMember(domain, memberForm);
         Map<String, Object> result = new HashMap<>();
         result.put("success", "Create member intro successfully.");

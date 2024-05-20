@@ -1,4 +1,4 @@
-package tw.appworks.school.yichien.enabling.controller;
+package tw.appworks.school.yichien.enabling.controller.webpage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
