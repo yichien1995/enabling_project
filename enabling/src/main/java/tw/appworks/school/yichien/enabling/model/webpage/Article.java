@@ -3,6 +3,8 @@ package tw.appworks.school.yichien.enabling.model.webpage;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import tw.appworks.school.yichien.enabling.dto.form.ArticleForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
@@ -33,6 +35,7 @@ public class Article {
 
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Institution institutionDomain;
 
     public static Article convertNewForm(ArticleForm form, int draft, int preview,

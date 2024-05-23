@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import tw.appworks.school.yichien.enabling.dto.form.MedicalRecordForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
@@ -40,6 +42,7 @@ public class MedicalRecord {
 
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Institution institutionDomain;
 
     public static MedicalRecord convertNewForm(MedicalRecordForm form, Institution institution) {

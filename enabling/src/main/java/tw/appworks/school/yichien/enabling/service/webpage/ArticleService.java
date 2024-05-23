@@ -22,5 +22,6 @@ public interface ArticleService {
 
     void previewExistArticle(int articleId, String domain, int draft, int preview, ArticleForm articleForm);
 
+    boolean checkArticleId(String domain, int id);
 
 }

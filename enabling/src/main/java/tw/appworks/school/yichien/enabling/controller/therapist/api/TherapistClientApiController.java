@@ -8,10 +8,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.ClientReportForm;
+import tw.appworks.school.yichien.enabling.response.ErrorResponse;
+import tw.appworks.school.yichien.enabling.response.SuccessResponse;
 import tw.appworks.school.yichien.enabling.service.ClientService;
 import tw.appworks.school.yichien.enabling.service.impl.SessionServiceImpl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -30,46 +31,40 @@ public class TherapistClientApiController {
     }
 
     @PostMapping("/list")
-    public ResponseEntity<?> addClientList(@PathVariable String domain,
-                                           @RequestBody Map<String, Object> data,
-                                           @CookieValue(value = "enabling", required = false) String sessionID)
+    public ResponseEntity<?> addIntervention(@PathVariable String domain,
+                                             @RequestBody Map<String, Object> data,
+                                             @CookieValue(value = "enabling", required = false) String sessionID)
             throws JsonProcessingException {
-
-        Map<String, Object> result = new HashMap<>();
         Long medicalRecordId = ((Integer) data.get("medical_record_id")).longValue();
         Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
         if (institutionUserId == null) {
-            return handleForbiddenRequest(result);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Find no institution user id"));
         }
         clientService.saveIntervention(medicalRecordId, institutionUserId);
-        result.put("success", "Add intervention successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Add intervention successfully."));
     }
 
     @DeleteMapping("/list/{id}")
     @ResponseBody
     public ResponseEntity<?> deleteIntervention(@PathVariable String id, @PathVariable String domain) {
-        Map<String, Object> result = new HashMap<>();
         long idValue = Long.parseLong(id);
         clientService.deleteInterventionById(idValue);
-        result.put("success", "Delete intervention id: " + id);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Delete intervention."));
     }
 
     @PostMapping("/report")
-    public ResponseEntity<?> reportTotalAttendance(@PathVariable String domain,
-                                                   @ModelAttribute ClientReportForm clientReportForm,
-                                                   @CookieValue(value = "enabling", required = false) String sessionID)
+    public ResponseEntity<?> createClientReport(@PathVariable String domain,
+                                                @ModelAttribute ClientReportForm clientReportForm,
+                                                @CookieValue(value = "enabling", required = false) String sessionID)
             throws JsonProcessingException {
-        Map<String, Object> result = new HashMap<>();
         Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
         if (institutionUserId == null) {
-            return handleForbiddenRequest(result);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Find no institution user id"));
         }
-
         clientService.saveClientReport(institutionUserId, clientReportForm);
-        result.put("success", "Save client total attendance successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Create client report successfully."));
     }
 
     @PatchMapping(path = "/report/{id}")
@@ -78,29 +73,24 @@ public class TherapistClientApiController {
                                                 @ModelAttribute ClientReportForm clientReportForm,
                                                 @CookieValue(value = "enabling", required = false) String sessionID)
             throws JsonProcessingException {
-        Map<String, Object> result = new HashMap<>();
+
         Long institutionUserId = sessionService.getInstitutionUserIdFromSession(sessionID, domain);
         if (institutionUserId == null) {
-            return handleForbiddenRequest(result);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("Find no institution user id"));
         }
         long idValue = Long.parseLong(id);
         clientService.updateClientReportById(idValue, clientReportForm);
-        result.put("success", "Update client report successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Update client report successfully."));
     }
 
     @DeleteMapping("/report/{id}")
     @ResponseBody
     public ResponseEntity<?> deleteClientReport(@PathVariable String id, @PathVariable String domain) {
-        Map<String, Object> result = new HashMap<>();
         long idValue = Long.parseLong(id);
         clientService.deleteClientReportById(idValue);
-        result.put("success", "Delete client report id: " + id);
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Delete client report."));
     }
 
-    private ResponseEntity<?> handleForbiddenRequest(Map<String, Object> result) {
-        result.put("error", "Find no institution user id");
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
-    }
 }

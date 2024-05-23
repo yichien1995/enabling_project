@@ -66,13 +66,25 @@ public class WebpageController {
     @GetMapping("/article/{id}")
     public String articlePage(@PathVariable String domain,
                               @PathVariable String id, Model model) {
-        boolean checkDomainExists = adminService.checkDomain(domain);
-        if (!checkDomainExists) {
-            return "redirect:" + domainPrefix;
+        try {
+            int idValue = Integer.parseInt(id);
+            boolean checkDomainExists = adminService.checkDomain(domain);
+            boolean articleValidation = articleService.checkArticleId(domain, idValue);
+            if (!checkDomainExists) {
+                return "redirect:" + domainPrefix;
+            }
+
+            if (!articleValidation) {
+                return "redirect:" + domainPrefix + domain + "/articles.html";
+            }
+
+            homepageService.renderHeaderAndFooter(domain, model);
+            articleService.renderPageByArticleId(id, model);
+            return "webpage/article_page";
+
+        } catch (NumberFormatException e) {
+            return "redirect:" + domainPrefix + domain + "/articles.html";
         }
-        homepageService.renderHeaderAndFooter(domain, model);
-        articleService.renderPageByArticleId(id, model);
-        return "webpage/article_page";
     }
 
     @GetMapping("/evaluation.html")

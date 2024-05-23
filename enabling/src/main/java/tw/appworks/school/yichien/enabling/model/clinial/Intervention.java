@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import tw.appworks.school.yichien.enabling.model.account.InstitutionUser;
 
 @Entity
@@ -23,5 +25,6 @@ public class Intervention {
 
     @JoinColumn(name = "institution_user_id", referencedColumnName = "id", nullable = false)
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private InstitutionUser institutionUserId;
 }

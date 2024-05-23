@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MyInstitutionDto {
 
-    private Long id;
+    private Integer id;
     private String role;
     private String institutionDomain;
     private String institutionName;

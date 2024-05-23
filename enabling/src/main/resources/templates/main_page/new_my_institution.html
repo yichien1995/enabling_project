@@ -39,39 +39,6 @@
 </header>
 <main>
     <h2><i class="fa-solid fa-hospital"></i>我的機構</h2>
-    <!--    <h2><i class="fa-solid fa-house-chimney-medical"></i>我的機構</h2>-->
-    <!--    <div id="my-institution-container">-->
-    <!--        <div class="my-institution-item-container" th:each="myInstitution : ${myInstitutions}"-->
-    <!--             th:if="${myInstitutions != null}">-->
-    <!--            <div>-->
-    <!--                <p>-->
-    <!--                    <strong>機構名稱：</strong>-->
-    <!--                    <span th:text="${myInstitution.institutionName}"></span>-->
-    <!--                </p>-->
-    <!--                <p>-->
-    <!--                    <strong>電話：</strong>-->
-    <!--                    <span th:text="${myInstitution.tel}"></span>-->
-    <!--                </p>-->
-    <!--                <p>-->
-    <!--                    <strong>地址：</strong>-->
-    <!--                    <span th:text="${myInstitution.address}"></span>-->
-    <!--                </p>-->
-    <!--                <p><strong>營業時間：</strong></p>-->
-    <!--                <p class="business-hour" th:utext="${myInstitution.businessHour}"></p>-->
-    <!--            </div>-->
-    <!--            <div class="link-container">-->
-    <!--                <a class="a-homepage"-->
-    <!--                   th:href="@{'/' + ${myInstitution.institutionDomain}+'/homepage.html'}">機構首頁</a>-->
-    <!--                <a class="a-institution"-->
-    <!--                   th:href="@{'/' + ${myInstitution.role}+'/' + ${myInstitution.institutionDomain}}">前往後台</a>-->
-    <!--            </div>-->
-
-    <!--            &lt;!&ndash;        <div th:if="${myInstitution.role == 'admin'}">&ndash;&gt;-->
-    <!--            &lt;!&ndash;            <button th:attr="onclick='deleteInstition(\'' + ${myInstitution.id} + '\')'">刪除</button>&ndash;&gt;-->
-    <!--            &lt;!&ndash;        </div>&ndash;&gt;-->
-    <!--        </div>-->
-    <!--    </div>-->
-
     <div id="my-institution-container">
         <div class="card" th:each="myInstitution : ${myInstitutions}"
              th:if="${myInstitutions != null}">
@@ -103,6 +70,10 @@
                        th:href="@{'/' + ${myInstitution.institutionDomain}+'/homepage.html'}">機構首頁</a>
                     <a class="a-institution"
                        th:href="@{'/' + ${myInstitution.role}+'/' + ${myInstitution.institutionDomain}}">前往後台</a>
+                </div>
+                <div th:if="${myInstitution.role == 'admin'}">
+                    <button class="delete" th:attr="onclick='deleteInstitution(\'' + ${myInstitution.id} + '\')'">刪除
+                    </button>
                 </div>
             </div>
         </div>
@@ -136,8 +107,27 @@
                 console.log("Error: " + e)
             }
         })()
-
     })
+
+    function deleteInstitution(id) {
+        if (confirm("確定刪除?")) {
+            let endpoint = `${RELATIVE_PATH}/api/1.0/admin/institution/` + id;
+            (async function deleteData() {
+                try {
+                    let response = await fetch(endpoint, {
+                        method: 'DELETE'
+                    })
+                    if (response.ok) {
+                        window.location.href = `${RELATIVE_PATH}/myinstitution`
+                    } else {
+                        throw new Error('Network response was not ok');
+                    }
+                } catch (e) {
+                    console.error('Error:', e);
+                }
+            })()
+        }
+    }
 </script>
 </body>
 </html>

@@ -4,10 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.NewEvaluationForm;
+import tw.appworks.school.yichien.enabling.response.SuccessResponse;
 import tw.appworks.school.yichien.enabling.service.webpage.EvaluationService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/1.0/admin/{domain}/webpage/evaluation")
@@ -23,9 +21,7 @@ public class EvaluationApiController {
     public ResponseEntity<?> createNewEvaluation(@PathVariable String domain,
                                                  @ModelAttribute NewEvaluationForm newEvaluationForm) {
         evaluationService.saveNewEvaluation(domain, newEvaluationForm);
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", "Create new evaluation successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Create new evaluation successfully."));
     }
 
     @DeleteMapping("/{id}")
@@ -34,6 +30,6 @@ public class EvaluationApiController {
             @PathVariable String id, @PathVariable String domain) {
         long idValue = Long.parseLong(id);
         evaluationService.deleteEvaluation(idValue);
-        return ResponseEntity.ok("Delete evaluation id: " + id);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Delete evaluation."));
     }
 }

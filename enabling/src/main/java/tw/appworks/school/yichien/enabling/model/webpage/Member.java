@@ -4,6 +4,8 @@ package tw.appworks.school.yichien.enabling.model.webpage;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import tw.appworks.school.yichien.enabling.dto.form.MemberForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
@@ -34,6 +36,7 @@ public class Member {
 
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Institution institutionDomain;
 
     public static Member convertNewForm(MemberForm form, Institution institution, String imagePath) {

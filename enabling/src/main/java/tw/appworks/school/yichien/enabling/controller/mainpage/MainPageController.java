@@ -1,6 +1,8 @@
 package tw.appworks.school.yichien.enabling.controller.mainpage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,16 +48,27 @@ public class MainPageController {
     }
 
     @GetMapping("/myinstitution")
-    public String user(Model model, @CookieValue(value = "enabling", required = false) String sessionID)
+    public String user(Model model,
+                       @CookieValue(value = "enabling", required = false) String sessionID,
+                       HttpServletResponse response)
             throws JsonProcessingException {
         if (sessionID == null) {
             return "redirect:" + domainPrefix;
         }
-        long userId = sessionService.getUserInfoDTOFromSession(sessionID).getUserId();
-        String userName = sessionService.getUserInfoDTOFromSession(sessionID).getUserName();
-        model.addAttribute("userName", userName);
-        mainPageService.renderMyInstitutionPage(model, userId);
-        return "main_page/new_my_institution";
+        try {
+            long userId = sessionService.getUserInfoDTOFromSession(sessionID).getUserId();
+            String userName = sessionService.getUserInfoDTOFromSession(sessionID).getUserName();
+            model.addAttribute("userName", userName);
+            mainPageService.renderMyInstitutionPage(model, userId);
+            return "main_page/new_my_institution";
+        } catch (NullPointerException e) {
+            //delete cookie
+            Cookie cookie = new Cookie("enabling", null);
+            cookie.setMaxAge(0);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            return "redirect:" + domainPrefix;
+        }
     }
 
     @GetMapping("/myinstitution/create")

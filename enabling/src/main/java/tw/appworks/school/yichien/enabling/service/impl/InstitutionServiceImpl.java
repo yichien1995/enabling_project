@@ -64,6 +64,12 @@ public class InstitutionServiceImpl implements InstitutionService {
         saveDefaultHomepage(form.getInstitutionDomain());
     }
 
+    @Override
+    @Transactional
+    public void deleteInstitutionById(Integer id) {
+        institutionRepository.deleteInstitutionById(id);
+    }
+
     private void saveInstitution(NewInstitutionForm form) {
         institutionRepository.save(Institution.convertNewForm(form));
     }

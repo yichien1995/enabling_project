@@ -3,6 +3,8 @@ package tw.appworks.school.yichien.enabling.model.webpage;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 
@@ -34,6 +36,7 @@ public class Homepage {
 
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Institution institutionDomain;
 
     @Column(name = "status", columnDefinition = "tinyint default 0")

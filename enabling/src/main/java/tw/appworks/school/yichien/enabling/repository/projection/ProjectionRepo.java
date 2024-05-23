@@ -31,7 +31,7 @@ public class ProjectionRepo {
 
     public List<MyInstitutionDto> getMyInstitutionDTO(Long id) {
         String query = """
-                    SELECT iu.id, r.role, iu.institution_domain, i.institution_name, i.address, i.tel, i.business_hour 
+                    SELECT i.id, r.role, iu.institution_domain, i.institution_name, i.address, i.tel, i.business_hour 
                     FROM institution_user AS iu JOIN institution AS i ON iu.institution_domain = i.domain_name 
                     JOIN role AS r ON iu.role_id = r.id WHERE iu.user_id = %d ORDER BY i.id;
                 """;

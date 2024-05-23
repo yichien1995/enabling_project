@@ -3,6 +3,8 @@ package tw.appworks.school.yichien.enabling.model.clinial;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import tw.appworks.school.yichien.enabling.dto.form.ClientReportForm;
 import tw.appworks.school.yichien.enabling.model.account.InstitutionUser;
 
@@ -26,6 +28,7 @@ public class ClientReport {
 
     @JoinColumn(name = "institution_user_id", referencedColumnName = "id", nullable = false)
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private InstitutionUser institutionUserId;
 
     public static ClientReport convertNewForm(ClientReportForm form, InstitutionUser institutionUser) {

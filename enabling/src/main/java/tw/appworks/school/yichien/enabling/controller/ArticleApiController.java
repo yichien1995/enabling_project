@@ -4,10 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.ArticleForm;
+import tw.appworks.school.yichien.enabling.response.SuccessResponse;
 import tw.appworks.school.yichien.enabling.service.webpage.ArticleService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class ArticleApiController {
 
@@ -31,9 +29,7 @@ public abstract class ArticleApiController {
             articleService.saveNewArticle(domain, draftValue, 0, articleForm);
         }
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", "Save article successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Save article successfully."));
     }
 
     @PostMapping("/preview")
@@ -46,9 +42,7 @@ public abstract class ArticleApiController {
             int idValue = Integer.parseInt(id);
             articleService.previewExistArticle(idValue, domain, 1, 1, articleForm);
         }
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", "Save preview article successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Save preview article successfully."));
     }
 
     @DeleteMapping("/{id}")
@@ -57,6 +51,7 @@ public abstract class ArticleApiController {
             @PathVariable String id, @PathVariable String domain) {
         int idValue = Integer.parseInt(id);
         articleService.deleteArticle(idValue);
-        return ResponseEntity.ok("Delete article id: " + id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Delete article."));
     }
 }

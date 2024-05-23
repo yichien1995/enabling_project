@@ -12,7 +12,7 @@ import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 
 @Controller
 @RequestMapping("/therapist/{domain}")
-public class TherapistController {
+public class TherapistPageController {
 
     private final ClientService clientService;
 
@@ -24,7 +24,7 @@ public class TherapistController {
 
     private final HomepageService homepageService;
 
-    public TherapistController(ClientService clientService, SessionServiceImpl sessionService, TherapistService therapistService, ArticleService articleService, HomepageService homepageService) {
+    public TherapistPageController(ClientService clientService, SessionServiceImpl sessionService, TherapistService therapistService, ArticleService articleService, HomepageService homepageService) {
         this.clientService = clientService;
         this.sessionService = sessionService;
         this.therapistService = therapistService;
@@ -59,9 +59,6 @@ public class TherapistController {
     @GetMapping("/webpage/article/{id}")
     public String getArticle(@PathVariable String domain, @PathVariable String id,
                              @RequestParam(required = false) int draft, Model model) {
-//        if (draft == 0) {
-//            model.addAttribute("released", "released");
-//        }
         articleService.renderPageByArticleId(id, model);
         articleService.renderArticleList(domain, model);
         therapistService.renderAdminSidebar(domain, model);

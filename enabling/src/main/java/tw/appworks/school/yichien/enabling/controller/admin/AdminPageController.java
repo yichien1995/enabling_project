@@ -2,6 +2,7 @@ package tw.appworks.school.yichien.enabling.controller.admin;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,8 @@ public class AdminPageController {
     private final ReportService reportService;
     private final ClientManagementService clientManagementService;
 
+    @Value("${prefix.domain}")
+    private String domainPrefix;
 
     public AdminPageController(HomepageService homepageService,
                                ServiceItemService serviceItemService,
@@ -95,14 +98,23 @@ public class AdminPageController {
 
     @GetMapping("/webpage/article/{id}")
     public String getArticle(@PathVariable String domain, @PathVariable String id,
-                             @RequestParam(required = false) int draft, Model model) {
-//        if (draft == 0) {
-//            model.addAttribute("released", "released");
-//        }
-        articleService.renderPageByArticleId(id, model);
-        articleService.renderArticleList(domain, model);
-        adminService.renderAdminSidebar(domain, model);
-        return "admin/webpage_setting/set_article";
+                             @RequestParam(required = false) Integer draft, Model model) {
+        try {
+            int idValue = Integer.parseInt(id);
+            boolean articleValidation = articleService.checkArticleId(domain, idValue);
+
+            if (!articleValidation) {
+                return "redirect:" + domainPrefix + "admin/" + domain + "/webpage/article";
+            }
+
+            articleService.renderPageByArticleId(id, model);
+            articleService.renderArticleList(domain, model);
+            adminService.renderAdminSidebar(domain, model);
+            return "admin/webpage_setting/set_article";
+
+        } catch (NumberFormatException e) {
+            return "redirect:" + domainPrefix + "admin/" + domain + "/webpage/article";
+        }
     }
 
     @GetMapping("webpage/article/preview")

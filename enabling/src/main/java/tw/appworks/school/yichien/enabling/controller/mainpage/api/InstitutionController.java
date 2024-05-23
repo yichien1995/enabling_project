@@ -6,11 +6,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tw.appworks.school.yichien.enabling.dto.account.UserInfoDto;
 import tw.appworks.school.yichien.enabling.dto.form.NewInstitutionForm;
+import tw.appworks.school.yichien.enabling.response.SuccessResponse;
 import tw.appworks.school.yichien.enabling.service.InstitutionService;
 import tw.appworks.school.yichien.enabling.service.impl.SessionServiceImpl;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -35,8 +36,9 @@ public class InstitutionController {
             return ResponseEntity.badRequest().body(domainErrorMsg);
         }
         // get userinfo from session
-        long userId = sessionService.getUserInfoDTOFromSession(sessionID).getUserId();
-        String email = sessionService.getUserInfoDTOFromSession(sessionID).getUserEmail();
+        UserInfoDto userInfo = sessionService.getUserInfoDTOFromSession(sessionID);
+        long userId = userInfo.getUserId();
+        String email = userInfo.getUserEmail();
 
         institutionService.createNewInstitution(userId, form);
 
@@ -47,8 +49,14 @@ public class InstitutionController {
         response.addCookie(cookie);
         sessionService.setCookieAndStoreSession(email, response);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", "Create institution successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Create new institution successfully."));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteInstitution(@PathVariable String id) {
+        int idValue = Integer.parseInt(id);
+        institutionService.deleteInstitutionById(idValue);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Delete institution."));
     }
 }

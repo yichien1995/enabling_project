@@ -6,8 +6,6 @@ import tw.appworks.school.yichien.enabling.model.account.Users;
 import tw.appworks.school.yichien.enabling.repository.account.UsersRepository;
 import tw.appworks.school.yichien.enabling.service.UserService;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +21,7 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
     public void saveUser(Users user) {
         Users newUser = new Users();
         newUser.setUsername(user.getUsername());
@@ -31,32 +30,28 @@ public class UserServiceImpl implements UserService {
         usersRepository.save(newUser);
     }
 
-    public Map<String, Object> emailValidationError(String email) {
-        Map<String, Object> result = new HashMap<>();
+    @Override
+    public String emailValidationError(String email) {
         // check email
         boolean checkEmailExists = usersRepository.existsByEmail(email);
         boolean checkEmailValidation = checkEmailRegex(email);
 
         if (!checkEmailValidation) {
-            result.put("error", "信箱格式錯誤");
-            return result;
+            return "信箱格式錯誤";
         }
 
         if (checkEmailExists) {
-            result.put("error", "該信箱已註冊過");
-            return result;
+            return "該信箱已註冊過";
         }
         return null;
     }
 
     @Override
-    public Map<String, Object> loginError(Users user) {
+    public String loginError(Users user) {
         boolean checkEmailExists = usersRepository.existsByEmail(user.getEmail());
         boolean permission = checkPassword(user.getEmail(), user.getPassword());
         if (!permission || !checkEmailExists) {
-            Map<String, Object> result = new HashMap<>();
-            result.put("error", "信箱或密碼錯誤");
-            return result;
+            return "信箱或密碼錯誤";
         }
         return null;
     }

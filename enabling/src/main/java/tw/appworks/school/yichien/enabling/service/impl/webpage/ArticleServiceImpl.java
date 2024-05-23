@@ -142,4 +142,10 @@ public class ArticleServiceImpl implements ArticleService {
     private List<Article> getReleasedArticlesList(String domain) {
         return articleRepository.getReleasedArticles(domain);
     }
+
+    @Override
+    public boolean checkArticleId(String domain, int id) {
+        List<Integer> articleIdList = getReleasedArticlesList(domain).stream().map(Article::getId).toList();
+        return articleIdList.contains(id);
+    }
 }

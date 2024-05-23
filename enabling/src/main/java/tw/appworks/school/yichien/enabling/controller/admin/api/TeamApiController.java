@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tw.appworks.school.yichien.enabling.dto.form.TeamMemberForm;
+import tw.appworks.school.yichien.enabling.response.SuccessResponse;
 import tw.appworks.school.yichien.enabling.service.TeamManagementService;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -26,9 +26,7 @@ public class TeamApiController {
         if (errorMsg != null) {
             return ResponseEntity.badRequest().body(errorMsg);
         }
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", "Create Member successfully.");
-        return ResponseEntity.status(HttpStatus.OK).body(result);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Add team member successfully."));
     }
 
     @DeleteMapping("/member/{id}")
@@ -37,6 +35,6 @@ public class TeamApiController {
             @PathVariable String id, @PathVariable String domain) {
         long idValue = Long.parseLong(id);
         teamManagementService.deleteInstitutionUserById(idValue);
-        return ResponseEntity.ok("Delete institution_user id: " + id);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessResponse("Delete team member."));
     }
 }

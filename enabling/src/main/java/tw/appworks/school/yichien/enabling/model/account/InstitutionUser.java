@@ -3,6 +3,8 @@ package tw.appworks.school.yichien.enabling.model.account;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "institution_user")
@@ -16,6 +18,7 @@ public class InstitutionUser {
 
     @JoinColumn(name = "institution_domain", referencedColumnName = "domain_name", nullable = false)
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Institution institutionDomain;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
