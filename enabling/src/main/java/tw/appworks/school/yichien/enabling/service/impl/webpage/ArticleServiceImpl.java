@@ -45,9 +45,9 @@ public class ArticleServiceImpl implements ArticleService {
         Article existArticle = articleRepository.findArticleById(articleId);
 
         if (!form.getCover().isEmpty()) {
-            String uploadAndGetPath = fileStorageService.uploadFile(existArticle.getInstitutionDomain().getDomainName(), form.getTitle(), form.getCover());
-//            String uploadAndGetPath = s3UploadService.uploadFileToS3(existArticle.getInstitutionDomain().getDomainName(),
-//                    form.getCover().getOriginalFilename(), form.getCover());
+//            String uploadAndGetPath = fileStorageService.uploadFile(existArticle.getInstitutionDomain().getDomainName(), form.getTitle(), form.getCover());
+            String uploadAndGetPath = s3UploadService.uploadFileToS3(existArticle.getInstitutionDomain().getDomainName(),
+                    form.getCover().getOriginalFilename(), form.getCover());
             existArticle.setCover(uploadAndGetPath);
         }
         articleRepository.save(Article.convertUpdateForm(form, existArticle, draft, preview));
@@ -58,9 +58,9 @@ public class ArticleServiceImpl implements ArticleService {
         Institution institution = institutionRepository.getInstitution(domain);
 
         // save image relative URL
-        String uploadAndGetPath = fileStorageService.uploadFile(institution.getDomainName(), form.getTitle(), form.getCover());
-//        String uploadAndGetPath = s3UploadService.uploadFileToS3(institution.getDomainName(),
-//                form.getCover().getOriginalFilename(), form.getCover());
+//        String uploadAndGetPath = fileStorageService.uploadFile(institution.getDomainName(), form.getTitle(), form.getCover());
+        String uploadAndGetPath = s3UploadService.uploadFileToS3(institution.getDomainName(),
+                form.getCover().getOriginalFilename(), form.getCover());
 
         articleRepository.save(Article.convertNewForm(form, draft, preview, uploadAndGetPath, institution));
     }
@@ -76,6 +76,7 @@ public class ArticleServiceImpl implements ArticleService {
         handlePreviewArticle(domain, draft, preview, form, existArticle);
     }
 
+    //TODO: check if bugs exist
     private void handlePreviewArticle(String domain, int draft, int preview, ArticleForm form, Article existArticle) {
         try {
             Article existPreviewArticle = articleRepository.getPreviewArticle(domain);

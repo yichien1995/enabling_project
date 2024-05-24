@@ -34,13 +34,13 @@ public class ServiceItemServiceImpl implements ServiceItemService {
         this.serviceItemRepository = serviceItemRepository;
         this.institutionRepository = institutionRepository;
     }
-    
+
     public void saveService(String domain, ServicesForm form) {
         Institution institution = institutionRepository.getInstitution(domain);
 
         // save image relative URL
-        String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
-//        String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
+//        String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+        String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
 
         serviceItemRepository.save(ServiceItem.convertNewForm(form, institution, uploadAndGetPath));
     }
@@ -60,8 +60,8 @@ public class ServiceItemServiceImpl implements ServiceItemService {
         ServiceItem serviceItem = serviceItemRepository.getServiceItemById(id);
 
         if (!form.getImage().isEmpty()) {
-            String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
-//            String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
+//            String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+            String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
             serviceItem.setImage(uploadAndGetPath);
         }
 

@@ -43,41 +43,48 @@
         </div>
         <div class="tables">
             <h3>團隊成員列表</h3>
-            <table>
-                <tr>
-                    <th>員編</th>
-                    <th>姓名</th>
-                    <th>信箱</th>
-                    <th>身份</th>
-                    <th>刪除</th>
-                </tr>
-                <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">
-                    <td th:text="${info.employeeId}"></td>
-                    <td th:text="${info.userName}"></td>
-                    <td th:text="${info.email}"></td>
-                    <td th:text="${info.role}"></td>
-                    <td th:if="${info.employeeId == 1}">
-                        <button class="btn-hide">刪除</button>
-                    </td>
-                    <td th:if="${info.employeeId != 1}">
-                        <button class="delete" th:attr="onclick='deleteMember(\'' + ${info.institutionUserId} + '\')'">
-                            刪除
-                        </button>
-                    </td>
-                </tr>
-                <!--            Update team member info-->
-                <!--            <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">-->
-                <!--                <td><input type="number"></td>-->
-                <!--                <td th:text="${info.userName}"></td>-->
-                <!--                <td><input th:value="${info.email}" type="email"></td>-->
-                <!--                <td>-->
-                <!--                    <input name="role" required type="radio" value="1">-->
-                <!--                    <label>管理者</label>-->
-                <!--                    <input name="role" th:value="2" type="radio">-->
-                <!--                    <label>治療師</label>-->
-                <!--                </td>-->
-                <!--            </tr>-->
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>員編</th>
+                        <th>姓名</th>
+                        <th>信箱</th>
+                        <th>身份</th>
+                        <th>刪除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">
+                        <td th:text="${info.employeeId}"></td>
+                        <td th:text="${info.userName}"></td>
+                        <td th:text="${info.email}"></td>
+                        <td th:text="${info.role}"></td>
+                        <td th:if="${info.employeeId == 1}">
+                            <button class="btn-hide">刪除</button>
+                        </td>
+                        <td th:if="${info.employeeId != 1}">
+                            <button class="delete"
+                                    th:attr="onclick='deleteMember(\'' + ${info.institutionUserId} + '\')'">
+                                刪除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <!--            Update team member info-->
+                    <!--            <tr th:each="info:${TeamMemberInfoDto}" th:if="${TeamMemberInfoDto != null}">-->
+                    <!--                <td><input type="number"></td>-->
+                    <!--                <td th:text="${info.userName}"></td>-->
+                    <!--                <td><input th:value="${info.email}" type="email"></td>-->
+                    <!--                <td>-->
+                    <!--                    <input name="role" required type="radio" value="1">-->
+                    <!--                    <label>管理者</label>-->
+                    <!--                    <input name="role" th:value="2" type="radio">-->
+                    <!--                    <label>治療師</label>-->
+                    <!--                </td>-->
+                    <!--            </tr>-->
+                </table>
+            </div>
         </div>
     </div>
 

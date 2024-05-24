@@ -39,8 +39,8 @@ public class MemberServiceImpl implements MemberService {
     public void saveMember(String domain, MemberForm form) {
         Institution institution = institutionRepository.getInstitution(domain);
         // save image relative URL
-        String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
-//        String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
+//        String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
+        String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
         memberRepository.save(Member.convertNewForm(form, institution, uploadAndGetPath));
     }
 
@@ -62,8 +62,8 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.getMemberById(id);
         if (!form.getPhoto().isEmpty()) {
             // save image relative URL
-            String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
-//            String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
+//            String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getName(), form.getPhoto());
+            String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getPhoto().getOriginalFilename(), form.getPhoto());
             member.setPhoto(uploadAndGetPath);
         }
         memberRepository.save(Member.convertUpdateForm(form, member));

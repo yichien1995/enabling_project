@@ -4,4 +4,6 @@ import org.springframework.ui.Model;
 
 public interface MainPageService {
     void renderMyInstitutionPage(Model model, Long id);
+
+    void renderMockData(Model model);
 }

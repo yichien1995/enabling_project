@@ -40,10 +40,11 @@ public class MainPageController {
     }
 
     @GetMapping("/login")
-    public String login(@CookieValue(value = "enabling", required = false) String sessionID) {
+    public String login(Model model, @CookieValue(value = "enabling", required = false) String sessionID) {
         if (sessionID != null) {
             return "redirect:" + domainPrefix + "myinstitution";
         }
+        mainPageService.renderMockData(model);
         return "main_page/login";
     }
 

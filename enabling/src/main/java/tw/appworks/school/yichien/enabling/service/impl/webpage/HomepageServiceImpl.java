@@ -135,14 +135,14 @@ public class HomepageServiceImpl implements HomepageService {
 
     private void saveHomepageForm(String domain, String fileType, HomepageForm form, Homepage homepage) {
         if (!form.getLogo().isEmpty()) {
-            String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, form.getLogo());
-//            String logoPath = s3UploadService.uploadFileToS3(domain, hf.getLogo().getOriginalFilename() + fileType, hf.getLogo());
+//            String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, form.getLogo());
+            String logoPath = s3UploadService.uploadFileToS3(domain, form.getLogo().getOriginalFilename() + fileType, form.getLogo());
             homepage.setLogo(logoPath);
         }
 
         if (!form.getMainImage().isEmpty()) {
-            String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, form.getMainImage());
-//            String mainImagePath = s3UploadService.uploadFileToS3(domain, hf.getMainImage().getOriginalFilename() + fileType, hf.getMainImage());
+//            String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, form.getMainImage());
+            String mainImagePath = s3UploadService.uploadFileToS3(domain, form.getMainImage().getOriginalFilename() + fileType, form.getMainImage());
             homepage.setMainImage(mainImagePath);
         }
         homepageRepository.save(Homepage.convertForm(form, homepage));

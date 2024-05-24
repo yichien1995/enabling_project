@@ -46,29 +46,36 @@
         </div>
         <div class="tables">
             <h3>服務項目列表</h3>
-            <table id="service-table">
-                <tr>
-                    <th>項目名稱</th>
-                    <th>收費說明</th>
-                    <th>更新</th>
-                    <th>刪除</th>
-                </tr>
-                <tr th:each="serviceItem:${serviceItems}" th:if="${serviceItems != null}">
-                    <td th:id="'title-' + ${serviceItem.id}" th:text="${serviceItem.title}"></td>
-                    <td class="align-left" th:id="'price-' + ${serviceItem.id}" th:utext="${serviceItem.price}"></td>
-                    <td>
-                        <button class="change">更新</button>
-                    </td>
-                    <td>
-                        <button class="delete" th:attr="onclick='deleteServiceItem(\'' + ${serviceItem.id} + '\')'">
-                            刪除
-                        </button>
-                    </td>
-                </tr>
-            </table>
+            <div class="table-container">
+                <table id="service-table">
+                    <thead>
+                    <tr>
+                        <th>項目名稱</th>
+                        <th>收費說明</th>
+                        <th>更新</th>
+                        <th>刪除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="serviceItem:${serviceItems}" th:if="${serviceItems != null}">
+                        <td th:id="'title-' + ${serviceItem.id}" th:text="${serviceItem.title}"></td>
+                        <td class="align-left" th:id="'price-' + ${serviceItem.id}"
+                            th:utext="${serviceItem.price}"></td>
+                        <td>
+                            <button class="change">更新</button>
+                        </td>
+                        <td>
+                            <button class="delete" th:attr="onclick='deleteServiceItem(\'' + ${serviceItem.id} + '\')'">
+                                刪除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <form enctype="multipart/form-data" id="update-service-form">
+    <form class="update-form" enctype="multipart/form-data" id="update-service-form">
         <label for="update-service-image">圖片:</label>
         <input accept="image/png, image/jpeg" id="update-service-image" name="image" type="file">
         <br>
@@ -82,6 +89,7 @@
         <button class="cancel" id="btn-cancel">取消</button>
         <button class="update" id="btn-update">更新</button>
     </form>
+    <div class="overlay"></div>
 </main>
 <script>
     const RELATIVE_PATH = window.location.origin;
@@ -140,10 +148,12 @@
 
     $(document).ready(function () {
         $('#update-service-form').hide();
+        $('.overlay').hide();
     });
 
     $('.change').click(function () {
         $('#update-service-form').show();
+        $('.overlay').show();
         let row = $(this).closest('tr');
         let id = row.find('td:first').attr('id').split('-').slice(-1)[0];
         let title = row.find('td:nth-child(1)').text();
@@ -190,6 +200,7 @@
     $('#btn-cancel').click((event) => {
         event.preventDefault();
         $('#update-service-form').hide();
+        $('.overlay').hide();
     });
 </script>
 </body>

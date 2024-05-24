@@ -16,56 +16,81 @@
           rel="stylesheet"/>
     <link rel="stylesheet" th:href="@{/styles/side_bar.css}"/>
     <link rel="stylesheet" th:href="@{/styles/therapist.css}"/>
+    <style>
+        form#update-client-report-form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 3rem 5rem rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+    </style>
     <title>業績回報</title>
 </head>
 <body>
-
 <nav th:insert="~{fragment/therapist_sidebar.html:: therapist_sidebar}"></nav>
 <main>
     <h2>業績回報</h2>
-    <h3>每日個案回報</h3>
-    <form id="client-report-form" method="post">
-        <label>日期: </label>
-        <input name="date" required type="date">
-        <br>
-        <label>個案量: </label>
-        <input min="0" name="totalAttendance" required type="number">
-        <button class="create" id="btn-submit">送出</button>
-    </form>
-    <h3>業績回報列表</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>日期</th>
-            <th>個案量</th>
-            <th>更改</th>
-            <th>刪除</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="clientReport:${clientReports}" th:if="${clientReports != null}">
-            <td th:id="'date-' + ${clientReport.id}" th:text="${clientReport.date}"></td>
-            <td th:id="'total-attendance-' + ${clientReport.id}" th:text="${clientReport.totalAttendance}"></td>
-            <td>
-                <button class="change">更改</button>
-            </td>
-            <td>
-                <button class="delete"
-                        th:attr="onclick='deleteClientReport(\'' + ${clientReport.id} + '\')'">
-                    刪除
-                </button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="therapist-setting-container">
+        <div class="submit-form">
+            <h3>每日個案回報</h3>
+            <form id="client-report-form" method="post">
+                <label>日期: </label>
+                <input name="date" required type="date">
+                <br>
+                <label>個案量: </label>
+                <input class="total-attendance" min="0" name="totalAttendance" required type="number">
+                <button class="create" id="btn-submit">送出</button>
+            </form>
+        </div>
+        <div class="tables">
+            <h3>業績回報列表</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>個案量</th>
+                        <th>更改</th>
+                        <th>刪除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="clientReport:${clientReports}" th:if="${clientReports != null}">
+                        <td th:id="'date-' + ${clientReport.id}" th:text="${clientReport.date}"></td>
+                        <td th:id="'total-attendance-' + ${clientReport.id}"
+                            th:text="${clientReport.totalAttendance}"></td>
+                        <td>
+                            <button class="change">更改</button>
+                        </td>
+                        <td>
+                            <button class="delete"
+                                    th:attr="onclick='deleteClientReport(\'' + ${clientReport.id} + '\')'">
+                                刪除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <form id="update-client-report-form">
         <label for="update-date">日期: </label>
         <input id="update-date" name="date" required type="date">
-        <label for="update-total-attendance">今日個案量: </label>
-        <input id="update-total-attendance" min="0" name="totalAttendance" required type="number">
+        <br>
+        <label for="update-total-attendance">個案量: </label>
+        <input class="total-attendance" id="update-total-attendance" min="0" name="totalAttendance" required
+               type="number">
+        <br>
         <button class="update" id="btn-update">更新</button>
         <button class="cancel" id="btn-cancel">取消</button>
     </form>
+    <div class="overlay"></div>
 </main>
 <script>
     const RELATIVE_PATH = window.location.origin;
@@ -104,10 +129,12 @@
 
     $(document).ready(function () {
         $('#update-client-report-form').hide();
+        $('.overlay').hide();
     });
 
     $('.change').click(function () {
         $('#update-client-report-form').show();
+        $('.overlay').show();
         let row = $(this).closest('tr');
         let id = row.find('td:first').attr('id').split('-').slice(-1)[0];
         let date = row.find('td:nth-child(1)').text();
@@ -154,6 +181,7 @@
     $('#btn-cancel').click((event) => {
         event.preventDefault();
         $('#update-client-report-form').hide();
+        $('.overlay').hide();
     });
 
     function deleteClientReport(id) {

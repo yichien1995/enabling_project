@@ -38,15 +38,6 @@ div#my-institution-container {
     padding: 0 2rem;
 }
 
-/*div.my-institution-item-container {*/
-/*    display: flex;*/
-/*    flex-direction: column;*/
-/*    justify-content: space-between;*/
-/*    border: 1px solid rgba(41, 50, 65, 0.5);*/
-/*    border-radius: 10px;*/
-/*    padding: 0.5rem 1rem;*/
-/*}*/
-
 div.my-institution-item-container p {
     color: #304269;
     font-weight: 500;
@@ -63,11 +54,6 @@ div.my-institution-item-container p.business-hour {
     line-height: 1.25;
     color: #293241;
 }
-
-/*div.link-container {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*}*/
 
 div.link-container a {
     font-size: 0.8rem;
@@ -98,7 +84,7 @@ button#btn-create {
     color: #fff;
     border: none;
     cursor: pointer;
-    position: absolute;
+    position: fixed;
     bottom: 100px;
     right: 150px;
     border-radius: 4px;
@@ -106,7 +92,6 @@ button#btn-create {
 }
 
 button#btn-create:hover {
-    /*font-weight: 600;*/
     background-color: #9BC0D9;
 }
 
@@ -114,11 +99,6 @@ button#btn-create:hover {
 
 div.card-header {
     background-color: #3D5B81;
-}
-
-h3.card-title {
-    cursor: default;
-    color: #DFFBFC;
 }
 
 div.card-body {
@@ -135,5 +115,31 @@ div.link-container {
 
 p#user-name {
     margin-bottom: 0;
+}
+
+h1#enabling {
+    margin: 0;
+}
+
+div.card-title {
+    cursor: default;
+    display: flex;
+    color: #DFFBFC;
+}
+
+div.card-title i {
+    color: rgba(223, 251, 252, 0.3);
+    margin-right: 0.5rem;
+    margin-top: 0.1rem;
+}
+
+div.card-title i:hover {
+    cursor: pointer;
+    color: #DFFBFC;
+}
+
+h3.h3-card {
+    font-size: 1.25rem;
+    font-weight: 400;
 }
 

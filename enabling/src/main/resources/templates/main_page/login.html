@@ -33,13 +33,14 @@
         <h2>登入</h2>
         <form action="/api/1.0/user/login" id="login-form" method="post" th:object="${Users}">
             <label for="login-email">信箱：</label>
-            <input id="login-email" name="email" required type="email"/>
+            <input id="login-email" name="email" required th:value="${account}" type="email"/>
             <br/>
             <label for="login-password">密碼：</label>
             <input
                     id="login-password"
                     name="password"
                     required
+                    th:value="${password}"
                     type="password"
             />
             <br/>
