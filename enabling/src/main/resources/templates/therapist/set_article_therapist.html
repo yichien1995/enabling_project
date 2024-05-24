@@ -38,11 +38,11 @@
             <label>文章內文</label>
             <textarea class="content" name="content" required th:text="${article.content}"></textarea>
             <br/>
-            <button class="preview btn-preview">預覽</button>
+            <!--            <button class="preview btn-preview">預覽</button>-->
+            <button class="cancel btn-cancel">取消</button>
             <button class="delete btn-delete">刪除</button>
             <button class="save btn-save" th:unless="${released}">存檔</button>
             <button class="release btn-release">發布</button>
-            <button class="cancel btn-cancel">取消</button>
         </form>
     </div>
 
@@ -59,10 +59,10 @@
             <label>文章內文</label>
             <textarea class="content" name="content" required></textarea>
             <br/>
-            <button class="preview btn-preview">預覽</button>
+            <!--            <button class="preview btn-preview">預覽</button>-->
+            <button class="cancel btn-cancel">取消</button>
             <button class="save btn-save">存檔</button>
             <button class="release btn-release">發布</button>
-            <button class="cancel btn-cancel">取消</button>
         </form>
     </div>
 </main>
@@ -83,7 +83,7 @@
 
     // get article id
     let path = urlString.pathname;
-    const ID_REGEX = /articles\/([^?]+)/;
+    const ID_REGEX = /article\/([^?]+)/;
     let articleId = ID_REGEX.exec(currentUrl) == null ? null : ID_REGEX.exec(currentUrl)[1];
 
     $(".btn-save").click(function (event) {
@@ -96,9 +96,9 @@
         let formData = new FormData(form);
         let endpoint;
         if (articleId == null) {
-            endpoint = `${RELATIVE_PATH}/therapist/${domain}/setting/articles/save?draft=${draftValue}&action=save'`;
+            endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/webpage/article?draft=${draftValue}`;
         } else {
-            endpoint = `${RELATIVE_PATH}/therapist/${domain}/setting/articles/save?draft=${draftValue}&action=save&id=${articleId}`;
+            endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/webpage/article?draft=${draftValue}&id=${articleId}`;
         }
         try {
             (async function postData() {
@@ -118,8 +118,14 @@
         event.preventDefault();
 
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/therapist/${domain}/setting/articles/save?draft=${draftValue}&action=preview&id=${articleId}`;
-        let previewUrl = `${RELATIVE_PATH}/therapist/${domain}/setting/articles/preview`;
+        let endpoint;
+        if (articleId !== null) {
+            endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/webpage/article/preview?id=${articleId}`;
+        } else {
+            endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/webpage/article/preview`;
+        }
+
+        let previewUrl = `${RELATIVE_PATH}/therapist/${domain}/webpage/article/preview`;
         try {
             (async function postData() {
                 await sendData(formData, endpoint);
@@ -139,14 +145,14 @@
 
         let formData = new FormData(form);
         if (articleId == null) {
-            endpoint = `${RELATIVE_PATH}/therapist/${domain}/setting/articles/save?&action=release&draft=0'`;
+            endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/webpage/article?draft=0`;
         } else {
-            endpoint = `${RELATIVE_PATH}/therapist/${domain}/setting/articles/save?&action=release&id=${articleId}`;
+            endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/webpage/article?&draft=0&id=${articleId}`;
         }
         try {
             (async function postData() {
                 await sendData(formData, endpoint);
-                window.location.href = `${RELATIVE_PATH}/therapist/${domain}/setting/articles`
+                window.location.href = `${RELATIVE_PATH}/therapist/${domain}/webpage/article`
             })()
         } catch (error) {
             console.error('Error:', error);
@@ -160,7 +166,7 @@
         }
         event.preventDefault();
 
-        let endpoint = `${RELATIVE_PATH}/therapist/${domain}/setting/articles/delete?id=${articleId}`;
+        let endpoint = `${RELATIVE_PATH}/api/1.0/therapist/${domain}/webpage/article/${articleId}`;
         (async function deleteData() {
             try {
                 let response = await fetch(endpoint, {
@@ -168,7 +174,7 @@
                 })
                 if (response.ok) {
                     alert("已刪除文章");
-                    window.location.href = `${RELATIVE_PATH}/therapist/${domain}/setting/articles`
+                    window.location.href = `${RELATIVE_PATH}/therapist/${domain}/webpage/article`
                 } else {
                     throw new Error('Network response was not ok');
                 }

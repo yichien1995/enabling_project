@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MedicalRecordDto {
 
-	private Long medicalRecordId;
+    private Long medicalRecordId;
 
-	private Integer medicalRecordNumber;
+    private Integer medicalRecordNumber;
 
-	private String name;
+    private String name;
 }

@@ -10,17 +10,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Users {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(name = "user_name", nullable = false)
-	private String username;
+    @Column(name = "user_name", nullable = false)
+    private String username;
 
-	@Column(name = "email", nullable = false, unique = true)
-	private String email;
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
 
-	//	@Column(name = "password", columnDefinition = "BINARY(60)",nullable = false)
-	@Column(name = "password", nullable = false)
-	private String password;
+    //	@Column(name = "password", columnDefinition = "BINARY(60)",nullable = false)
+    @Column(name = "password", nullable = false)
+    private String password;
 }

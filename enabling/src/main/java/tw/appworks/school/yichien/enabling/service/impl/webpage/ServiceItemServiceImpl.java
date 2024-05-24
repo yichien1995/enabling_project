@@ -20,65 +20,57 @@ import java.util.List;
 @Service
 public class ServiceItemServiceImpl implements ServiceItemService {
 
-	private static final Logger logger = LoggerFactory.getLogger(ServiceItemServiceImpl.class);
-	private final FileStorageService fileStorageService;
-	private final S3UploadServiceImpl s3UploadService;
-	private final ServiceItemRepository serviceItemRepository;
-	private final InstitutionRepository institutionRepository;
-	@Value("${prefix.image}")
-	private String imageUrlPrefix;
+    private static final Logger logger = LoggerFactory.getLogger(ServiceItemServiceImpl.class);
+    private final FileStorageService fileStorageService;
+    private final S3UploadServiceImpl s3UploadService;
+    private final ServiceItemRepository serviceItemRepository;
+    private final InstitutionRepository institutionRepository;
+    @Value("${prefix.image}")
+    private String imageUrlPrefix;
 
-	public ServiceItemServiceImpl(FileStorageService fileStorageService, S3UploadServiceImpl s3UploadService, ServiceItemRepository serviceItemRepository, InstitutionRepository institutionRepository) {
-		this.fileStorageService = fileStorageService;
-		this.s3UploadService = s3UploadService;
-		this.serviceItemRepository = serviceItemRepository;
-		this.institutionRepository = institutionRepository;
-	}
+    public ServiceItemServiceImpl(FileStorageService fileStorageService, S3UploadServiceImpl s3UploadService, ServiceItemRepository serviceItemRepository, InstitutionRepository institutionRepository) {
+        this.fileStorageService = fileStorageService;
+        this.s3UploadService = s3UploadService;
+        this.serviceItemRepository = serviceItemRepository;
+        this.institutionRepository = institutionRepository;
+    }
 
-	public void saveService(String domain, ServicesForm form) {
-		ServiceItem serviceItem = new ServiceItem();
-		Institution institution = institutionRepository.getInstitution(domain);
+    public void saveService(String domain, ServicesForm form) {
+        Institution institution = institutionRepository.getInstitution(domain);
 
-		// save image relative URL
-//		String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
-		String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
-		serviceItem.setImage(uploadAndGetPath);
+        // save image relative URL
+//        String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+        String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
 
-		serviceItem.setTitle(form.getTitle());
-		serviceItem.setPrice(form.getPrice());
-		serviceItem.setInstitutionDomain(institution);
+        serviceItemRepository.save(ServiceItem.convertNewForm(form, institution, uploadAndGetPath));
+    }
 
-		serviceItemRepository.save(serviceItem);
-	}
+    @Override
+    public void renderServicePage(String domain, Model model) {
+        List<ServiceItem> serviceItems = serviceItemRepository.getAllServicesItemByDomain(domain);
+        for (ServiceItem item : serviceItems) {
+            item.setPrice(item.getPrice().replace("\n", "<br>"));
+            item.setImage(imageUrlPrefix + item.getImage());
+        }
+        model.addAttribute("serviceItems", serviceItems);
+    }
 
-	@Override
-	public void renderServicePage(String domain, Model model) {
-		List<ServiceItem> serviceItems = serviceItemRepository.getAllServicesItemByDomain(domain);
-		for (ServiceItem item : serviceItems) {
-			item.setPrice(item.getPrice().replace("\n", "<br>"));
-			item.setImage(imageUrlPrefix + item.getImage());
-		}
-		model.addAttribute("serviceItems", serviceItems);
-	}
+    @Override
+    public void updateService(String domain, Long id, ServicesForm form) {
+        ServiceItem serviceItem = serviceItemRepository.getServiceItemById(id);
 
-	@Override
-	public void updateService(String domain, Long id, ServicesForm form) {
-		ServiceItem serviceItem = serviceItemRepository.getServiceItemById(id);
-		serviceItem.setTitle(form.getTitle());
-		serviceItem.setPrice(form.getPrice());
+        if (!form.getImage().isEmpty()) {
+//            String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
+            String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
+            serviceItem.setImage(uploadAndGetPath);
+        }
 
-		if (!form.getImage().isEmpty()) {
-//			String uploadAndGetPath = fileStorageService.uploadFile(domain, form.getTitle(), form.getImage());
-			String uploadAndGetPath = s3UploadService.uploadFileToS3(domain, form.getImage().getOriginalFilename(), form.getImage());
-			serviceItem.setImage(uploadAndGetPath);
-		}
+        serviceItemRepository.save(ServiceItem.convertUpdateForm(form, serviceItem));
+    }
 
-		serviceItemRepository.save(serviceItem);
-	}
-
-	@Override
-	@Transactional
-	public void deleteServiceItemById(Long id) {
-		serviceItemRepository.deleteServiceItemById(id);
-	}
+    @Override
+    @Transactional
+    public void deleteServiceItemById(Long id) {
+        serviceItemRepository.deleteServiceItemById(id);
+    }
 }

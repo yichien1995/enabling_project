@@ -31,6 +31,8 @@ div.img-article-container {
 
 div.img-article-container a img.image-article {
     width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
 }
 
 h3 {

@@ -5,11 +5,11 @@ import tw.appworks.school.yichien.enabling.dto.form.MedicalRecordForm;
 
 public interface ClientManagementService {
 
-	void saveMedicalRecord(String domain, MedicalRecordForm form);
+    void saveMedicalRecord(String domain, MedicalRecordForm form);
 
-	void updateMedicalRecord(Long id, MedicalRecordForm form);
+    void updateMedicalRecord(Long id, MedicalRecordForm form);
 
-	void deleteMedicalRecordById(Long id);
+    void deleteMedicalRecordById(Long id);
 
-	void renderClientManagementPage(String domain, Model model);
+    void renderClientManagementPage(String domain, Model model);
 }

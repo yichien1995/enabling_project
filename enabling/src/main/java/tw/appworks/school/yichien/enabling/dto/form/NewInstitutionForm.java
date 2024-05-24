@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NewInstitutionForm {
 
-	private String institutionDomain;
-	private String institutionName;
-	private String tel;
-	private String address;
-	private String businessHour;
+    private String institutionDomain;
+    private String institutionName;
+    private String tel;
+    private String address;
+    private String businessHour;
 }

@@ -11,6 +11,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ClientReportForm {
 
-	private LocalDate date;
-	private Integer totalAttendance;
+    private LocalDate date;
+    private Integer totalAttendance;
 }

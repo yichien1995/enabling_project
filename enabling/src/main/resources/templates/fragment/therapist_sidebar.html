@@ -13,14 +13,14 @@
     </ul>
     <h3 class="h3-side-bar">網頁管理</h3>
     <ul>
-        <li><i class="fa-solid fa-book"></i><a th:href="@{'/therapist/' +${domain}+'/setting/articles'}">衛教文章</a>
+        <li><i class="fa-solid fa-book"></i><a th:href="@{'/therapist/' +${domain}+'/webpage/article'}">衛教文章</a>
         </li>
         <div th:if="${released_article != null || draft != null}">
             <details>
                 <summary>已發布文章</summary>
                 <ul class="article" th:if="${released_article != null}">
                     <li th:each="article : ${released_article}">
-                        <a th:href="@{'/therapist/' +${domain}+'/setting/articles/'+${article.id} + '?draft=0'}"
+                        <a th:href="@{'/therapist/' +${domain}+'/webpage/article/'+${article.id} + '?draft=0'}"
                            th:text="${article.title}"></a>
                     </li>
                 </ul>
@@ -29,7 +29,7 @@
                 <summary>草稿</summary>
                 <ul class="article" th:if="${drafts != null}">
                     <li th:each="article : ${drafts}">
-                        <a th:href="@{'/therapist/' +${domain}+'/setting/articles/'+${article.id} + '?draft=1'}"
+                        <a th:href="@{'/therapist/' +${domain}+'/webpage/article/'+${article.id} + '?draft=1'}"
                            th:text="${article.title}"></a>
                     </li>
                 </ul>

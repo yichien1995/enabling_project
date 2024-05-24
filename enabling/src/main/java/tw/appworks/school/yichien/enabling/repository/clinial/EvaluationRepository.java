@@ -10,19 +10,19 @@ import java.util.List;
 
 public interface EvaluationRepository extends JpaRepository<Evaluation, Long> {
 
-	@Query(value = "SELECT e.* FROM evaluation AS e " +
-			"LEFT JOIN institution_user AS i ON e.institution_user_id = i.id " +
-			"WHERE i.institution_domain = :domain " +
-			"ORDER BY e.evaluation_date ASC, e.evaluation_time ASC", nativeQuery = true)
-	List<Evaluation> getEvaluationsByDomain(@Param("domain") String domain);
+    @Query(value = "SELECT e.* FROM evaluation AS e " +
+            "LEFT JOIN institution_user AS i ON e.institution_user_id = i.id " +
+            "WHERE i.institution_domain = :domain " +
+            "ORDER BY e.evaluation_date ASC, e.evaluation_time ASC", nativeQuery = true)
+    List<Evaluation> getEvaluationsByDomain(@Param("domain") String domain);
 
-	@Query(value = "SELECT e.* FROM evaluation AS e " +
-			"LEFT JOIN institution_user AS i ON e.institution_user_id = i.id " +
-			"WHERE i.institution_domain = :domain AND e.reserved = 0 " +
-			"ORDER BY e.evaluation_date ASC, e.evaluation_time ASC", nativeQuery = true)
-	List<Evaluation> getUnreservedEvaluations(@Param("domain") String domain);
+    @Query(value = "SELECT e.* FROM evaluation AS e " +
+            "LEFT JOIN institution_user AS i ON e.institution_user_id = i.id " +
+            "WHERE i.institution_domain = :domain AND e.reserved = 0 " +
+            "ORDER BY e.evaluation_date ASC, e.evaluation_time ASC", nativeQuery = true)
+    List<Evaluation> getUnreservedEvaluations(@Param("domain") String domain);
 
-	void deleteEvaluationById(long id);
+    void deleteEvaluationById(long id);
 
-	Evaluation getEvaluationById(long id);
+    Evaluation getEvaluationById(long id);
 }

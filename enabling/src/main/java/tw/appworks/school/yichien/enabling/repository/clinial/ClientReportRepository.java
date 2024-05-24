@@ -7,7 +7,7 @@ import tw.appworks.school.yichien.enabling.model.clinial.ClientReport;
 @Repository
 public interface ClientReportRepository extends JpaRepository<ClientReport, Long> {
 
-	ClientReport findClientReportById(Long id);
+    ClientReport findClientReportById(Long id);
 
-	void deleteClientReportById(Long id);
+    void deleteClientReportById(Long id);
 }

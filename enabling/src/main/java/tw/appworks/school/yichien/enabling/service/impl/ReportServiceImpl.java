@@ -16,44 +16,44 @@ import java.util.List;
 @Service
 public class ReportServiceImpl implements ReportService {
 
-	private final ProjectionRepo projectionRepo;
+    private final ProjectionRepo projectionRepo;
 
-	public ReportServiceImpl(ProjectionRepo projectionRepo) {
-		this.projectionRepo = projectionRepo;
-	}
+    public ReportServiceImpl(ProjectionRepo projectionRepo) {
+        this.projectionRepo = projectionRepo;
+    }
 
-	@Override
-	public void renderReportPage(String domain, Model model) {
-		ArrayList<ClientReportChartData> allChartData = getAllChartData(domain);
-		model.addAttribute("allChartData", allChartData);
-	}
+    @Override
+    public void renderReportPage(String domain, Model model) {
+        ArrayList<ClientReportChartData> allChartData = getAllChartData(domain);
+        model.addAttribute("allChartData", allChartData);
+    }
 
-	private ArrayList<ClientReportChartData> getAllChartData(String domain) {
-		List<TeamMemberInfoDto> therapistList = projectionRepo.getTherapistInfoDTO(domain);
-		ArrayList<ClientReportChartData> result = new ArrayList<>();
-		for (int i = 0; i < therapistList.size(); i++) {
-			ClientReportChartData clientReportChartData = new ClientReportChartData();
-			Long id = therapistList.get(i).getInstitutionUserId();
-			String name = therapistList.get(i).getUserName();
+    private ArrayList<ClientReportChartData> getAllChartData(String domain) {
+        List<TeamMemberInfoDto> therapistList = projectionRepo.getTherapistInfoDTO(domain);
+        ArrayList<ClientReportChartData> result = new ArrayList<>();
+        for (int i = 0; i < therapistList.size(); i++) {
+            ClientReportChartData clientReportChartData = new ClientReportChartData();
+            Long id = therapistList.get(i).getInstitutionUserId();
+            String name = therapistList.get(i).getUserName();
 
-			clientReportChartData.setInstitutionUserId(id);
-			clientReportChartData.setName(name);
+            clientReportChartData.setInstitutionUserId(id);
+            clientReportChartData.setName(name);
 
-			//set chart x,y data
-			List<ClientReportDto> allData = projectionRepo.getClientReportDto(id);
-			ArrayList<LocalDate> x = new ArrayList<>();
-			ArrayList<Integer> y = new ArrayList<>();
+            //set chart x,y data
+            List<ClientReportDto> allData = projectionRepo.getClientReportDto(id);
+            ArrayList<LocalDate> x = new ArrayList<>();
+            ArrayList<Integer> y = new ArrayList<>();
 
-			for (ClientReportDto data : allData) {
-				x.add(data.getDate());
-				y.add(data.getTotalAttendance());
-			}
+            for (ClientReportDto data : allData) {
+                x.add(data.getDate());
+                y.add(data.getTotalAttendance());
+            }
 
-			clientReportChartData.setXData(x);
-			clientReportChartData.setYData(y);
+            clientReportChartData.setXData(x);
+            clientReportChartData.setYData(y);
 
-			result.add(clientReportChartData);
-		}
-		return result;
-	}
+            result.add(clientReportChartData);
+        }
+        return result;
+    }
 }

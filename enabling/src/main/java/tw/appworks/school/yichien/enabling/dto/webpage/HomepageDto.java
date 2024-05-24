@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HomepageDto {
 
-	private Integer themeColorId;
+    private Integer themeColorId;
 
-	private String mainImage;
+    private String mainImage;
 
-	private String imageDescription;
+    private String imageDescription;
 
-	private String logo;
+    private String logo;
 
-	private String institutionIntro;
+    private String institutionIntro;
 
-	private String institutionDomain;
+    private String institutionDomain;
 }

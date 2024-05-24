@@ -11,15 +11,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class MedicalRecordForm {
 
-	private Integer medicalRecordNumber;
+    private Integer medicalRecordNumber;
 
-	private String nationalIdNumber;
+    private String nationalIdNumber;
 
-	private String name;
+    private String name;
 
-	private LocalDate birthday;
+    private LocalDate birthday;
 
-	private String tel;
+    private String tel;
 
-	private String email;
+    private String email;
 }

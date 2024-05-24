@@ -7,10 +7,10 @@ import tw.appworks.school.yichien.enabling.model.account.Users;
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
 
-	boolean existsByEmail(String email);
+    boolean existsByEmail(String email);
 
-	Users findUsersByEmail(String email);
+    Users findUsersByEmail(String email);
 
-	Users findUsersById(Long id);
+    Users findUsersById(Long id);
 
 }

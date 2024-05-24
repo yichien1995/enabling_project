@@ -10,10 +10,10 @@ import tw.appworks.school.yichien.enabling.model.account.InstitutionUser;
 @Repository
 public interface InstitutionUserRepository extends JpaRepository<InstitutionUser, Long> {
 
-	InstitutionUser findInstitutionUserById(Long id);
+    InstitutionUser findInstitutionUserById(Long id);
 
 //TODO:delete before final release
-	//
+    //
 //	@Query(value = "SELECT * FROM institution_user WHERE user_id = :userId", nativeQuery = true)
 //	List<InstitutionUser> findInstitutionUserByUserId(Long userId);
 //
@@ -24,12 +24,12 @@ public interface InstitutionUserRepository extends JpaRepository<InstitutionUser
 //			"JOIN users AS u ON i.user_id = u.id WHERE u.email = :email", nativeQuery = true)
 //	List<InstitutionUser> getInstitutionUserInfoByEmail(@Param("email") String email);
 
-	boolean existsInstitutionUserByInstitutionDomainAndEmployeeId(Institution InstitutionDomain, Integer EmployeeId);
+    boolean existsInstitutionUserByInstitutionDomainAndEmployeeId(Institution InstitutionDomain, Integer EmployeeId);
 
-	@Query(value = "SELECT COUNT(i.id) FROM institution_user AS i JOIN users AS u ON i.user_id = u.id " +
-			"WHERE i.institution_domain = :domain AND u.email = :email", nativeQuery = true)
-	Integer countInstitutionUserByDomainANDEmail(@Param("domain") String domain, @Param("email") String Email);
+    @Query(value = "SELECT COUNT(i.id) FROM institution_user AS i JOIN users AS u ON i.user_id = u.id " +
+            "WHERE i.institution_domain = :domain AND u.email = :email", nativeQuery = true)
+    Integer countInstitutionUserByDomainANDEmail(@Param("domain") String domain, @Param("email") String Email);
 
-	void deleteInstitutionUserById(Long id);
+    void deleteInstitutionUserById(Long id);
 
 }

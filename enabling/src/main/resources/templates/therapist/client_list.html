@@ -21,44 +21,53 @@
 <body>
 <nav th:insert="~{fragment/therapist_sidebar.html:: therapist_sidebar}"></nav>
 <main>
-    <h3>個案管理系統</h3>
-    <label>新增個案: </label>
-    <input list="medical-record-list" name="medicalRecord" required type="text">
-    <datalist id="medical-record-list">
-        <option th:attr="data-medical-record-id=${medicalRecord.medicalRecordId}"
-                th:each="medicalRecord: ${medicalRecords}"
-                th:if="${medicalRecords != null}"
-                th:text="${medicalRecord.medicalRecordNumber} + ${medicalRecord.name}"></option>
-    </datalist>
-    <button class="create" id="btn-new-client" th:if="${medicalRecords != null}">新增</button>
-    <h3>個案列表</h3>
-    <table>
-        <thead>
-        <tr>
-            <th>病歷號</th>
-            <th>姓名</th>
-            <th>生日</th>
-            <th>聯絡電話</th>
-            <th>信箱</th>
-            <th>刪除</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="info:${interventionDto}" th:if="${interventionDto != null}">
-            <td th:text="${info.medicalRecordNumber}"></td>
-            <td th:text="${info.name}"></td>
-            <td th:text="${info.birthday}"></td>
-            <td th:text="${info.tel}"></td>
-            <td th:text="${info.email}"></td>
-            <td>
-                <button class="delete" th:attr="onclick='deleteIntervention(\'' + ${info.interventionId} + '\')'">
-                    刪除
-                </button>
-            </td>
-
-        </tr>
-        </tbody>
-    </table>
+    <h2>個案管理</h2>
+    <div class="therapist-setting-container">
+        <div class="submit-form">
+            <h3>新增個案</h3>
+            <label>新增個案: </label>
+            <input list="medical-record-list" name="medicalRecord" required type="text">
+            <datalist id="medical-record-list">
+                <option th:attr="data-medical-record-id=${medicalRecord.medicalRecordId}"
+                        th:each="medicalRecord: ${medicalRecords}"
+                        th:if="${medicalRecords != null}"
+                        th:text="${medicalRecord.medicalRecordNumber} + ${medicalRecord.name}"></option>
+            </datalist>
+            <button class="create" id="btn-new-client" th:if="${medicalRecords != null}">新增</button>
+        </div>
+        <div class="tables">
+            <h3>個案列表</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>病歷號</th>
+                        <th>姓名</th>
+                        <th>生日</th>
+                        <th>聯絡電話</th>
+                        <th>信箱</th>
+                        <th>刪除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="info:${interventionDto}" th:if="${interventionDto != null}">
+                        <td th:text="${info.medicalRecordNumber}"></td>
+                        <td th:text="${info.name}"></td>
+                        <td th:text="${info.birthday}"></td>
+                        <td th:text="${info.tel}"></td>
+                        <td th:text="${info.email}"></td>
+                        <td>
+                            <button class="delete"
+                                    th:attr="onclick='deleteIntervention(\'' + ${info.interventionId} + '\')'">
+                                刪除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </main>
 </body>
 <script>
@@ -89,7 +98,7 @@
                     body: JSON.stringify(data)
                 })
                 if (response.ok) {
-                    alert("成功新增個案量")
+                    alert("成功新增個案")
                     setTimeout(function () {
                         window.location.href = `${RELATIVE_PATH}/therapist/${domain}/client/list`;
                     }, 0);

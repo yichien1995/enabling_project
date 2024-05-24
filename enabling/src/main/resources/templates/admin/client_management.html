@@ -76,43 +76,46 @@
         </div>
         <div class="tables">
             <h3>個案列表</h3>
-            <table id="client-table">
-                <thead>
-                <tr>
-                    <th>病歷號</th>
-                    <th>身分證字號</th>
-                    <th>姓名</th>
-                    <th>生日</th>
-                    <th>聯絡電話</th>
-                    <th>信箱</th>
-                    <th>更新</th>
-                    <th>刪除</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="medicalRecord:${medicalRecords}" th:if="${medicalRecords != null}">
-                    <td th:id="'medical-record-number-' + ${medicalRecord.id}"
-                        th:text="${medicalRecord.medicalRecordNumber}"></td>
-                    <td th:id="'national-id-number-' + ${medicalRecord.id}"
-                        th:text="${medicalRecord.nationalIdNumber}"></td>
-                    <td th:id="'name-' + ${medicalRecord.id}" th:text="${medicalRecord.name}"></td>
-                    <td th:id="'birthday-' + ${medicalRecord.id}" th:text="${medicalRecord.birthday}"></td>
-                    <td th:id="'tel-' + ${medicalRecord.id}" th:text="${medicalRecord.tel}"></td>
-                    <td th:id="'email-' + ${medicalRecord.id}" th:text="${medicalRecord.email}"></td>
-                    <td>
-                        <button class="change">更新</button>
-                    </td>
-                    <td>
-                        <button class="delete" th:attr="onclick='deleteMedicalRecord(\'' + ${medicalRecord.id} + '\')'">
-                            刪除
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table id="client-table">
+                    <thead>
+                    <tr>
+                        <th>病歷號</th>
+                        <th>身分證字號</th>
+                        <th>姓名</th>
+                        <th>生日</th>
+                        <th>聯絡電話</th>
+                        <th>信箱</th>
+                        <th>更新</th>
+                        <th>刪除</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="medicalRecord:${medicalRecords}" th:if="${medicalRecords != null}">
+                        <td th:id="'medical-record-number-' + ${medicalRecord.id}"
+                            th:text="${medicalRecord.medicalRecordNumber}"></td>
+                        <td th:id="'national-id-number-' + ${medicalRecord.id}"
+                            th:text="${medicalRecord.nationalIdNumber}"></td>
+                        <td th:id="'name-' + ${medicalRecord.id}" th:text="${medicalRecord.name}"></td>
+                        <td th:id="'birthday-' + ${medicalRecord.id}" th:text="${medicalRecord.birthday}"></td>
+                        <td th:id="'tel-' + ${medicalRecord.id}" th:text="${medicalRecord.tel}"></td>
+                        <td th:id="'email-' + ${medicalRecord.id}" th:text="${medicalRecord.email}"></td>
+                        <td>
+                            <button class="change">更新</button>
+                        </td>
+                        <td>
+                            <button class="delete"
+                                    th:attr="onclick='deleteMedicalRecord(\'' + ${medicalRecord.id} + '\')'">
+                                刪除
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
-    <form id="update-client-form">
+    <form class="update-form" id="update-client-form">
         <label for="update-medical-record-number">病歷號: </label>
         <br>
         <input id="update-medical-record-number" min="1" name="medicalRecordNumber" required type="number">
@@ -141,6 +144,7 @@
         <button class="cancel" id="btn-cancel">取消</button>
         <button class="update" id="btn-update">更新</button>
     </form>
+    <div class="overlay"></div>
 </main>
 <script>
     const RELATIVE_PATH = window.location.origin;
@@ -157,7 +161,7 @@
         }
         event.preventDefault();
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/management/client`;
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/client`;
         try {
             (async function postData() {
                 let response = await fetch(endpoint, {
@@ -165,9 +169,9 @@
                     body: formData
                 })
                 if (response.ok) {
-                    // alert("成功新增服務項目")
+                    alert("成功新增個案")
                     setTimeout(function () {
-                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/management/client`;
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/client`;
                     }, 0);
                 }
             })()
@@ -179,14 +183,14 @@
 
     function deleteMedicalRecord(id) {
         if (confirm("確定刪除?")) {
-            let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/management/client/` + id;
+            let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/client/` + id;
             (async function deleteData() {
                 try {
                     let response = await fetch(endpoint, {
                         method: 'DELETE'
                     })
                     if (response.ok) {
-                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/management/client`
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/client`
                     } else {
                         throw new Error('Network response was not ok');
                     }
@@ -199,10 +203,12 @@
 
     $(document).ready(function () {
         $('#update-client-form').hide();
+        $('.overlay').hide();
     });
 
     $('.change').click(function () {
         $('#update-client-form').show();
+        $('.overlay').show();
         let row = $(this).closest('tr');
         let id = row.find('td:first').attr('id').split('-').slice(-1)[0];
         let medicalRecordNumber = row.find('td:nth-child(1)').text();
@@ -235,7 +241,7 @@
         }
 
         let formData = new FormData(form);
-        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/management/client/` + id;
+        let endpoint = `${RELATIVE_PATH}/api/1.0/admin/${domain}/client/` + id;
         (async function updateData() {
             try {
                 let response = await fetch(endpoint, {
@@ -243,9 +249,9 @@
                     body: formData
                 })
                 if (response.ok) {
-                    // alert("成功更新個案資訊")
+                    alert("成功更新個案資訊")
                     setTimeout(function () {
-                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/management/client`;
+                        window.location.href = `${RELATIVE_PATH}/admin/${domain}/client`;
                     }, 0);
                 }
             } catch (e) {
@@ -257,6 +263,7 @@
     $('#btn-cancel').click((event) => {
         event.preventDefault();
         $('#update-client-form').hide();
+        $('.overlay').hide();
     });
 
 </script>

@@ -5,9 +5,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class HomepageForm {
-	private MultipartFile logo;
-	private MultipartFile mainImage;
-	private String imageDescription;
-	private String institutionIntro;
-	private Integer color;
+    private MultipartFile logo;
+    private MultipartFile mainImage;
+    private String imageDescription;
+    private String institutionIntro;
+    private Integer color;
 }

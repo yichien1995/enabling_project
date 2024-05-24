@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InstitutionUserDto {
-	private long InstitutionUserId;
-	private String institutionDomain;
-	private long userId;
-	private int roleId;
-	private int employeeId;
+    private long InstitutionUserId;
+    private String institutionDomain;
+    private long userId;
+    private int roleId;
+    private int employeeId;
 }

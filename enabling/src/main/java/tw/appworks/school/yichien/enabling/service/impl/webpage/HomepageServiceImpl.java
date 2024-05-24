@@ -10,7 +10,6 @@ import tw.appworks.school.yichien.enabling.dto.form.HomepageForm;
 import tw.appworks.school.yichien.enabling.dto.webpage.LocationDto;
 import tw.appworks.school.yichien.enabling.model.account.Institution;
 import tw.appworks.school.yichien.enabling.model.webpage.Homepage;
-import tw.appworks.school.yichien.enabling.model.webpage.ThemeColor;
 import tw.appworks.school.yichien.enabling.repository.account.InstitutionRepository;
 import tw.appworks.school.yichien.enabling.repository.webpage.HomepageRepository;
 import tw.appworks.school.yichien.enabling.service.FileStorageService;
@@ -21,164 +20,151 @@ import tw.appworks.school.yichien.enabling.service.webpage.HomepageService;
 @Service
 public class HomepageServiceImpl implements HomepageService {
 
-	private static final Logger logger = LoggerFactory.getLogger(HomepageServiceImpl.class);
-	private final InstitutionRepository institutionRepository;
-	private final HomepageRepository homepageRepository;
-	private final FileStorageService fileStorageService;
-	private final GeocodingServiceImpl geocodingService;
-	private final S3UploadServiceImpl s3UploadService;
-	@Value("${prefix.image}")
-	private String imageUrlPrefix;
-	@Value("${google.api.key}")
-	private String API_KEY;
+    private static final Logger logger = LoggerFactory.getLogger(HomepageServiceImpl.class);
+    private final InstitutionRepository institutionRepository;
+    private final HomepageRepository homepageRepository;
+    private final FileStorageService fileStorageService;
+    private final GeocodingServiceImpl geocodingService;
+    private final S3UploadServiceImpl s3UploadService;
 
-	public HomepageServiceImpl(InstitutionRepository institutionRepository,
-	                           HomepageRepository homepageRepository, FileStorageService fileStorageService, GeocodingServiceImpl geocodingService, S3UploadServiceImpl s3UploadService) {
-		this.institutionRepository = institutionRepository;
-		this.homepageRepository = homepageRepository;
-		this.fileStorageService = fileStorageService;
-		this.geocodingService = geocodingService;
-		this.s3UploadService = s3UploadService;
-	}
+    @Value("${prefix.image}")
+    private String IMAGE_URL_PREFIX;
 
-	@Override
-	public void renderHomePage(String domain, Model model) {
-		Homepage homepage;
-		if (homepageRepository.getHomepage(domain, 1) != null) {
-			homepage = homepageRepository.getHomepage(domain, 1);
-		} else {
-			homepage = homepageRepository.getHomepage(domain, 0);
-		}
-		String address = homepage.getInstitutionDomain().getAddress();
-		LocationDto location = geocodingService.getGeocodingResponse(address);
-		addHomepageModelAttr(homepage, model);
-		model.addAttribute("location", location);
-		model.addAttribute("key", API_KEY);
-	}
+    @Value("${google.api.key}")
+    private String API_KEY;
 
-	@Override
-	public void renderHeaderAndFooter(String domain, Model model) {
-		Homepage homepage;
-		if (homepageRepository.getHomepage(domain, 1) != null) {
-			homepage = homepageRepository.getHomepage(domain, 1);
-		} else {
-			homepage = homepageRepository.getHomepage(domain, 0);
-		}
-		addHomepageModelAttr(homepage, model);
-	}
+    @Value("${default.logo.relative.path}")
+    private String DEFAULT_LOGO_PATH;
 
-	@Override
-	public void renderHomepagePreview(String domain, Model model) {
-		Homepage homepage = homepageRepository.getHomepage(domain, 0);
-		String address = homepage.getInstitutionDomain().getAddress();
-		LocationDto location = geocodingService.getGeocodingResponse(address);
-		addHomepageModelAttr(homepage, model);
-		model.addAttribute("location", location);
-		model.addAttribute("key", API_KEY);
-	}
+    @Value("${default.main_image.relative.path}")
+    private String DEFAULT_MAIN_IMAGE_PATH;
 
-	private void addHomepageModelAttr(Homepage homepage, Model model) {
-		model.addAttribute("homePage", homepage);
+    public HomepageServiceImpl(InstitutionRepository institutionRepository,
+                               HomepageRepository homepageRepository, FileStorageService fileStorageService, GeocodingServiceImpl geocodingService, S3UploadServiceImpl s3UploadService) {
+        this.institutionRepository = institutionRepository;
+        this.homepageRepository = homepageRepository;
+        this.fileStorageService = fileStorageService;
+        this.geocodingService = geocodingService;
+        this.s3UploadService = s3UploadService;
+    }
 
-		// add prefix to image url
-		model.addAttribute("logoImage", imageUrlPrefix + homepage.getLogo());
-		model.addAttribute("mainImage", imageUrlPrefix + homepage.getMainImage());
+    // functions of rendering homepage
+    @Override
+    public void renderHomePage(String domain, Model model) {
+        Homepage homepage = findExistHomepage(domain);
+        renderHomePageContent(model, homepage);
+    }
 
-		// replace "\n" to "<br>"
-		addFormattedAttribute(model, "businessHour", homepage.getInstitutionDomain().getBusinessHour());
-		addFormattedAttribute(model, "imageDescription", homepage.getImageDescription());
-		addFormattedAttribute(model, "institutionIntro", homepage.getInstitutionIntro());
-	}
+    @Override
+    public void renderHomepagePreview(String domain, Model model) {
+        Homepage homepage = homepageRepository.getHomepage(domain, 0);
+        renderHomePageContent(model, homepage);
+    }
 
-	private void addFormattedAttribute(Model model, String attributeName, String attributeValue) {
-		if (attributeValue != null) {
-			model.addAttribute(attributeName, attributeValue.replace("\n", "<br>"));
-		}
-	}
+    @Override
+    public void renderHeaderAndFooter(String domain, Model model) {
+        Homepage homepage = findExistHomepage(domain);
+        addHomepageModelAttr(homepage, model);
+    }
 
-	@Override
-	public void getInstitution(String domain, Model model) {
-		Institution institutionInfo = institutionRepository.getInstitution(domain);
-		model.addAttribute("i", institutionInfo);
-		addFormattedAttribute(model, "businessHour", institutionInfo.getBusinessHour());
+    private void renderHomePageContent(Model model, Homepage homepage) {
+        String address = homepage.getInstitutionDomain().getAddress();
+        LocationDto location = geocodingService.getGeocodingResponse(address);
+        model.addAttribute("location", location);
+        model.addAttribute("key", API_KEY);
+        addHomepageModelAttr(homepage, model);
+    }
 
-	}
+    private Homepage findExistHomepage(String domain) {
+        Homepage homepage = homepageRepository.getHomepage(domain, 1);
+        if (homepage == null) {
+            homepage = homepageRepository.getHomepage(domain, 0);
+        }
+        return homepage;
+    }
 
 
-	@Override
-	public void updateInstitution(String domain, Institution i) {
-		Institution existData = institutionRepository.findByDomainName(domain);
+    private void addHomepageModelAttr(Homepage homepage, Model model) {
+        model.addAttribute("homePage", homepage);
 
-		existData.setInstitutionName(i.getInstitutionName());
-		existData.setAddress(i.getAddress());
-		existData.setTel(i.getTel());
-		existData.setBusinessHour(i.getBusinessHour());
+        // add prefix to image url
+        model.addAttribute("logoImage", IMAGE_URL_PREFIX + homepage.getLogo());
+        model.addAttribute("mainImage", IMAGE_URL_PREFIX + homepage.getMainImage());
 
-		institutionRepository.save(existData);
-	}
+        // replace "\n" to "<br>"
+        addFormattedAttribute(model, "businessHour", homepage.getInstitutionDomain().getBusinessHour());
+        addFormattedAttribute(model, "imageDescription", homepage.getImageDescription());
+        addFormattedAttribute(model, "institutionIntro", homepage.getInstitutionIntro());
+    }
 
-	@Override
-	@Transactional
-	public void saveHomepage(String domain, HomepageForm hf) {
-		if (checkHomepageExists(domain, 1)) {
-			Homepage existData = homepageRepository.getHomepage(domain, 1);
-			saveHomepageForm(domain, "public", hf, existData);
-		} else {
-			Institution institution = institutionRepository.findByDomainName(domain);
-			Homepage homepage = new Homepage();
-
-			// create new public homepage
-			homepage.setStatus(1);
-			homepage.setInstitutionDomain(institution);
-			homepage.setLogo("enabling/default/logo_public.png");
-			homepage.setMainImage("enabling/default/main_public.jpg");
-			homepageRepository.save(homepage);
-
-			// save homepage form
-			saveHomepageForm(domain, "public", hf, homepage);
-		}
-	}
-
-	@Override
-	public void saveHomepageDraft(String domain, HomepageForm hf) {
-		Homepage existData = homepageRepository.getHomepage(domain, 0);
-		saveHomepageForm(domain, "draft", hf, existData);
-	}
-
-	public void saveHomepageForm(String domain, String fileType, HomepageForm hf, Homepage homepage) {
-		homepage.setImageDescription(hf.getImageDescription());
-		homepage.setInstitutionIntro(hf.getInstitutionIntro());
-
-		ThemeColor newColor = new ThemeColor();
-		newColor.setId(hf.getColor());
-
-		if (!hf.getLogo().isEmpty()) {
-			//		String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, hf.getLogo());
-			String logoPath = s3UploadService.uploadFileToS3(domain, hf.getLogo().getOriginalFilename() + fileType, hf.getLogo());
-			homepage.setLogo(logoPath);
-		}
-
-		if (!hf.getMainImage().isEmpty()) {
-			//		String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, hf.getMainImage());
-			String mainImagePath = s3UploadService.uploadFileToS3(domain, hf.getMainImage().getOriginalFilename() + fileType, hf.getMainImage());
-			homepage.setMainImage(mainImagePath);
-		}
-
-		homepage.setThemeColorId(newColor);
-		homepageRepository.save(homepage);
-	}
-
-	private boolean checkHomepageExists(String domain, int status) {
-		return homepageRepository.checkHomepage(domain, status) == 1;
-	}
+    private void addFormattedAttribute(Model model, String attributeName, String attributeValue) {
+        if (attributeValue != null) {
+            model.addAttribute(attributeName, attributeValue.replace("\n", "<br>"));
+        }
+    }
 
 
-	@Override
-	public Homepage getHomepageDetail(String domain) {
-		return homepageRepository.getHomepage(domain, 1);
-	}
+    // functions of saving / updating homepage form
+    @Override
+    @Transactional
+    public void saveHomepage(String domain, HomepageForm hf) {
+        if (checkHomepageExists(domain, 1)) {
+            Homepage existData = homepageRepository.getHomepage(domain, 1);
+            saveHomepageForm(domain, "public", hf, existData);
+        } else {
+            Institution institution = institutionRepository.findByDomainName(domain);
+            Homepage homepage = new Homepage();
 
-	;
+            // create new public homepage
+            homepage.setStatus(1);
+            homepage.setInstitutionDomain(institution);
+            homepage.setLogo(DEFAULT_LOGO_PATH);
+            homepage.setMainImage(DEFAULT_MAIN_IMAGE_PATH);
+            homepageRepository.save(homepage);
 
+            // save homepage form
+            saveHomepageForm(domain, "public", hf, homepage);
+        }
+    }
+
+    @Override
+    public void saveHomepageDraft(String domain, HomepageForm hf) {
+        Homepage existData = homepageRepository.getHomepage(domain, 0);
+        saveHomepageForm(domain, "draft", hf, existData);
+    }
+
+    private void saveHomepageForm(String domain, String fileType, HomepageForm form, Homepage homepage) {
+        if (!form.getLogo().isEmpty()) {
+//            String logoPath = fileStorageService.uploadFile(domain, "logo_" + fileType, form.getLogo());
+            String logoPath = s3UploadService.uploadFileToS3(domain, form.getLogo().getOriginalFilename() + fileType, form.getLogo());
+            homepage.setLogo(logoPath);
+        }
+
+        if (!form.getMainImage().isEmpty()) {
+//            String mainImagePath = fileStorageService.uploadFile(domain, "main_" + fileType, form.getMainImage());
+            String mainImagePath = s3UploadService.uploadFileToS3(domain, form.getMainImage().getOriginalFilename() + fileType, form.getMainImage());
+            homepage.setMainImage(mainImagePath);
+        }
+        homepageRepository.save(Homepage.convertForm(form, homepage));
+    }
+
+    private boolean checkHomepageExists(String domain, int status) {
+        return homepageRepository.checkHomepage(domain, status) == 1;
+    }
+
+    //TODO: Move to institutionService
+    @Override
+    public void getInstitution(String domain, Model model) {
+        Institution institutionInfo = institutionRepository.getInstitution(domain);
+        model.addAttribute("i", institutionInfo);
+        addFormattedAttribute(model, "businessHour", institutionInfo.getBusinessHour());
+
+    }
+
+    @Override
+    public void updateInstitution(String domain, Institution form) {
+        Institution institution = institutionRepository.findByDomainName(domain);
+        institutionRepository.save(Institution.convertUpdateForm(form, institution));
+    }
 
 }

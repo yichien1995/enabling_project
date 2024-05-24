@@ -7,13 +7,13 @@ import java.time.LocalDate;
 @Data
 public class ReserveEvaluationForm {
 
-	private long evaluationId;
+    private long evaluationId;
 
-	private String clientName;
+    private String clientName;
 
-	private LocalDate birthday;
+    private LocalDate birthday;
 
-	private String tel;
+    private String tel;
 
-	private String email;
+    private String email;
 }

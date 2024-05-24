@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MyInstitutionDto {
 
-	private Long id;
-	private String role;
-	private String institutionDomain;
-	private String institutionName;
-	private String address;
-	private String tel;
-	private String businessHour;
+    private Integer id;
+    private String role;
+    private String institutionDomain;
+    private String institutionName;
+    private String address;
+    private String tel;
+    private String businessHour;
 }

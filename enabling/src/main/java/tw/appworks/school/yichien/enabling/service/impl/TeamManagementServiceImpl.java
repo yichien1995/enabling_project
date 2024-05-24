@@ -23,82 +23,82 @@ import java.util.Map;
 @Service
 public class TeamManagementServiceImpl implements TeamManagementService {
 
-	private final ProjectionRepo projectionRepo;
+    private final ProjectionRepo projectionRepo;
 
-	private final InstitutionRepository institutionRepository;
+    private final InstitutionRepository institutionRepository;
 
-	private final UsersRepository usersRepository;
+    private final UsersRepository usersRepository;
 
-	private final RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-	private final InstitutionUserRepository institutionUserRepository;
+    private final InstitutionUserRepository institutionUserRepository;
 
-	public TeamManagementServiceImpl(ProjectionRepo projectionRepo, InstitutionRepository institutionRepository, UsersRepository usersRepository, RoleRepository roleRepository, InstitutionUserRepository institutionUserRepository) {
-		this.projectionRepo = projectionRepo;
-		this.institutionRepository = institutionRepository;
-		this.usersRepository = usersRepository;
-		this.roleRepository = roleRepository;
-		this.institutionUserRepository = institutionUserRepository;
-	}
+    public TeamManagementServiceImpl(ProjectionRepo projectionRepo, InstitutionRepository institutionRepository, UsersRepository usersRepository, RoleRepository roleRepository, InstitutionUserRepository institutionUserRepository) {
+        this.projectionRepo = projectionRepo;
+        this.institutionRepository = institutionRepository;
+        this.usersRepository = usersRepository;
+        this.roleRepository = roleRepository;
+        this.institutionUserRepository = institutionUserRepository;
+    }
 
-	public void renderTeamManagementPage(String domain, Model model) {
-		List<TeamMemberInfoDto> data = getTeamMemberInfoDtoByDomain(domain);
-		model.addAttribute("TeamMemberInfoDto", data);
-	}
+    public void renderTeamManagementPage(String domain, Model model) {
+        List<TeamMemberInfoDto> data = getTeamMemberInfoDtoByDomain(domain);
+        model.addAttribute("TeamMemberInfoDto", data);
+    }
 
-	@Override
-	public Map<String, Object> saveInstitutionUser(TeamMemberForm teamMemberForm, String domain) {
-		Map<String, Object> errorMsg = new HashMap<>();
-		InstitutionUser institutionUser = new InstitutionUser();
+    @Override
+    public Map<String, Object> saveInstitutionUser(TeamMemberForm teamMemberForm, String domain) {
+        Map<String, Object> errorMsg = new HashMap<>();
+        InstitutionUser institutionUser = new InstitutionUser();
 //		// set FK
-		Institution institution = institutionRepository.getInstitution(domain);
-		Users user = usersRepository.findUsersByEmail(teamMemberForm.getEmail());
-		Role role = roleRepository.findRoleById(teamMemberForm.getRoleId());
-		int employeeId = teamMemberForm.getEmployeeId();
+        Institution institution = institutionRepository.getInstitution(domain);
+        Users user = usersRepository.findUsersByEmail(teamMemberForm.getEmail());
+        Role role = roleRepository.findRoleById(teamMemberForm.getRoleId());
+        int employeeId = teamMemberForm.getEmployeeId();
 
-		// validation
-		if (user == null) {
-			errorMsg.put("error", "該用戶不存在");
-			return errorMsg;
-		}
-		// check duplicate employeeID
-		boolean checkExistEmployeeId = existEmployeeId(institution, employeeId);
-		if (checkExistEmployeeId) {
-			errorMsg.put("error", "重複員工編號");
-			return errorMsg;
-		}
+        // validation
+        if (user == null) {
+            errorMsg.put("error", "該用戶不存在");
+            return errorMsg;
+        }
+        // check duplicate employeeID
+        boolean checkExistEmployeeId = existEmployeeId(institution, employeeId);
+        if (checkExistEmployeeId) {
+            errorMsg.put("error", "重複員工編號");
+            return errorMsg;
+        }
 
-		boolean checkDuplicateUser = duplicateUser(domain, teamMemberForm.getEmail());
+        boolean checkDuplicateUser = duplicateUser(domain, teamMemberForm.getEmail());
 
-		if (checkDuplicateUser) {
-			errorMsg.put("error", "該員工已存在");
-			return errorMsg;
-		}
+        if (checkDuplicateUser) {
+            errorMsg.put("error", "該員工已存在");
+            return errorMsg;
+        }
 
-		institutionUser.setInstitutionDomain(institution);
-		institutionUser.setUserId(user);
-		institutionUser.setRoleId(role);
-		institutionUser.setEmployeeId(employeeId);
+        institutionUser.setInstitutionDomain(institution);
+        institutionUser.setUserId(user);
+        institutionUser.setRoleId(role);
+        institutionUser.setEmployeeId(employeeId);
 
-		institutionUserRepository.save(institutionUser);
-		return null;
-	}
+        institutionUserRepository.save(institutionUser);
+        return null;
+    }
 
-	@Override
-	@Transactional
-	public void deleteInstitutionUserById(Long id) {
-		institutionUserRepository.deleteInstitutionUserById(id);
-	}
+    @Override
+    @Transactional
+    public void deleteInstitutionUserById(Long id) {
+        institutionUserRepository.deleteInstitutionUserById(id);
+    }
 
-	private boolean duplicateUser(String domain, String email) {
-		return institutionUserRepository.countInstitutionUserByDomainANDEmail(domain, email) != 0;
-	}
+    private boolean duplicateUser(String domain, String email) {
+        return institutionUserRepository.countInstitutionUserByDomainANDEmail(domain, email) != 0;
+    }
 
-	private boolean existEmployeeId(Institution institution, int employeeId) {
-		return institutionUserRepository.existsInstitutionUserByInstitutionDomainAndEmployeeId(institution, employeeId);
-	}
+    private boolean existEmployeeId(Institution institution, int employeeId) {
+        return institutionUserRepository.existsInstitutionUserByInstitutionDomainAndEmployeeId(institution, employeeId);
+    }
 
-	private List<TeamMemberInfoDto> getTeamMemberInfoDtoByDomain(String domain) {
-		return projectionRepo.getTeamMemberInfoDTO(domain);
-	}
+    private List<TeamMemberInfoDto> getTeamMemberInfoDtoByDomain(String domain) {
+        return projectionRepo.getTeamMemberInfoDTO(domain);
+    }
 }

@@ -5,11 +5,11 @@ import tw.appworks.school.yichien.enabling.dto.form.ServicesForm;
 
 public interface ServiceItemService {
 
-	void saveService(String domain, ServicesForm form);
+    void saveService(String domain, ServicesForm form);
 
-	void renderServicePage(String domain, Model model);
+    void renderServicePage(String domain, Model model);
 
-	void updateService(String domain, Long id, ServicesForm form);
+    void updateService(String domain, Long id, ServicesForm form);
 
-	void deleteServiceItemById(Long id);
+    void deleteServiceItemById(Long id);
 }
